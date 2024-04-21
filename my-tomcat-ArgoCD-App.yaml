@@ -25,12 +25,29 @@ spec:
     helm:
       releaseName: my-tomcat-argocd-deploy               # Название релиза
       valueFiles:
-      # - $values/Helm-values/my-tomcat-values.yaml
-      - $values/my-tomcat-values.yaml
-  - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с values
-    path: "Helm-values"
-    targetRevision: main
-    ref: values
+      - tomcat-values.yaml
+      parameters:
+      # Образ
+      - name: "container.image"
+        value: tomcat:8.5.38
+      # Порт на контейнере
+      - name: "containerPort"
+        value: 8080
+      # Порт на сервисе
+      - name: "servicePort"
+        value: 8081
+      # # Ограничение по CPU
+      # - name: "cpuUtilization"
+      #   value: 50
+      # # Ограничение по памяти
+      # - name: "memoryUtilization"
+      #   value: 80
+      # Адрес публикации
+      - name: "host"
+        value: tomcat.fillswim.local
+      # Класс Ingress контроллера
+      - name: "ingressClassName"
+        value: nginx
 
   syncPolicy:
     automated:
