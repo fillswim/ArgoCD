@@ -25,8 +25,10 @@ spec:
     helm:
       releaseName: my-tomcat-argocd-deploy               # Название релиза
       valueFiles:
-      - $values/Helm-values/my-tomcat-values.yaml
+      # - $values/Helm-values/my-tomcat-values.yaml
+      - $values/my-tomcat-values.yaml
   - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с values
+    path: "Helm-values"
     targetRevision: main
     ref: values
 
