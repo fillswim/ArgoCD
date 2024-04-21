@@ -51,8 +51,8 @@ spec:
       #   value: "nginx"
       #   forceString: true
       valueFiles:
-      - $values/my-tomcat-values.yaml
-  - repoURL: 'https://github.com/fillswim/ArgoCD/tree/main/Helm-values'   # Репозиторий с values
+      - $values/Helm-values/my-tomcat-values.yaml
+  - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с values
     targetRevision: main
     ref: values
 

@@ -18,7 +18,7 @@ cpuUtilization: 50
 memoryUtilization: 80
 
 # Адрес публикации
-host: tomcat.fillswim.local
+host: tomcat1.fillswim.local
 
 # Класс Ingress контроллера
 ingressClassName: nginx
