@@ -1,5 +1,8 @@
 # Nginx values for my template Helm Chart
 
+# Доступ:
+# http://gifservice.fillswim.local/swagger-ui/index.html
+
 # Образ
 container:
   image: fillswim/mygifservice:latest
