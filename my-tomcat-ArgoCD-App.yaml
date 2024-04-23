@@ -21,7 +21,7 @@ spec:
   sources:
   - repoURL: 'https://fillswim.github.io/HelmChats'     # Репозиторий с Helm чартом
     chart: my-template-helmchart                        # Наименование Helm чарта
-    targetRevision: 0.0.8                               # Версия Helm чарта
+    targetRevision: 0.0.9                               # Версия Helm чарта
     helm:
       # releaseName: my-tomcat-argocd-deploy               # Название релиза
       valueFiles:
