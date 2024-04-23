@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f applications/my-gifservice-ArgoCD-App.yaml
-# kubectl delete -f applications/my-gifservice-ArgoCD-App.yaml
+# kubectl apply -f my-gifservice-ArgoCD-App.yaml
+# kubectl delete -f my-gifservice-ArgoCD-App.yaml
 
 metadata:
   name: my-gifservice-app                                    # Название создаваемого Argo CD application
@@ -23,9 +23,9 @@ spec:
     chart: my-template-helmchart                        # Наименование Helm чарта
     targetRevision: 0.0.9                               # Версия Helm чарта
     helm:
-      releaseName: my-gifservice-argocd-deploy          # Название релиза
+      # releaseName: my-gifservice-argocd-deploy          # Название релиза
       valueFiles:
-      - $values/GifServiceApp-values/my-gifservice-values.yaml
+      - $values/Helm-values/my-gifservice-values.yaml
   - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с values
     targetRevision: main
     ref: values
