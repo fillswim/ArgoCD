@@ -21,11 +21,11 @@ spec:
   sources:
   - repoURL: 'https://fillswim.github.io/HelmChats'     # Репозиторий с Helm чартом
     chart: my-template-helmchart                        # Наименование Helm чарта
-    targetRevision: 0.0.8                               # Версия Helm чарта
+    targetRevision: 0.0.9                               # Версия Helm чарта
     helm:
       releaseName: my-nginx-argocd-deploy               # Название релиза
       valueFiles:
-      - $values/NginxApp-values/my-nginx-values.yaml
+      - $values/Helm-values/my-nginx-values.yaml
   - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с values
     targetRevision: main
     ref: values

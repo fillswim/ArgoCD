@@ -19,11 +19,14 @@ spec:
     namespace: my-tomcat                                 # В какой namespace будет производиться деплой
 
   sources:
-  - repoURL: 'https://fillswim.github.io/HelmChats'     # Репозиторий с Helm чартом
-    # path: "My-Template-HelmChart/"
-    chart: my-template-helmchart                        # Наименование Helm чарта
-    targetRevision: 0.0.8                               # Версия Helm чарта
+  - repoURL: 'https://github.com/fillswim/HelmChats.git'     # Репозиторий с Helm чартом
+    path: "My-Template-HelmChart"
+    # chart: my-template-helmchart                        # Наименование Helm чарта
+    # targetRevision: 0.0.8                               # Версия Helm чарта
+    targetRevision: HEAD                               # Версия Helm чарта
     helm:
+      valueFiles:
+      - tomcat-values.yaml
       # releaseName: my-tomcat-argocd-deploy               # Название релиза
       # parameters:
       # # Образ
@@ -50,11 +53,9 @@ spec:
       # - name: "ingressClassName"
       #   value: "nginx"
       #   forceString: true
-      valueFiles:
-      - $values/Helm-values/my-tomcat-values.yaml
-  - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с values
-    targetRevision: main
-    ref: values
+  # - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с values
+  #   targetRevision: main
+  #   ref: values
 
   syncPolicy:
     automated:
