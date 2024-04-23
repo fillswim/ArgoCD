@@ -19,43 +19,21 @@ spec:
     namespace: my-tomcat                                 # В какой namespace будет производиться деплой
 
   sources:
-  - repoURL: 'https://github.com/fillswim/HelmChats.git'     # Репозиторий с Helm чартом
-    path: "My-Template-HelmChart"
-    # chart: my-template-helmchart                        # Наименование Helm чарта
-    # targetRevision: 0.0.8                               # Версия Helm чарта
-    targetRevision: HEAD                               # Версия Helm чарта
+  - repoURL: 'https://fillswim.github.io/HelmChats'     # Репозиторий с Helm чартом
+    chart: my-template-helmchart                        # Наименование Helm чарта
+    targetRevision: 0.0.8                               # Версия Helm чарта
     helm:
-      valueFiles:
-      - tomcat-values.yaml
       # releaseName: my-tomcat-argocd-deploy               # Название релиза
+      valueFiles:
+      - $values/Helm-values/my-tomcat-values.yaml
       # parameters:
-      # # Образ
-      # - name: "container.image"
-      #   value: "tomcat:8.5.38"
-      #   forceString: true
-      # # Порт на контейнере
-      # - name: "containerPort"
-      #   value: "8080"
-      # # Порт на сервисе
-      # - name: "servicePort"
-      #   value: "8081"
-      # # Ограничение по CPU
-      # - name: "cpuUtilization"
-      #   value: "50"
-      # # Ограничение по памяти
-      # - name: "memoryUtilization"
-      #   value: "80"
       # # Адрес публикации
       # - name: "host"
       #   value: "tomcat.fillswim.local"
       #   forceString: true
-      # # Класс Ingress контроллера
-      # - name: "ingressClassName"
-      #   value: "nginx"
-      #   forceString: true
-  # - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с values
-  #   targetRevision: main
-  #   ref: values
+  - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с values
+    targetRevision: main
+    ref: values
 
   syncPolicy:
     automated:

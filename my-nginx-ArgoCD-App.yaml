@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f applications/my-nginx-ArgoCD-App.yaml
-# kubectl delete -f applications/my-nginx-ArgoCD-App.yaml
+# kubectl apply -f my-nginx-ArgoCD-App.yaml
+# kubectl delete -f my-nginx-ArgoCD-App.yaml
 
 metadata:
   name: my-nginx-app                                    # Название создаваемого Argo CD application
