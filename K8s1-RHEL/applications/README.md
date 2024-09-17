@@ -1,1 +1,1 @@
-# ArgoCD K8s1-RHEL
+# Applications K8s1-RHEL
