@@ -1,0 +1,82 @@
+global:
+  enabled: true
+  tlsDisable: true
+
+server:
+  enabled: "-"
+
+  image:
+    repository: "hashicorp/vault"
+    tag: "1.17.2"
+    pullPolicy: IfNotPresent
+
+  ingress:
+    enabled: true
+
+    ingressClassName: "nginx"
+    pathType: Prefix
+    activeService: true
+    hosts:
+      - host: vault.fillswim.local
+        paths: []
+
+  priorityClassName: "system-cluster-critical"
+
+  service:
+    enabled: true
+
+  dataStorage:
+    enabled: true
+    size: 10Gi
+    mountPath: "/vault/data"
+    storageClass: null
+    accessMode: ReadWriteOnce
+    annotations: {}
+    labels: {}
+
+  dev:
+    enabled: false
+
+  standalone:
+    enabled: false
+
+  ha:
+    enabled: true
+    replicas: 3
+
+    raft:
+
+      enabled: true
+      setNodeId: false
+
+      config: |
+        ui = true
+
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+        }
+
+        storage "raft" {
+          path = "/vault/data"
+        }
+
+        service_registration "kubernetes" {}
+
+
+ui:
+  enabled: true
+  publishNotReadyAddresses: true
+  activeVaultPodOnly: false
+  serviceType: "ClusterIP"
+  serviceNodePort: null
+  externalPort: 8200
+  targetPort: 8200
+
+csi:
+  enabled: true
+  image:
+    repository: "hashicorp/vault-csi-provider"
+    tag: "1.5.0"
+    pullPolicy: IfNotPresent
