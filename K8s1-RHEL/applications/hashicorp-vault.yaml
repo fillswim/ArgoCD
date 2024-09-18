@@ -18,7 +18,6 @@ spec:
     namespace: vault # В какой namespace будет производиться деплой
 
   sources:
-    # - repoURL: "http://192.168.2.44:8081/repository/helm-hosted/" # Репозиторий с Helm чартом
     - repoURL: "http://nexus-ubuntu.fillswim.local:8081/repository/helm-hosted/" # Репозиторий с Helm чартом
       chart: vault # Наименование Helm чарта
       targetRevision: 0.28.1 # Версия Helm чарта
@@ -29,12 +28,6 @@ spec:
     - repoURL: "https://github.com/fillswim/ArgoCD.git" # Репозиторий с values
       targetRevision: main
       ref: values
-
-  # ignoreDifferences:
-  #   - group: admissionregistration
-  #     kind: MutatingWebhookConfiguration
-  #     jsonPointers:
-  #       - /webhooks/0/clientConfig/caBundle
 
   ignoreDifferences:
     - group: admissionregistration.k8s.io
