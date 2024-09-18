@@ -30,6 +30,12 @@ spec:
     targetRevision: main
     ref: values
 
+  ignoreDifferences:
+    - group: admissionregistration
+      kind: MutatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+
   syncPolicy:
     automated:
       prune: true
