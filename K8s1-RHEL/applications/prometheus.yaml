@@ -15,7 +15,7 @@ spec:
 
   destination:
     name: in-cluster # Деплой в этот же кластер
-    namespace: monitoring # В какой namespace будет производиться деплой
+    namespace: prometheus # В какой namespace будет производиться деплой
 
   sources:
     - repoURL: "https://prometheus-community.github.io/helm-charts" # Репозиторий с Helm чартом
@@ -29,6 +29,10 @@ spec:
       targetRevision: main
       ref: values
 
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий
+      path: "K8s1-RHEL/additions/prometheus"              # Относительный путь отслеживаемой папки
+      targetRevision: HEAD
+
   syncPolicy:
     automated:
       prune: true
@@ -36,3 +40,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
+      - ServerSideApply=true
