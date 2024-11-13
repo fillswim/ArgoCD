@@ -3,10 +3,10 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: longhorn-prometheus-servicemonitor
-  namespace: {{ prometheus_namespace }}
+  namespace: monitoring
   labels:
     name: longhorn-prometheus-servicemonitor
-    release: {{ prometheus_release_name }}      # Отслеживается в Prometheus
+    release: prometheus                         # Отслеживается в Prometheus
 spec:
   selector:
     matchLabels:
