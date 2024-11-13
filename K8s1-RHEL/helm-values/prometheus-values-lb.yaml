@@ -1,6 +1,22 @@
 grafana:
   enabled: false
 
+alertmanager:
+
+  ## Deploy alertmanager
+  ##
+  enabled: true
+
+  alertmanagerSpec:
+
+    ## Image of Alertmanager
+    ##
+    image:
+      registry: quay.io
+      repository: prometheus/alertmanager
+      tag: v0.27.0
+      sha: ""
+
 ## Deploy a Prometheus instance
 ##
 prometheus:
@@ -24,6 +40,14 @@ prometheus:
     type: LoadBalancer
 
   prometheusSpec:
+
+    ## Image of Prometheus.
+    ##
+    image:
+      registry: quay.io
+      repository: prometheus/prometheus
+      tag: v2.55.1
+      sha: ""
 
     ## EnableAdminAPI enables Prometheus the administrative HTTP API which includes functionality such as deleting time series.
     ## This is disabled by default.
