@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply -f K8s1-RHEL/applications-non-sync/longhorn.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/longhorn.yaml
+
+metadata:
+  name: longhorn # Название создаваемого Argo CD application
+  namespace: argo-cd # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  destination:
+    name: in-cluster # Деплой в этот же кластер
+    namespace: longhorn-system # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "https://charts.longhorn.io" # Репозиторий с Helm чартом
+      chart: longhorn # Наименование Helm чарта
+      targetRevision: 1.7.2 # Версия Helm чарта
+      helm:
+        releaseName: longhorn # Название релиза
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/longhorn-values-2024-11-14.yaml
+    - repoURL: "https://github.com/fillswim/ArgoCD.git" # Репозиторий с values
+      targetRevision: main
+      ref: values
+
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий
+      path: "K8s1-RHEL/additions/longhorn"              # Относительный путь отслеживаемой папки
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      # - ServerSideApply=true
