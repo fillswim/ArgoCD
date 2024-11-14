@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f K8s1-RHEL/applications/prometheus.yaml
-# kubectl delete -f K8s1-RHEL/applications/prometheus.yaml
+# kubectl apply -f K8s1-RHEL/applications-non-sync/prometheus.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/prometheus.yaml
 
 metadata:
   name: prometheus # Название создаваемого Argo CD application
