@@ -1,0 +1,106 @@
+global:
+  # -- Overrides the Docker registry globally for all images
+  imageRegistry: null
+
+  # To help compatibility with other charts which use global.imagePullSecrets.
+  # Allow either an array of {name: pullSecret} maps (k8s-style), or an array of strings (more common helm-style).
+  # Can be templated.
+  # global:
+  #   imagePullSecrets:
+  #   - name: pullSecret1
+  #   - name: pullSecret2
+  # or
+  # global:
+  #   imagePullSecrets:
+  #   - pullSecret1
+  #   - pullSecret2
+  imagePullSecrets: []
+
+replicas: 1
+
+## Create HorizontalPodAutoscaler object for deployment type
+#
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPU: "60"
+  targetMemory: ""
+  behavior: {}
+
+image:
+  # -- The Docker registry
+  registry: docker.io
+  # -- Docker image repository
+  repository: grafana/grafana
+  # Overrides the Grafana image tag whose default is the chart appVersion
+  tag: ""
+  sha: ""
+  pullPolicy: IfNotPresent
+
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Can be templated.
+  ##
+  pullSecrets: []
+  #   - myRegistrKeySecretName
+
+downloadDashboardsImage:
+  # -- The Docker registry
+  registry: docker.io
+  repository: curlimages/curl
+  tag: 7.85.0
+  sha: ""
+  pullPolicy: IfNotPresent
+
+# Настройки Ingress
+ingress:
+  enabled: true
+  # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
+  # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
+  ingressClassName: nginx
+  # Values can be templated
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  labels: {}
+  path: /
+
+  # pathType is only for k8s >= 1.1=
+  pathType: Prefix
+
+  hosts:
+    - grafana.fillswim.local
+  ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
+  extraPaths: []
+  # - path: /*
+  #   backend:
+  #     serviceName: ssl-redirect
+  #     servicePort: use-annotation
+  ## Or for k8s > 1.19
+  # - path: /*
+  #   pathType: Prefix
+  #   backend:
+  #     service:
+  #       name: ssl-redirect
+  #       port:
+  #         name: use-annotation
+
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
+
+# Administrator credentials when not using an existing secret (see below)
+adminUser: admin
+adminPassword: password

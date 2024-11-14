@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply -f K8s1-RHEL/applications-non-sync/grafana.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/grafana.yaml
+
+metadata:
+  name: grafana # Название создаваемого Argo CD application
+  namespace: argo-cd # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  destination:
+    name: in-cluster # Деплой в этот же кластер
+    namespace: grafana # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "https://grafana.github.io/helm-charts" # Репозиторий с Helm чартом
+      chart: grafana # Наименование Helm чарта
+      targetRevision: 8.6.0 # Версия Helm чарта
+      helm:
+        releaseName: grafana # Название релиза
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/grafana-values-ingress.yaml
+    - repoURL: "https://github.com/fillswim/ArgoCD.git" # Репозиторий с values
+      targetRevision: main
+      ref: values
+
+    # - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий
+    #   path: "K8s1-RHEL/additions/prometheus"              # Относительный путь отслеживаемой папки
+    #   targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      - ServerSideApply=true
