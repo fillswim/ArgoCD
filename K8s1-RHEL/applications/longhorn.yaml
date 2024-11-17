@@ -29,18 +29,18 @@ spec:
           - $values/K8s1-RHEL/helm-values/longhorn-values-2024-11-14.yaml
 
         # Переопределенный параметр в values
-        parameters:                                                         # Переопределенный параметр в values
+        parameters:
         - name: "preUpgradeChecker.jobEnabled"
           value: "false"
 
     # Репозиторий с values
-    - repoURL: "https://github.com/fillswim/ArgoCD.git"                     # Репозиторий с values
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"
       targetRevision: main
       ref: values
 
      # Дополнительная папка для отслеживания
-    - repoURL: 'https://github.com/fillswim/ArgoCD.git'                     # Дополнительнаяпапка для отслеживания
-      path: "K8s1-RHEL/additions/longhorn"                                  # Относительный путь отслеживаемой папки
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'
+      path: "K8s1-RHEL/additions/longhorn"
       targetRevision: HEAD
 
   syncPolicy:
