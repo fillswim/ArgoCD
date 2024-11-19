@@ -70,16 +70,16 @@ kubeEtcd:
 
   ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used
   ##
-  # service:
-  #   enabled: true
-  #   port: 2381
-  #   targetPort: 2381
-  #   ipDualStack:
-  #     enabled: false
-  #     ipFamilies: ["IPv6", "IPv4"]
-  #     ipFamilyPolicy: "PreferDualStack"
-  #   # selector:
-  #   #   component: etcd
+  service:
+    enabled: false
+    port: 2381
+    targetPort: 2381
+    ipDualStack:
+      enabled: false
+      ipFamilies: ["IPv6", "IPv4"]
+      ipFamilyPolicy: "PreferDualStack"
+    # selector:
+    #   component: etcd
 
   ## Configure secure access to the etcd cluster by loading a secret into prometheus and
   ## specifying security configuration below. For example, with a secret named etcd-client-cert
