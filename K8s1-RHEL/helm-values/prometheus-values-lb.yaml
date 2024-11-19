@@ -80,16 +80,6 @@ kubeEtcd:
   #     ipFamilyPolicy: "PreferDualStack"
   #   # selector:
   #   #   component: etcd
-  service:
-    enabled: true
-    port: 2379
-    targetPort: 2379
-    ipDualStack:
-      enabled: false
-      ipFamilies: ["IPv4"]
-      ipFamilyPolicy: "PreferDualStack"
-    # selector:
-    #   component: etcd
 
   ## Configure secure access to the etcd cluster by loading a secret into prometheus and
   ## specifying security configuration below. For example, with a secret named etcd-client-cert
