@@ -62,7 +62,7 @@ prometheus:
     ##
     # secrets: []
     secrets:
-      - name: etcd-client-cert
+      - etcd-client-cert
         # mountPath: /etc/prometheus/secrets/etcd-client-cert
 
 
