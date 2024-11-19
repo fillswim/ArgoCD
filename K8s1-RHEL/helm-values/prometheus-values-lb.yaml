@@ -83,7 +83,7 @@ kubeEtcd:
   service:
     enabled: true
     port: 2381
-    targetPort: 2381
+    targetPort: 2379
     ipDualStack:
       enabled: false
       ipFamilies: ["IPv6", "IPv4"]
