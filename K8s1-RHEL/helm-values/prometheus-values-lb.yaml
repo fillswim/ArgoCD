@@ -68,9 +68,9 @@ kubeEtcd:
   # # - 10.141.4.23
   # # - 10.141.4.24
   endpoints:
-    - https://192.168.2.211:2379
-    - https://192.168.2.212:2379
-    - https://192.168.2.213:2379
+    - https://192.168.2.211:2381
+    - https://192.168.2.212:2381
+    - https://192.168.2.213:2381
 
   ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used
   ##
