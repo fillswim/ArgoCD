@@ -55,6 +55,16 @@ prometheus:
     ##
     enableAdminAPI: true
 
+    ## Secrets is a list of Secrets in the same namespace as the Prometheus object, which shall be mounted into the Prometheus Pods.
+    ## The Secrets are mounted into /etc/prometheus/secrets/. Secrets changes after initial creation of a Prometheus object are not
+    ## reflected in the running Pods. To change the secrets mounted into the Prometheus Pods, the object must be deleted and recreated
+    ## with the new list of secrets.
+    ##
+    # secrets: []
+    secrets:
+      - name: etcd-client-cert
+        # mountPath: /etc/prometheus/secrets/etcd-client-cert
+
 
 ## Component scraping etcd
 ##
@@ -71,7 +81,7 @@ kubeEtcd:
   ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used
   ##
   service:
-    enabled: false
+    enabled: true
     port: 2381
     targetPort: 2381
     ipDualStack:
