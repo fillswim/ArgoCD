@@ -54,3 +54,116 @@ prometheus:
     ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
     ##
     enableAdminAPI: true
+
+
+## Component scraping etcd
+##
+kubeEtcd:
+  enabled: true
+
+  ## If your etcd is not deployed as a pod, specify IPs it can be found on
+  ##
+  endpoints: []
+  # - 10.141.4.22
+  # - 10.141.4.23
+  # - 10.141.4.24
+
+  ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used
+  ##
+  service:
+    enabled: true
+    port: 2381
+    targetPort: 2381
+    ipDualStack:
+      enabled: false
+      ipFamilies: ["IPv6", "IPv4"]
+      ipFamilyPolicy: "PreferDualStack"
+    # selector:
+    #   component: etcd
+
+  ## Configure secure access to the etcd cluster by loading a secret into prometheus and
+  ## specifying security configuration below. For example, with a secret named etcd-client-cert
+  ##
+  serviceMonitor:
+    scheme: https
+    insecureSkipVerify: false
+    serverName: localhost
+    # caFile: /etc/prometheus/secrets/etcd-client-cert/etcd-ca
+    caFile: /etc/prometheus/secrets/etcd-client-cert/ca.crt
+    # certFile: /etc/prometheus/secrets/etcd-client-cert/etcd-client
+    certFile: /etc/prometheus/secrets/etcd-client-cert/client.crt
+    # keyFile: /etc/prometheus/secrets/etcd-client-cert/etcd-client-key
+    keyFile: /etc/prometheus/secrets/etcd-client-cert/client.key
+  ##
+  # serviceMonitor:
+  #   enabled: true
+  #   ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+  #   ##
+  #   interval: ""
+
+  #   ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
+  #   ##
+  #   sampleLimit: 0
+
+  #   ## TargetLimit defines a limit on the number of scraped targets that will be accepted.
+  #   ##
+  #   targetLimit: 0
+
+  #   ## Per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+  #   ##
+  #   labelLimit: 0
+
+  #   ## Per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+  #   ##
+  #   labelNameLengthLimit: 0
+
+  #   ## Per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.
+  #   ##
+  #   labelValueLengthLimit: 0
+
+  #   ## proxyUrl: URL of a proxy that should be used for scraping.
+  #   ##
+  #   proxyUrl: ""
+  #   scheme: http
+  #   insecureSkipVerify: false
+  #   serverName: ""
+  #   caFile: ""
+  #   certFile: ""
+  #   keyFile: ""
+
+  #   ## port: Name of the port the metrics will be scraped from
+  #   ##
+  #   port: http-metrics
+
+  #   jobLabel: jobLabel
+  #   selector: {}
+  #   #  matchLabels:
+  #   #    component: etcd
+
+  #   ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+  #   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
+  #   ##
+  #   metricRelabelings: []
+  #   # - action: keep
+  #   #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
+  #   #   sourceLabels: [__name__]
+
+  #   ## RelabelConfigs to apply to samples before scraping
+  #   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
+  #   ##
+  #   relabelings: []
+  #   # - sourceLabels: [__meta_kubernetes_pod_node_name]
+  #   #   separator: ;
+  #   #   regex: ^(.*)$
+  #   #   targetLabel: nodename
+  #   #   replacement: $1
+  #   #   action: replace
+
+  #   ## Additional labels
+  #   ##
+  #   additionalLabels: {}
+  #   #  foo: bar
+
+  #   ## defines the labels which are transferred from the associated Kubernetes Service object onto the ingested metrics.
+  #   ## https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitor
+  #   targetLabels: []
