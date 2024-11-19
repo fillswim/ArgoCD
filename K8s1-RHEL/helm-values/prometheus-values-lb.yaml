@@ -67,20 +67,26 @@ kubeEtcd:
   # - 10.141.4.22
   # - 10.141.4.23
   # - 10.141.4.24
-  # endpoints:
-  #   - https://192.168.2.211:2381
-  #   - https://192.168.2.212:2381
-  #   - https://192.168.2.213:2381
 
   ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used
   ##
+  # service:
+  #   enabled: true
+  #   port: 2381
+  #   targetPort: 2381
+  #   ipDualStack:
+  #     enabled: false
+  #     ipFamilies: ["IPv6", "IPv4"]
+  #     ipFamilyPolicy: "PreferDualStack"
+  #   # selector:
+  #   #   component: etcd
   service:
     enabled: true
-    port: 2381
-    targetPort: 2381
+    port: 2379
+    targetPort: 2379
     ipDualStack:
       enabled: false
-      ipFamilies: ["IPv6", "IPv4"]
+      ipFamilies: ["IPv4"]
       ipFamilyPolicy: "PreferDualStack"
     # selector:
     #   component: etcd
