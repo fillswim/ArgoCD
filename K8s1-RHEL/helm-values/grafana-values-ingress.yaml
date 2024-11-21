@@ -102,5 +102,5 @@ resources: {}
 #    memory: 128Mi
 
 # Administrator credentials when not using an existing secret (see below)
-adminUser: admin
-adminPassword: password
+# adminUser: admin
+# adminPassword: password
