@@ -16,7 +16,7 @@ global:
   #   - pullSecret2
   imagePullSecrets: []
 
-replicas: 1
+replicas: 3
 
 ## Create HorizontalPodAutoscaler object for deployment type
 #
