@@ -1,1 +1,1 @@
-# Addons K8s1-RHEL
+# Addons Vault Secrets Operator
