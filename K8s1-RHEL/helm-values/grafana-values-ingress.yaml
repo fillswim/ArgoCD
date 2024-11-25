@@ -106,7 +106,8 @@ resources: {}
 ##
 persistence:
   type: pvc
-  enabled: true
+  # enabled: true
+  enabled: false
   # storageClassName: default
   accessModes:
     # - ReadWriteOnce
