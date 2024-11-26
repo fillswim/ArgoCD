@@ -132,6 +132,6 @@ admin:
 ## Define command to be executed at startup by grafana container
 ## Needed if using `vault-env` to manage secrets (ref: https://banzaicloud.com/blog/inject-secrets-into-pods-vault/)
 ## Default is "run.sh" as defined in grafana's Dockerfile
-command:
-- "grafana cli admin reset-admin-password $GF_SECURITY_ADMIN_PASSWORD"
-# - "/run.sh"
+# command:
+# - "grafana cli admin reset-admin-password $GF_SECURITY_ADMIN_PASSWORD"
+# # - "/run.sh"
