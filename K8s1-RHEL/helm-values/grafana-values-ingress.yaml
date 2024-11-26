@@ -101,13 +101,22 @@ resources: {}
 #    cpu: 100m
 #    memory: 128Mi
 
+## Volumes that can be used in init containers that will not be mounted to deployment pods
+# extraContainerVolumes:
+#  - name: volume-from-secret
+#    secret:
+#      secretName: grafana-my-secret
+# #  - name: empty-dir-volume
+# #    emptyDir: {}
+
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   type: pvc
-  # enabled: true
-  enabled: false
+  enabled: true
+  # enabled: false
+
   # storageClassName: default
   accessModes:
     # - ReadWriteOnce
