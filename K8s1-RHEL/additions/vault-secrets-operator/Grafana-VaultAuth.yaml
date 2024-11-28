@@ -12,7 +12,7 @@ spec:
   method: kubernetes
   mount: kubernetes
   kubernetes:
-    role: grafana-ui-role
+    role: grafana-ui-secret-role
     serviceAccount: default
     audiences:
       - vault
