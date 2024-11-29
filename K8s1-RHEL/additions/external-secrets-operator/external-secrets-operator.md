@@ -1,0 +1,1 @@
+# Addons External Secrets Operator
