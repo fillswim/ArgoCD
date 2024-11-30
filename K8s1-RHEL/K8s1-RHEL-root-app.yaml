@@ -5,23 +5,22 @@ kind: Application
 # kubectl delete -f K8s1-RHEL/K8s1-RHEL-root-app.yaml
 
 metadata:
-  name: root-app                                        # Название создаваемого Argo CD application
-  namespace: argo-cd                                    # namespace, в котором будет создаваться Argo CD application
+  name: root-app # Название создаваемого Argo CD application
+  namespace: argo-cd # namespace, в котором будет создаваться Argo CD application
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
 
 spec:
-
   project: default
 
   destination:
-    name: in-cluster                                    # Деплой в этот же кластер
-    namespace: argo-cd                                  # В какой namespace будет производиться деплой
+    name: in-cluster # Деплой в этот же кластер
+    namespace: argo-cd # В какой namespace будет производиться деплой
 
   sources:
-  - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий с Helm чартом
-    path: "K8s1-RHEL/applications"                      # Относительный путь отслеживаемой папки
-    targetRevision: HEAD                                # Версия Helm чарта
+    - repoURL: "https://github.com/fillswim/ArgoCD.git" # Репозиторий с Helm чартом
+      path: "K8s1-RHEL/applications" # Относительный путь отслеживаемой папки
+      targetRevision: HEAD # Версия Helm чарта
 
   syncPolicy:
     automated:
