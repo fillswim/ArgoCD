@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply -f K8s1-RHEL/applications-non-sync/loki.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/loki.yaml
+
+metadata:
+  name: loki                                              # Название создаваемого Argo CD application
+  namespace: argo-cd                                      # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  destination:
+    name: in-cluster                                      # Деплой в этот же кластер
+    namespace: loki                                       # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "https://grafana.github.io/helm-charts/"   # Репозиторий с Helm чартом
+      chart: loki                                         # Наименование Helm чарта
+      targetRevision: 6.22.0                                                         # Версия Helm чарта
+      helm:
+        releaseName: loki                                 # Название релиза
+
+        # Values относительно репозитория
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/loki-values-2024-11-30.yaml
+
+        # # Переопределенный параметр в values
+        # parameters:
+        # - name: "preUpgradeChecker.jobEnabled"
+        #   value: "false"
+
+    # Репозиторий с values
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"
+      targetRevision: main
+      ref: values
+
+     # Дополнительная папка для отслеживания
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'
+      path: "K8s1-RHEL/additions/loki"
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # - RespectIgnoreDifferences=true
+      # - ServerSideApply=true
