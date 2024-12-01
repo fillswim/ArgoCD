@@ -1,0 +1,52 @@
+global:
+  # -- configures cluster domain ("cluster.local" by default)
+  clusterDomain: "cluster.local"
+  # -- configures DNS service name
+  dnsService: "kube-dns"
+  # -- configures DNS service namespace
+  dnsNamespace: "kube-system"
+
+loki:
+
+  # -- Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
+  schemaConfig:
+    configs:
+    - from: "2020-09-07"
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: loki_index_
+        period: 24h
+
+  # -- Check https://grafana.com/docs/loki/latest/configuration/#storage_config for more info on how to configure storages
+  storageConfig:
+    s3:
+      insecure: true
+      s3: "http://api.minio.fillswim.local"
+      # endpoint: "http://api.minio.fillswim.local"
+      bucket: "loki"
+      access_key: "minioadmin"
+      secret_key: "Hiwk-dJFj-bRbB-i65r"
+      # region: "us-east-1"
+      # prefix: "loki"
+      s3forcepathstyle: true
+
+    boltdb_shipper:
+      shared_store: s3
+      active_index_directory: /var/loki/index
+      cache_location: /var/loki/cache
+      cache_ttl: 168h
+
+    # boltdb_shipper:
+    #   shared_store: filesystem
+    #   active_index_directory: /var/loki/index
+    #   cache_location: /var/loki/cache
+    #   cache_ttl: 168h
+    # filesystem:
+    #   directory: /var/loki/chunks
+# -- Uncomment to configure each storage individually
+#   azure: {}
+#   gcs: {}
+#   s3: {}
+#   boltdb: {}

@@ -26,7 +26,7 @@ spec:
 
         # Values относительно репозитория
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/loki-values-2024-11-30.yaml
+          - $values/K8s1-RHEL/helm-values/loki-values-2024-12-01.yaml
 
         # # Переопределенный параметр в values
         # parameters:
