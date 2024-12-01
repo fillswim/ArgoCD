@@ -25,7 +25,7 @@ loki:
       s3: "http://api.minio.fillswim.local"
       insecure: true
       # endpoint: "http://api.minio.fillswim.local"
-      bucket: "loki"
+      bucketNames: "loki"
       access_key: "minioadmin"
       secret_key: "Hiwk-dJFj-bRbB-i65r"
       # region: "us-east-1"
