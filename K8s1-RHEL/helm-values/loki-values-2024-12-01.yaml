@@ -14,8 +14,8 @@ loki:
       s3: http://api.minio.fillswim.local
       endpoint: http://api.minio.fillswim.local
       # region: null
-      secretAccessKey: "Hiwk-dJFj-bRbB-i65r"
-      accessKeyId: "minioadmin"
+      secretAccessKey: "minioadmin"
+      accessKeyId: "Hiwk-dJFj-bRbB-i65r"
       # signatureVersion: null
       s3ForcePathStyle: true
       insecure: true
