@@ -13,9 +13,14 @@ loki:
     s3:
       s3: http://api.minio.fillswim.local
       endpoint: http://api.minio.fillswim.local
+
+      bucketNames:
+        chunks: loki-chunks
+        ruler: loki-ruler
+
       # region: null
-      secretAccessKey: "minioadmin"
-      accessKeyId: "Hiwk-dJFj-bRbB-i65r"
+      secretAccessKey: "Hiwk-dJFj-bRbB-i65r"
+      accessKeyId: "minioadmin"
       # signatureVersion: null
       s3ForcePathStyle: true
       insecure: true
