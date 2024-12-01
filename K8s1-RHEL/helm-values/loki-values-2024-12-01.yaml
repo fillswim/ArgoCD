@@ -1,52 +1,26 @@
-global:
-  # -- configures cluster domain ("cluster.local" by default)
-  clusterDomain: "cluster.local"
-  # -- configures DNS service name
-  dnsService: "kube-dns"
-  # -- configures DNS service namespace
-  dnsNamespace: "kube-system"
+
+deploymentMode: Distributed
 
 loki:
-
-  # -- Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
-  schemaConfig:
-    configs:
-    - from: "2020-09-07"
-      store: boltdb-shipper
-      object_store: filesystem
-      schema: v11
-      index:
-        prefix: loki_index_
-        period: 24h
-
-  # -- Check https://grafana.com/docs/loki/latest/configuration/#storage_config for more info on how to configure storages
-  storageConfig:
-    aws:
-      s3: "http://api.minio.fillswim.local"
+  # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
+  storage:
+    # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
+    # Please provide these values if you are using object storage.
+    bucketNames:
+      chunks: loki-chunks
+      ruler: loki-ruler
+      admin: loki-admin
+    type: s3
+    s3:
+      s3: http://api.minio.fillswim.local
+      endpoint: http://api.minio.fillswim.local
+      # region: null
+      secretAccessKey: "Hiwk-dJFj-bRbB-i65r"
+      accessKeyId: "minioadmin"
+      # signatureVersion: null
+      s3ForcePathStyle: true
       insecure: true
-      # endpoint: "http://api.minio.fillswim.local"
-      bucketNames: "loki"
-      access_key: "minioadmin"
-      secret_key: "Hiwk-dJFj-bRbB-i65r"
-      # region: "us-east-1"
-      # prefix: "loki"
-      s3forcepathstyle: true
-
-    boltdb_shipper:
-      shared_store: s3
-      active_index_directory: /var/loki/index
-      cache_location: /var/loki/cache
-      cache_ttl: 168h
-
-    # boltdb_shipper:
-    #   shared_store: filesystem
-    #   active_index_directory: /var/loki/index
-    #   cache_location: /var/loki/cache
-    #   cache_ttl: 168h
-    # filesystem:
-    #   directory: /var/loki/chunks
-# -- Uncomment to configure each storage individually
-#   azure: {}
-#   gcs: {}
-#   s3: {}
-#   boltdb: {}
+      http_config: {}
+      # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
+      backoff_config: {}
+      disable_dualstack: false
