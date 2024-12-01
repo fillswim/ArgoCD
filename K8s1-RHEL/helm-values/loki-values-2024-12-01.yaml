@@ -94,4 +94,4 @@ gateway:
 
 # Enable minio for storage
 minio:
-  enabled: true
+  enabled: false
