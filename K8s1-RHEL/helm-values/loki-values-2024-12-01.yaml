@@ -102,8 +102,18 @@ singleBinary:
 
   # This exposes the Loki gateway so it can be written to and queried externaly
 gateway:
-  service:
-    type: LoadBalancer
+
+  # service:
+  #   type: LoadBalancer
+
+  # Gateway ingress configuration
+  ingress:
+    # -- Specifies whether an ingress for the gateway should be created
+    enabled: true
+    hosts:
+      - host: gateway.loki.fillswim.local
+        paths:
+          - path: /
 
 # Enable minio for storage
 minio:

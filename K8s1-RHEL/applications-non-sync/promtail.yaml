@@ -19,10 +19,10 @@ spec:
 
   sources:
     - repoURL: "https://grafana.github.io/helm-charts/"   # Репозиторий с Helm чартом
-      chart: promtail                                         # Наименование Helm чарта
+      chart: promtail                                     # Наименование Helm чарта
       targetRevision: 6.16.6                                                         # Версия Helm чарта
       helm:
-        releaseName: promtail                                 # Название релиза
+        releaseName: promtail                             # Название релиза
 
         # Values относительно репозитория
         valueFiles:
