@@ -102,28 +102,39 @@ write:
 singleBinary:
   replicas: 0
 
-  # This exposes the Loki gateway so it can be written to and queried externaly
-gateway:
-
-  # service:
-  #   type: LoadBalancer
-
-  # Gateway ingress configuration
-  ingress:
-    # -- Specifies whether an ingress for the gateway should be created
-    enabled: true
-    # -- Ingress Class Name. MAY be required for Kubernetes versions >= 1.18
-    ingressClassName: "nginx"
-    hosts:
-      - host: gateway.loki.fillswim.local
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      - secretName: loki-gateway-tls
-        hosts:
-          - gateway.loki.fillswim.local
 
 # Enable minio for storage
 minio:
   enabled: false
+
+# # This exposes the Loki gateway so it can be written to and queried externaly
+# gateway:
+
+#   # service:
+#   #   type: LoadBalancer
+
+#   # Gateway ingress configuration
+#   ingress:
+#     # -- Specifies whether an ingress for the gateway should be created
+#     enabled: true
+#     # -- Ingress Class Name. MAY be required for Kubernetes versions >= 1.18
+#     ingressClassName: "nginx"
+#     hosts:
+#       - host: gateway.loki.fillswim.local
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#     tls:
+#       - secretName: loki-gateway-tls
+#         hosts:
+#           - gateway.loki.fillswim.local
+
+# -- Ingress configuration Use either this ingress or the gateway, but not both at once.
+# If you enable this, make sure to disable the gateway.
+# You'll need to supply authn configuration for your ingress controller.
+ingress:
+  enabled: true
+  ingressClassName: "nginx"
+  # -- Hosts configuration for the ingress, passed through the `tpl` function to allow templating
+  hosts:
+    - loki.fillswim.com
