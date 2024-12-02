@@ -114,6 +114,7 @@ gateway:
       - host: gateway.loki.fillswim.local
         paths:
           - path: /
+            pathType: Prefix
 
 # Enable minio for storage
 minio:
