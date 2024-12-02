@@ -137,4 +137,4 @@ ingress:
   ingressClassName: "nginx"
   # -- Hosts configuration for the ingress, passed through the `tpl` function to allow templating
   hosts:
-    - loki.fillswim.com
+    - loki.fillswim.local
