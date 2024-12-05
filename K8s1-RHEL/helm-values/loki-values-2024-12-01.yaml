@@ -63,7 +63,7 @@ ingester:
 
   extraEnvFrom:
     - secretRef:
-        name: your-secret-name
+        name: minio-my-secret
 
   # extraEnvFrom:
   #   - name: MINIO_USER
