@@ -60,6 +60,11 @@ loki:
 
 ingester:
   replicas: 3 # To ensure data durability with replication
+
+  extraEnvFrom:
+    - secretRef:
+        name: your-secret-name
+
   # extraEnvFrom:
   #   - name: MINIO_USER
   #     valueFrom:
