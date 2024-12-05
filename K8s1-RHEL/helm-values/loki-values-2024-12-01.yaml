@@ -91,6 +91,19 @@ distributor:
   replicas: 3
   maxUnavailable: 2
 compactor:
+
+  extraEnv:
+    - name: MINIO_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: minio-my-secret
+          key: admin-user
+    - name: MINIO_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: minio-my-secret
+          key: admin-password
+
   replicas: 1
 indexGateway:
   replicas: 2
