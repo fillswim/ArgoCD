@@ -22,9 +22,9 @@ loki:
 
       # region: null
       # secretAccessKey: "Hiwk-dJFj-bRbB-i65r"
-      secretAccessKey: ${MINIO_PASSWORD}
+      secretAccessKey: "${MINIO_PASSWORD}"
       # accessKeyId: "minioadmin"
-      accessKeyId: ${MINIO_USERNAME}
+      accessKeyId: "${MINIO_USERNAME}"
       # signatureVersion: null
       s3ForcePathStyle: true
       insecure: true
