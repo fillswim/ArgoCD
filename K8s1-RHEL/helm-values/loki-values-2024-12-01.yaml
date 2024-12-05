@@ -21,8 +21,10 @@ loki:
         ruler: loki-ruler
 
       # region: null
-      secretAccessKey: "Hiwk-dJFj-bRbB-i65r"
-      accessKeyId: "minioadmin"
+      # secretAccessKey: "Hiwk-dJFj-bRbB-i65r"
+      secretAccessKey: ${MINIO_PASSWORD}
+      # accessKeyId: "minioadmin"
+      accessKeyId: ${MINIO_USERNAME}
       # signatureVersion: null
       s3ForcePathStyle: true
       insecure: true
@@ -77,17 +79,6 @@ ingester:
   #   - secretRef:
   #       name: minio-my-secret
 
-  # extraEnvFrom:
-  #   - name: MINIO_USER
-  #     valueFrom:
-  #       secretRef:
-  #         name: minio-my-secret
-  #         key: admin-user
-  #   - name: MINIO_PASSWORD
-  #     valueFrom:
-  #       secretRef:
-  #         name: minio-my-secret
-  #         key: admin-password
 querier:
   replicas: 3 # Improve query performance via parallelism
   maxUnavailable: 2
