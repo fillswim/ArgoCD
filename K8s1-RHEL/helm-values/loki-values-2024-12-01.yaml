@@ -92,6 +92,9 @@ distributor:
   maxUnavailable: 2
 compactor:
 
+  extraArgs:
+    - -config.expand-env=true
+
   extraEnv:
     - name: MINIO_USERNAME
       valueFrom:
