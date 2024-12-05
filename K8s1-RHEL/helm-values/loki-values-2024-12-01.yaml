@@ -60,17 +60,17 @@ loki:
 
 ingester:
   replicas: 3 # To ensure data durability with replication
-  extraEnvFrom:
-    - name: MINIO_USER
-      valueFrom:
-        secretKeyRef:
-          name: minio-my-secret
-          key: admin-user
-    - name: MINIO_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: minio-my-secret
-          key: admin-password
+  # extraEnvFrom:
+  #   - name: MINIO_USER
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: minio-my-secret
+  #         key: admin-user
+  #   - name: MINIO_PASSWORD
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: minio-my-secret
+  #         key: admin-password
 querier:
   replicas: 3 # Improve query performance via parallelism
   maxUnavailable: 2
