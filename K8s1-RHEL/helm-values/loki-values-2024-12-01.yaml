@@ -24,7 +24,7 @@ loki:
       # secretAccessKey: "Hiwk-dJFj-bRbB-i65r"
       secretAccessKey: "${MINIO_PASSWORD}"
       # accessKeyId: "minioadmin"
-      accessKeyId: "${MINIO_USERNAME}"
+      accessKeyId: "${MINIO_USER}"
       # signatureVersion: null
       s3ForcePathStyle: true
       insecure: true
@@ -62,23 +62,6 @@ loki:
 
 ingester:
   replicas: 3 # To ensure data durability with replication
-
-  extraEnv:
-    - name: MINIO_USERNAME
-      valueFrom:
-        secretKeyRef:
-          name: minio-my-secret
-          key: admin-user
-    - name: MINIO_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: minio-my-secret
-          key: admin-password
-
-  # extraEnvFrom:
-  #   - secretRef:
-  #       name: minio-my-secret
-
 querier:
   replicas: 3 # Improve query performance via parallelism
   maxUnavailable: 2
@@ -90,24 +73,29 @@ queryScheduler:
 distributor:
   replicas: 3
   maxUnavailable: 2
+
 compactor:
+
+  replicas: 1
 
   extraArgs:
     - -config.expand-env=true
-
   extraEnv:
-    - name: MINIO_USERNAME
+    - name: MINIO_USER
       valueFrom:
         secretKeyRef:
           name: minio-my-secret
-          key: admin-user
+          key: minio-user
     - name: MINIO_PASSWORD
       valueFrom:
         secretKeyRef:
           name: minio-my-secret
-          key: admin-password
+          key: minio-password
 
-  replicas: 1
+  # extraEnvFrom:
+  #   - secretRef:
+  #       name: minio-my-secret
+
 indexGateway:
   replicas: 2
   maxUnavailable: 1
