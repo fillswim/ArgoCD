@@ -1,15 +1,15 @@
 ## minio mode, i.e. standalone or distributed
 mode: distributed ## other supported values are "standalone"
 
+# Number of MinIO containers running
+replicas: 4
+
 ## Set default rootUser, rootPassword
 ## rootUser and rootPassword is generated when not set
 ## Distributed MinIO ref: https://min.io/docs/minio/linux/operations/install-deploy-manage/deploy-minio-multi-node-multi-drive.html
 ##
-rootUser: "minioadmin"
-rootPassword: "password"
-
-# Number of MinIO containers running
-replicas: 4
+# rootUser: "minioadmin"
+# rootPassword: "password"
 
 ## Use existing Secret that store following variables:
 ##
@@ -21,7 +21,7 @@ replicas: 4
 ## All mentioned variables will be ignored in values file.
 ## .data.rootUser and .data.rootPassword are mandatory,
 ## others depend on enabled status of corresponding sections.
-existingSecret: ""
+existingSecret: "minio-my-k8s-secret"
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
