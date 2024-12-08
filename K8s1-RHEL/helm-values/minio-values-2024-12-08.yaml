@@ -8,6 +8,9 @@ mode: distributed ## other supported values are "standalone"
 rootUser: "minioadmin"
 rootPassword: "password"
 
+# Number of MinIO containers running
+replicas: 4
+
 ## Use existing Secret that store following variables:
 ##
 ## | Chart var             | .data.<key> in Secret    |
