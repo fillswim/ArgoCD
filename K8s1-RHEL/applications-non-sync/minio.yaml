@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply -f K8s1-RHEL/applications-non-sync/minio.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/minio.yaml
+
+metadata:
+  name: minio                                             # Название создаваемого Argo CD application
+  namespace: argo-cd                                      # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  destination:
+    name: in-cluster                                      # Деплой в этот же кластер
+    namespace: minio                                      # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "https://charts.min.io/"                   # Репозиторий с Helm чартом
+      chart: minio                                        # Наименование Helm чарта
+      targetRevision: 5.3.0                                                         # Версия Helm чарта
+      helm:
+        releaseName: minio                                # Название релиза
+
+        # Values относительно репозитория
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/minio-values-2024-12-08.yaml
+
+        # # Переопределенный параметр в values
+        # parameters:
+        # - name: "preUpgradeChecker.jobEnabled"
+        #   value: "false"
+
+    # Репозиторий с values
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"
+      targetRevision: main
+      ref: values
+
+     # Дополнительная папка для отслеживания
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'
+      path: "K8s1-RHEL/additions/minio"
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # - RespectIgnoreDifferences=true
+      # - ServerSideApply=true
