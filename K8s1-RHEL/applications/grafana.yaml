@@ -29,9 +29,9 @@ spec:
       targetRevision: main
       ref: values
 
-    # - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий
-    #   path: "K8s1-RHEL/additions/prometheus"              # Относительный путь отслеживаемой папки
-    #   targetRevision: HEAD
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий
+      path: "K8s1-RHEL/additions/grafana"                 # Относительный путь отслеживаемой папки
+      targetRevision: HEAD
 
   syncPolicy:
     automated:
