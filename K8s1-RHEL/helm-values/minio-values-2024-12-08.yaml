@@ -48,7 +48,7 @@ ingress:
     # nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0
   path: /
   hosts:
-    - minio-example.local
+    - api.minio-example.fillswim.local
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -69,7 +69,7 @@ consoleIngress:
     # nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0
   path: /
   hosts:
-    - console.minio-example.local
+    - console.minio-example.fillswim.local
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
