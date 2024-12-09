@@ -1,0 +1,18 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+
+# kubectl apply -f K8s1-RHEL/additions/vault-secrets-operator/Loki-VaultAuth.yaml
+# kubectl delete -f K8s1-RHEL/additions/vault-secrets-operator/Loki-VaultAuth.yaml
+
+kind: VaultAuth
+metadata:
+  name: loki-static-auth
+  namespace: loki
+spec:
+  # vaultConnectionRef: default
+  method: kubernetes
+  mount: kubernetes
+  kubernetes:
+    role: minio-secret-role         # Ссылается на secret Minio в Vault
+    serviceAccount: default
+    audiences:
+      - vault

@@ -65,13 +65,13 @@ ingester:
     - name: MINIO_USER
       valueFrom:
         secretKeyRef:
-          name: minio-my-secret
-          key: minio-user
+          name: minio-for-loki-secret
+          key: rootUser
     - name: MINIO_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: minio-my-secret
-          key: minio-password
+          name: minio-for-loki-secret
+          key: rootPassword
 
 querier:
   replicas: 3 # Improve query performance via parallelism
@@ -95,17 +95,17 @@ compactor:
     - name: MINIO_USER
       valueFrom:
         secretKeyRef:
-          name: minio-my-secret
-          key: minio-user
+          name: minio-for-loki-secret
+          key: rootUser
     - name: MINIO_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: minio-my-secret
-          key: minio-password
+          name: minio-for-loki-secret
+          key: rootPassword
 
   # extraEnvFrom:
   #   - secretRef:
-  #       name: minio-my-secret
+  #       name: minio-for-loki-secret
 
 indexGateway:
   replicas: 2
