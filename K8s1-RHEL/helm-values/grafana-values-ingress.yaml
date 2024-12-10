@@ -1,21 +1,3 @@
-global:
-  # -- Overrides the Docker registry globally for all images
-  imageRegistry: null
-
-  # To help compatibility with other charts which use global.imagePullSecrets.
-  # Allow either an array of {name: pullSecret} maps (k8s-style), or an array of strings (more common helm-style).
-  # Can be templated.
-  # global:
-  #   imagePullSecrets:
-  #   - name: pullSecret1
-  #   - name: pullSecret2
-  # or
-  # global:
-  #   imagePullSecrets:
-  #   - pullSecret1
-  #   - pullSecret2
-  imagePullSecrets: []
-
 replicas: 1
 
 ## Create HorizontalPodAutoscaler object for deployment type
@@ -27,32 +9,6 @@ autoscaling:
   targetCPU: "60"
   targetMemory: ""
   behavior: {}
-
-image:
-  # -- The Docker registry
-  registry: docker.io
-  # -- Docker image repository
-  repository: grafana/grafana
-  # Overrides the Grafana image tag whose default is the chart appVersion
-  tag: ""
-  sha: ""
-  pullPolicy: IfNotPresent
-
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Can be templated.
-  ##
-  pullSecrets: []
-  #   - myRegistrKeySecretName
-
-downloadDashboardsImage:
-  # -- The Docker registry
-  registry: docker.io
-  repository: curlimages/curl
-  tag: 7.85.0
-  sha: ""
-  pullPolicy: IfNotPresent
 
 # Настройки Ingress
 ingress:
