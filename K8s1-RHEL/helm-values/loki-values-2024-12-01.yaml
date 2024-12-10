@@ -13,8 +13,12 @@ loki:
       admin: loki-admin
     type: s3
     s3:
+
+      ## MinIO S3 Cluster Standalone
       # s3: http://api.minio.fillswim.local
       # endpoint: http://api.minio.fillswim.local
+
+      ## MinIO S3 Cluster K8s
       s3: http://api.minio-example.fillswim.local
       endpoint: http://api.minio-example.fillswim.local
 
@@ -58,9 +62,9 @@ loki:
     retention_enabled: true
     delete_request_store: s3
 
+# Ingester
 ingester:
   replicas: 3 # To ensure data durability with replication
-
   extraArgs:
     - -config.expand-env=true
   extraEnv:
@@ -87,10 +91,9 @@ distributor:
   replicas: 3
   maxUnavailable: 2
 
+# Compactor
 compactor:
-
   replicas: 1
-
   extraArgs:
     - -config.expand-env=true
   extraEnv:
