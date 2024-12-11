@@ -18,7 +18,7 @@ spec:
     namespace: elasticsearch                                                # В какой namespace будет производиться деплой
 
   sources:
-    - repoURL: "https://helm.elastic.co"                                    # Репозиторий с Helm чартом
+    - repoURL: "http://nexus.fillswim.local:8081/repository/helm-hosted/"   # Репозиторий с Helm чартом
       chart: elasticsearch                                                  # Наименование Helm чарта
       targetRevision: 8.5.1                                                        # Версия Helm чарта
       helm:
