@@ -5,6 +5,11 @@ secret:
   enabled: true
   password: "elastic" # generated randomly if not defined
 
+# image: "docker.elastic.co/elasticsearch/elasticsearch"
+image: "nexus.fillswim.local:8086/docker.elastic.co/elasticsearch/elasticsearch"
+imageTag: "8.5.1"
+imagePullPolicy: "IfNotPresent"
+
 volumeClaimTemplate:
   accessModes: ["ReadWriteOnce"]
   resources:
