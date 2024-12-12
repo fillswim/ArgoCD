@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply -f K8s1-RHEL/applications-non-sync/filebeat.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/filebeat.yaml
+
+metadata:
+  name: filebeat                                                            # Название создаваемого Argo CD application
+  namespace: argo-cd                                                        # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  destination:
+    name: in-cluster                                                        # Деплой в этот же кластер
+    namespace: elk                                                          # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "http://nexus.fillswim.local:8081/repository/helm-hosted/"   # Репозиторий с Helm чартом
+      chart: filebeat                                                         # Наименование Helm чарта
+      targetRevision: 8.5.1                                                        # Версия Helm чарта
+      helm:
+        releaseName: filebeat                                                 # Название релиза
+
+        # Values относительно репозитория
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/filebeat-values-2024-12-12.yaml
+
+    # Репозиторий с values
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"
+      targetRevision: main
+      ref: values
+
+     # Дополнительная папка для отслеживания
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'
+      path: "K8s1-RHEL/additions/filebeat"
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # - RespectIgnoreDifferences=true
+      # - ServerSideApply=true

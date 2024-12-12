@@ -1,0 +1,5 @@
+---
+
+image: "nexus.fillswim.local:8086/docker.elastic.co/beats/filebeat"
+imageTag: "8.5.1"
+imagePullPolicy: "IfNotPresent"
