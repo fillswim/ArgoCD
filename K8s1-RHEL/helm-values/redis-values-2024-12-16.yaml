@@ -26,3 +26,13 @@ auth:
   ## @param auth.usePasswordFileFromSecret Mount password file from secret
   ##
   usePasswordFileFromSecret: true
+
+## @section Redis&reg; Sentinel configuration parameters
+##
+
+sentinel:
+  ## @param sentinel.enabled Use Redis&reg; Sentinel on Redis&reg; pods.
+  ## IMPORTANT: this will disable the master and replicas services and
+  ## create a single Redis&reg; service exposing both the Redis and Sentinel ports
+  ##
+  enabled: true
