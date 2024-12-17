@@ -36,3 +36,10 @@ sentinel:
   ## create a single Redis&reg; service exposing both the Redis and Sentinel ports
   ##
   enabled: true
+  ## Persistence parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param sentinel.persistence.enabled Enable persistence on Redis&reg; sentinel nodes using Persistent Volume Claims (Experimental)
+    ##
+    enabled: true
