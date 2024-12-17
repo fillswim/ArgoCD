@@ -1,3 +1,7 @@
+global:
+  redis:
+    password: "redispassword"
+
 ## Redis&reg; Authentication parameters
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#setting-the-server-password-on-first-run
 ##
@@ -51,14 +55,14 @@ sentinel:
     enabled: true
 
 
-master:
-  livenessProbe:
-    enabled: false
-  readinessProbe:
-    enabled: false
+# master:
+#   livenessProbe:
+#     enabled: true
+#   readinessProbe:
+#     enabled: true
 
-replica:
-  livenessProbe:
-    enabled: false
-  readinessProbe:
-    enabled: false
+# replica:
+#   livenessProbe:
+#     enabled: true
+#   readinessProbe:
+#     enabled: true

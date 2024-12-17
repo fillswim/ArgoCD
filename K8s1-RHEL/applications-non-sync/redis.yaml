@@ -20,14 +20,14 @@ spec:
   sources:
     - repoURL: "http://nexus.fillswim.local:8081/repository/helm-hosted/"           # Репозиторий с Helm чартом
     # - repoURL: "https://charts.bitnami.com/bitnami"   # Репозиторий с Helm чартом
-      chart: redis-cluster                                                          # Наименование Helm чарта
-      targetRevision: 11.2.0                                                        # Версия Helm чарта
+      chart: redis                                                          # Наименование Helm чарта
+      targetRevision: 20.6.0                                                        # Версия Helm чарта
       helm:
-        releaseName: redis-cluster                                                  # Название релиза
+        releaseName: redis                                                  # Название релиза
 
         # Values относительно репозитория
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/redis-values-2024-12-16.yaml
+          - $values/K8s1-RHEL/helm-values/redis-values-2024-12-17.yaml
 
     # Репозиторий с values
     - repoURL: "https://github.com/fillswim/ArgoCD.git"
