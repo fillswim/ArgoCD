@@ -27,19 +27,38 @@ auth:
   ##
   usePasswordFileFromSecret: true
 
-## @section Redis&reg; Sentinel configuration parameters
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
 ##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: true
 
 sentinel:
   ## @param sentinel.enabled Use Redis&reg; Sentinel on Redis&reg; pods.
   ## IMPORTANT: this will disable the master and replicas services and
   ## create a single Redis&reg; service exposing both the Redis and Sentinel ports
   ##
-  enabled: true
+  enabled: false
   ## Persistence parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param sentinel.persistence.enabled Enable persistence on Redis&reg; sentinel nodes using Persistent Volume Claims (Experimental)
     ##
-    enabled: true
+    enabled: false
+
+
+master:
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+
+replica:
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
