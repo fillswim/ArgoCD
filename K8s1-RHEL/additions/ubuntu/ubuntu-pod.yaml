@@ -1,0 +1,17 @@
+apiVersion: v1
+
+# kubectl apply -f Ubuntu/ubuntu-pod.yaml
+# kubectl delete -f Ubuntu/ubuntu-pod.yaml
+
+kind: Pod
+metadata:
+  name: ubuntu
+spec:
+  containers:
+  - image: ubuntu
+    command:
+      - "sleep"
+      - "604800"
+    imagePullPolicy: IfNotPresent
+    name: ubuntu
+  restartPolicy: Always
