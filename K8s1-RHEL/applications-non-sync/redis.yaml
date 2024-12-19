@@ -20,10 +20,10 @@ spec:
   sources:
     - repoURL: "http://nexus.fillswim.local:8081/repository/helm-hosted/"           # Репозиторий с Helm чартом
     # - repoURL: "https://charts.bitnami.com/bitnami"   # Репозиторий с Helm чартом
-      chart: redis                                                          # Наименование Helm чарта
+      chart: redis                                                                  # Наименование Helm чарта
       targetRevision: 20.6.0                                                        # Версия Helm чарта
       helm:
-        releaseName: redis                                                  # Название релиза
+        releaseName: redis                                                          # Название релиза
 
         # Values относительно репозитория
         valueFiles:
