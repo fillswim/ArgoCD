@@ -24,7 +24,7 @@ spec:
       chart: rabbitmq                                                                 # Наименование Helm чарта
       targetRevision: 15.2.1                                                          # Версия Helm чарта
       helm:
-        releaseName: rerabbitmqdis                                                    # Название релиза
+        releaseName: rabbitmq                                                    # Название релиза
 
         # Values относительно репозитория
         valueFiles:
