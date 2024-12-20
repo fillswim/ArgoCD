@@ -1,16 +1,17 @@
 ## RabbitMQ Authentication parameters
 ##
 auth:
+
   username: user
-  password: "password"
-  securePassword: true
-  updatePassword: false
-  existingPasswordSecret: ""
-  existingSecretPasswordKey: ""
-  enableLoopbackUser: false
+  # password: "password"
+
+  ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (existing secret must contain a value for `rabbitmq-password` key or override with setting auth.existingSecretPasswordKey)
+  ## e.g:
+  ## existingPasswordSecret: name-of-existing-secret
+  ##
+  existingPasswordSecret: "rabbitmq-my-secret"
+
   erlangCookie: "rD2r5ZJh952Vqond"
-  existingErlangSecret: ""
-  existingSecretErlangKey: ""
 
 replicaCount: 3
 
