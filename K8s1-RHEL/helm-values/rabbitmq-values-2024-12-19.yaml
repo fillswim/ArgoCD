@@ -17,14 +17,9 @@ replicaCount: 1
 service:
   # type: ClusterIP
   type: LoadBalancer
-  loadBalancerClass: "nginx"
   loadBalancerIP: "192.168.2.228"
-  # externalIPs:
-  #   - 192.168.2.228
 
 ingress:
   enabled: false
-  path: /
-  pathType: ImplementationSpecific
-  hostname: rabbitmq.local
-  ingressClassName: ""
+  hostname: rabbitmq.fillswim.local
+  ingressClassName: "nginx"
