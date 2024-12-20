@@ -2,8 +2,18 @@
 ##
 auth:
 
+  ## @param auth.username RabbitMQ application username
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
+  ##
   username: user
+  ## @param auth.password RabbitMQ application password
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
+  ##
   # password: "password"
+
+  ## @param auth.securePassword Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions and 'true' when not setting the auth.password parameter.
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
+  ##
   securePassword: false
 
   ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (existing secret must contain a value for `rabbitmq-password` key or override with setting auth.existingSecretPasswordKey)
@@ -16,6 +26,9 @@ auth:
   ##
   # existingSecretPasswordKey: "rabbitmq-password"
 
+  ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
+  ##
   erlangCookie: "rD2r5ZJh952Vqond"
 
 replicaCount: 3
