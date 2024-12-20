@@ -19,6 +19,8 @@ service:
   type: LoadBalancer
   loadBalancerClass: "nginx"
   # loadBalancerIP: "192.168.2.228"
+  externalIPs:
+    - 192.168.2.228
 
 ingress:
   enabled: false
