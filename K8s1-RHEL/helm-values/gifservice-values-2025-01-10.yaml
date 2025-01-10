@@ -1,0 +1,14 @@
+---
+
+container:
+  image: nexus.fillswim.local:8086/mygifservice-gitlabcicd:20250106.143359
+
+containerPort: 8080
+
+servicePort: 8080
+
+cpuUtilization: 50
+
+memoryUtilization: 80
+
+host: gifservice.fillswim.local
