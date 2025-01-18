@@ -15,7 +15,7 @@ spec:
 
   destination:
     name: in-cluster                                                                  # Деплой в этот же кластер
-    namespace: rabbitmq-apps                                                          # В какой namespace будет производиться деплой
+    namespace: rabbitmq-publisher                                                     # В какой namespace будет производиться деплой
 
   sources:
     - repoURL: "http://nexus.fillswim.local:8081/repository/helm-hosted/"             # Репозиторий с Helm чартом
@@ -35,7 +35,7 @@ spec:
 
     # Дополнительная папка для отслеживания
     - repoURL: 'https://github.com/fillswim/ArgoCD.git'
-      path: "K8s1-RHEL/additions/rabbitmq-apps"
+      path: "K8s1-RHEL/additions/rabbitmq-publisher"
       targetRevision: HEAD
 
   syncPolicy:
