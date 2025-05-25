@@ -14,13 +14,13 @@ loki:
     type: s3
     s3:
 
-      ## MinIO S3 Cluster Standalone
-      # s3: http://api.minio.fillswim.local
-      # endpoint: http://api.minio.fillswim.local
+      # MinIO S3 Cluster Standalone
+      s3: http://api.minio.fillswim.local
+      endpoint: http://api.minio.fillswim.local
 
-      ## MinIO S3 Cluster K8s
-      s3: http://api.minio-example.fillswim.local
-      endpoint: http://api.minio-example.fillswim.local
+      # ## MinIO S3 Cluster K8s
+      # s3: http://api.minio-example.fillswim.local
+      # endpoint: http://api.minio-example.fillswim.local
 
       bucketNames:
         chunks: loki-chunks
