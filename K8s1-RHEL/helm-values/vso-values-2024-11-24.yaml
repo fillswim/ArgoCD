@@ -14,8 +14,8 @@ defaultVaultConnection:
   # @type: string
   # Example: http://vault.default.svc.cluster.local:8200
   # address: ""
-  # address: "http://vault.vault.svc.cluster.local:8200"
-  address: "https://vault.vault.svc.cluster.local:8200"
+  address: "http://vault.vault.svc.cluster.local:8200"
+  # address: "https://vault.vault.svc.cluster.local:8200"
 
   # CACertSecret is the name of a Kubernetes secret containing the trusted PEM encoded CA certificate chain as `ca.crt`.
   # Note: This secret must exist prior to deploying the CR.
