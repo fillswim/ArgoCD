@@ -58,9 +58,3 @@ spec:
       - CreateNamespace=true
       # - RespectIgnoreDifferences=true
       # - ServerSideApply=true
-    # ignoreDifferences:
-    #   - group: apiextensions.k8s.io
-    #     kind: CustomResourceDefinition
-    #     jsonPointers:
-    #       - /spec/preserveUnknownFields
-    #       - /spec/versions/0/schema/openAPIV3Schema/preserveUnknownFields
