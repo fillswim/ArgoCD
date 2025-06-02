@@ -43,6 +43,13 @@ spec:
       path: "K8s1-RHEL/additions/longhorn"
       targetRevision: HEAD
 
+# spec:
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
+
   syncPolicy:
     automated:
       prune: true
@@ -51,9 +58,9 @@ spec:
       - CreateNamespace=true
       # - RespectIgnoreDifferences=true
       # - ServerSideApply=true
-    ignoreDifferences:
-      - group: apiextensions.k8s.io
-        kind: CustomResourceDefinition
-        jsonPointers:
-          - /spec/preserveUnknownFields
-          - /spec/versions/0/schema/openAPIV3Schema/preserveUnknownFields
+    # ignoreDifferences:
+    #   - group: apiextensions.k8s.io
+    #     kind: CustomResourceDefinition
+    #     jsonPointers:
+    #       - /spec/preserveUnknownFields
+    #       - /spec/versions/0/schema/openAPIV3Schema/preserveUnknownFields
