@@ -1,7 +1,7 @@
 apiVersion: secrets.hashicorp.com/v1beta1
 
-# kubectl apply -f K8s1-RHEL/additions/vault-secrets-operator/MinIO-VaultAuth.yaml
-# kubectl delete -f K8s1-RHEL/additions/vault-secrets-operator/MinIO-VaultAuth.yaml
+# kubectl apply  -f K8s1-RHEL/additions/minio/VSO-MinIO-VaultAuth.yaml
+# kubectl delete -f K8s1-RHEL/additions/minio/VSO-MinIO-VaultAuth.yaml
 
 kind: VaultAuth
 metadata:

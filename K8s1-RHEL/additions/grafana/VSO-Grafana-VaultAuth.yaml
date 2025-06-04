@@ -1,7 +1,7 @@
 apiVersion: secrets.hashicorp.com/v1beta1
 
-# kubectl apply -f /root/Vault-Secrets-Operator/Grafana/Grafana-VaultAuth.yaml
-# kubectl delete -f /root/Vault-Secrets-Operator/Grafana/Grafana-VaultAuth.yaml
+# kubectl apply  -f K8s1-RHEL/additions/grafana/VSO-Grafana-VaultAuth.yaml
+# kubectl delete -f K8s1-RHEL/additions/grafana/VSO-Grafana-VaultAuth.yaml
 
 kind: VaultAuth
 metadata:
