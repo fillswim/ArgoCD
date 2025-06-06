@@ -20,7 +20,7 @@ spec:
   sources:
     - repoURL: "https://prometheus-community.github.io/helm-charts" # Репозиторий с Helm чартом
       chart: kube-prometheus-stack # Наименование Helm чарта
-      targetRevision: 62.4.0 # Версия Helm чарта
+      targetRevision: 73.2.0 # Версия Helm чарта
       helm:
         releaseName: prometheus # Название релиза
         valueFiles:
