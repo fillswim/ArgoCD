@@ -14,15 +14,15 @@ loki:
     type: s3
     s3:
 
-      # # MinIO S3 Cluster Standalone
+      # # MinIO S3 (На обычных серверах)
       # s3: http://api.minio.fillswim.local
       # endpoint: http://api.minio.fillswim.local
 
-      # # MinIO S3 Cluster K8s
+      # # MinIO S3 Cluster K8s (Через Ingress)
       # s3: http://api.minio-example.fillswim.local
       # endpoint: http://api.minio-example.fillswim.local
 
-      # # MinIO S3 Cluster K8s (доступ внутри кластера)
+      # # MinIO S3 Cluster K8s (Внутри кластера, через Service Cluster IP)
       s3: http://minio.minio.svc.cluster.local:9000
       endpoint: http://minio.minio.svc.cluster.local:9000
 
