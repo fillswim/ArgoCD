@@ -1,4 +1,9 @@
 config:
 # publish data to loki
   clients:
-    - url: http://loki.fillswim.local/loki/api/v1/push
+  
+    # Через Ingress
+    # - url: http://loki.fillswim.local/loki/api/v1/push
+
+    # Внутри кластера, через Service Cluster IP
+    - url: http://loki-distributor.loki.svc.cluster.local:3100/loki/api/v1/push
