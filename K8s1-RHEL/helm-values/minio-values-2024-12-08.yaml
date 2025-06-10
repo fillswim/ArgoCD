@@ -2,7 +2,7 @@
 mode: distributed ## other supported values are "standalone"
 
 # Number of MinIO containers running
-replicas: 4
+replicas: 3
 
 ## Set default rootUser, rootPassword
 ## rootUser and rootPassword is generated when not set
