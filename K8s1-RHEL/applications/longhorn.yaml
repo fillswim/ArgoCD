@@ -20,7 +20,7 @@ spec:
   sources:
     - repoURL: "https://charts.longhorn.io/"                                # Репозиторий с Helm чартом
       chart: longhorn                                                       # Наименование Helm чарта
-      targetRevision: v1.8.2                                                # Версия Helm чарта
+      targetRevision: v1.9.0                                                # Версия Helm чарта
       helm:
         releaseName: longhorn                                               # Название релиза
 
