@@ -3,3 +3,16 @@
 image: "nexus.fillswim.local:8086/docker.elastic.co/beats/filebeat"
 imageTag: "8.5.1"
 imagePullPolicy: "IfNotPresent"
+
+daemonset:
+  extraEnvs:
+    - name: "ELASTICSEARCH_USERNAME"
+      valueFrom:
+        secretKeyRef:
+          name: elasticsearch-master-credentials
+          key: username
+    - name: "ELASTICSEARCH_PASSWORD"
+      valueFrom:
+        secretKeyRef:
+          name: elasticsearch-master-credentials
+          key: password
