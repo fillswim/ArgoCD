@@ -20,7 +20,7 @@ spec:
   sources:
     - repoURL: "http://nexus.fillswim.local:8081/repository/helm-hosted/"   # Репозиторий с Helm чартом
       chart: elasticsearch                                                  # Наименование Helm чарта
-      targetRevision: 8.5.1                                                        # Версия Helm чарта
+      targetRevision: 8.5.1                                                 # Версия Helm чарта
       helm:
         releaseName: elasticsearch                                          # Название релиза
 
