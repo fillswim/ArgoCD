@@ -20,7 +20,7 @@ spec:
   sources:
     - repoURL: "https://grafana.github.io/helm-charts" # Репозиторий с Helm чартом
       chart: grafana # Наименование Helm чарта
-      targetRevision: 9.2.2 # Версия Helm чарта
+      targetRevision: 9.3.0 # Версия Helm чарта
       helm:
         releaseName: grafana # Название релиза
         valueFiles:
