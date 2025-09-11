@@ -13,7 +13,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: longhorn.fillswim.local
+  - host: longhorn-altlinux-k8s1.fillswim.local
     http:
       paths:
       - pathType: Prefix
