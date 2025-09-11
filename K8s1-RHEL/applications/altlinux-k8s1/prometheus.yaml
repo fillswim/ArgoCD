@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/prometheus.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/prometheus.yaml
+
+metadata:
+  name: prometheus-altlinux-k8s1                  # Название создаваемого Argo CD application
+  namespace: argo-cd                              # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  destination:
+    name: kubernetes-admin-altlinux@altlinux-k8s1                   # Деплой в этот же кластер
+    namespace: prometheus                                           # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "https://prometheus-community.github.io/helm-charts" # Репозиторий с Helm чартом
+      chart: kube-prometheus-stack                                  # Наименование Helm чарта
+      targetRevision: 73.2.0                                        # Версия Helm чарта
+      helm:
+        releaseName: prometheus # Название релиза
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/altlinux-k8s1/prometheus-values-lb.yaml
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"             # Репозиторий с values
+      targetRevision: main
+      ref: values
+
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'             # Репозиторий
+      path: "K8s1-RHEL/additions-altlinux-k8s1/prometheus"          # Относительный путь отслеживаемой папки
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      - ServerSideApply=true
