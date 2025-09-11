@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f K8s1-RHEL/K8s1-RHEL-root-app.yaml
+# kubectl apply  -f K8s1-RHEL/K8s1-RHEL-root-app.yaml
 # kubectl delete -f K8s1-RHEL/K8s1-RHEL-root-app.yaml
 
 metadata:
