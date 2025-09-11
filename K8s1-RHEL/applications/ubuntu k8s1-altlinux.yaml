@@ -1,11 +1,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f K8s1-RHEL/applications-non-sync/ubuntu.yaml
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/ubuntu.yaml
 # kubectl delete -f K8s1-RHEL/applications-non-sync/ubuntu.yaml
 
 metadata:
-  name: ubuntu-k8s1-altlinux                                           # Название создаваемого Argo CD application
+  name: ubuntu-k8s1-altlinux                             # Название создаваемого Argo CD application
   namespace: argo-cd                                     # namespace, в котором будет создаваться Argo CD application
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -20,7 +20,7 @@ spec:
   sources:
     # Папка для отслеживания
     - repoURL: 'https://github.com/fillswim/ArgoCD.git'
-      path: "K8s1-RHEL/additions/ubuntu"
+      path: "K8s1-RHEL/additions-altlinux-k8s1/ubuntu"
       targetRevision: HEAD
 
   syncPolicy:
