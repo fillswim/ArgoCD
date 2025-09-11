@@ -20,6 +20,8 @@ spec:
   sources:
     - repoURL: "https://github.com/fillswim/ArgoCD.git" # Репозиторий с Helm чартом
       path: "K8s1-RHEL/applications" # Относительный путь отслеживаемой папки
+      directory:
+        recurse: true
       targetRevision: HEAD # Версия Helm чарта
 
   syncPolicy:
