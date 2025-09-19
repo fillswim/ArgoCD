@@ -5,7 +5,7 @@ kind: Application
 # kubectl delete -f K8s1-RHEL/applications-non-sync/ubuntu.yaml
 
 metadata:
-  name: ubuntu-k8s1-altlinux                             # Название создаваемого Argo CD application
+  name: ubuntu-altlinux-k8s1                             # Название создаваемого Argo CD application
   namespace: argo-cd                                     # namespace, в котором будет создаваться Argo CD application
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -14,7 +14,7 @@ spec:
   project: default
 
   destination:
-    name: kubernetes-admin-altlinux@altlinux-k8s1        # Деплой в этот же кластер
+    name: kubernetes-admin-altlinux-k8s1@altlinux-k8s1   # Деплой в этот же кластер
     namespace: default                                   # В какой namespace будет производиться деплой
 
   sources:
