@@ -26,7 +26,7 @@ spec:
 
         # Values относительно репозитория
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/rabbitmq-publisher-values-2025-01-17.yaml
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/rabbitmq-publisher-values-2025-01-17.yaml
 
     # Репозиторий с values
     - repoURL: "https://github.com/fillswim/ArgoCD.git"

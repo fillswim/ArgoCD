@@ -26,7 +26,7 @@ spec:
 
         # Values относительно репозитория
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/promtail-values-2024-12-02.yaml
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/promtail-values-2024-12-02.yaml
 
         # # Переопределенный параметр в values
         # parameters:

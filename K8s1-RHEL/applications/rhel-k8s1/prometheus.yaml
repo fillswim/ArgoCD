@@ -18,13 +18,15 @@ spec:
     namespace: prometheus # В какой namespace будет производиться деплой
 
   sources:
+
     - repoURL: "https://prometheus-community.github.io/helm-charts" # Репозиторий с Helm чартом
       chart: kube-prometheus-stack # Наименование Helm чарта
       targetRevision: 73.2.0 # Версия Helm чарта
       helm:
         releaseName: prometheus # Название релиза
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/prometheus-values-lb.yaml
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/prometheus-values-lb.yaml
+
     - repoURL: "https://github.com/fillswim/ArgoCD.git" # Репозиторий с values
       targetRevision: main
       ref: values

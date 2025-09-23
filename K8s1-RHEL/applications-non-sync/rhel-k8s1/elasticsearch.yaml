@@ -26,7 +26,7 @@ spec:
 
         # Values относительно репозитория
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/elasticsearch-values-2024-12-11.yaml
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/elasticsearch-values-2024-12-11.yaml
 
     # Репозиторий с values
     - repoURL: "https://github.com/fillswim/ArgoCD.git"

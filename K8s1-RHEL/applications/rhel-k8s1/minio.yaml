@@ -26,7 +26,7 @@ spec:
 
         # Values относительно репозитория
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/minio-values-2024-12-08.yaml
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/minio-values-2024-12-08.yaml
 
         # # Переопределенный параметр в values
         # parameters:

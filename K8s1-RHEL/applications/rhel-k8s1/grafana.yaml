@@ -25,7 +25,7 @@ spec:
       helm:
         releaseName: grafana # Название релиза
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/grafana-values-ingress.yaml
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/grafana-values-ingress.yaml
 
     - repoURL: "https://github.com/fillswim/ArgoCD.git"                       # Репозиторий с values
       targetRevision: main
