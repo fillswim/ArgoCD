@@ -30,7 +30,7 @@ spec:
       ref: values
 
     - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий
-      path: "K8s1-RHEL/additions/prometheus"              # Относительный путь отслеживаемой папки
+      path: "K8s1-RHEL/additions/additions-rhel-k8s1/prometheus"              # Относительный путь отслеживаемой папки
       targetRevision: HEAD
 
   syncPolicy:

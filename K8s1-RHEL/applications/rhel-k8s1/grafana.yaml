@@ -18,19 +18,21 @@ spec:
     namespace: grafana # В какой namespace будет производиться деплой
 
   sources:
-    - repoURL: "https://grafana.github.io/helm-charts" # Репозиторий с Helm чартом
+
+    - repoURL: "https://grafana.github.io/helm-charts"                       # Репозиторий с Helm чартом
       chart: grafana # Наименование Helm чарта
       targetRevision: 9.3.0 # Версия Helm чарта
       helm:
         releaseName: grafana # Название релиза
         valueFiles:
           - $values/K8s1-RHEL/helm-values/grafana-values-ingress.yaml
-    - repoURL: "https://github.com/fillswim/ArgoCD.git" # Репозиторий с values
+
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"                       # Репозиторий с values
       targetRevision: main
       ref: values
 
-    - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий
-      path: "K8s1-RHEL/additions/grafana"                 # Относительный путь отслеживаемой папки
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'                       # Репозиторий
+      path: "K8s1-RHEL/additions/additions-rhel-k8s1/grafana"                 # Относительный путь отслеживаемой папки
       targetRevision: HEAD
 
   syncPolicy:

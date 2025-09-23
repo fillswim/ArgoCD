@@ -25,6 +25,7 @@ spec:
         releaseName: vault # Название релиза
         valueFiles:
           - $values/K8s1-RHEL/helm-values/hashicorp-vault-ha-raft-without-tls.yaml
+
     - repoURL: "https://github.com/fillswim/ArgoCD.git" # Репозиторий с values
       targetRevision: main
       ref: values

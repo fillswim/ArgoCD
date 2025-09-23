@@ -1,11 +1,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f K8s1-RHEL/applications-non-sync/elasticsearch.yaml
-# kubectl delete -f K8s1-RHEL/applications-non-sync/elasticsearch.yaml
+# kubectl apply -f K8s1-RHEL/applications-non-sync/kibana.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/kibana.yaml
 
 metadata:
-  name: elasticsearch                                                       # Название создаваемого Argo CD application
+  name: kibana                                                              # Название создаваемого Argo CD application
   namespace: argo-cd                                                        # namespace, в котором будет создаваться Argo CD application
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -19,14 +19,14 @@ spec:
 
   sources:
     - repoURL: "http://nexus.fillswim.local:8081/repository/helm-hosted/"   # Репозиторий с Helm чартом
-      chart: elasticsearch                                                  # Наименование Helm чарта
-      targetRevision: 8.5.1                                                 # Версия Helm чарта
+      chart: kibana                                                         # Наименование Helm чарта
+      targetRevision: 8.5.1                                                        # Версия Helm чарта
       helm:
-        releaseName: elasticsearch                                          # Название релиза
+        releaseName: kibana                                                 # Название релиза
 
         # Values относительно репозитория
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/elasticsearch-values-2024-12-11.yaml
+          - $values/K8s1-RHEL/helm-values/kibana-values-2024-12-12.yaml
 
     # Репозиторий с values
     - repoURL: "https://github.com/fillswim/ArgoCD.git"
@@ -35,7 +35,7 @@ spec:
 
      # Дополнительная папка для отслеживания
     - repoURL: 'https://github.com/fillswim/ArgoCD.git'
-      path: "K8s1-RHEL/additions/elasticsearch"
+      path: "K8s1-RHEL/additions/additions-rhel-k8s1/kibana"
       targetRevision: HEAD
 
   syncPolicy:
