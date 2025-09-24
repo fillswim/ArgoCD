@@ -1,0 +1,8 @@
+
+replicas: 2
+
+args:
+  # Включить insecure-клиентское соединение к kubelet
+  - --kubelet-insecure-tls
+  # Использовать hostname ноды вместо IP при обращении к kubelet
+  - --kubelet-preferred-address-types=InternalIP,Hostname,InternalDNS,ExternalDNS,ExternalIP
