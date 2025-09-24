@@ -1,0 +1,80 @@
+grafana:
+  enabled: false
+
+## Deploy a Prometheus instance
+##
+prometheus:
+  enabled: true
+
+  service:
+
+    ## Port for Prometheus Service to listen on
+    ##
+    port: 9090
+
+    ## To be used with a proxy extraContainer port
+    targetPort: 9090
+
+    ## Loadbalancer IP
+    ## Only use if service.type is "LoadBalancer"
+    loadBalancerIP: 192.168.2.138
+
+    ## Service type
+    ##
+    type: LoadBalancer
+
+  prometheusSpec:
+
+    ## EnableAdminAPI enables Prometheus the administrative HTTP API which includes functionality such as deleting time series.
+    ## This is disabled by default.
+    ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
+    ##
+    enableAdminAPI: true
+
+    externalLabels:
+      cluster: alma-k8s2
+
+    ## Secrets is a list of Secrets in the same namespace as the Prometheus object, which shall be mounted into the Prometheus Pods.
+    ## The Secrets are mounted into /etc/prometheus/secrets/. Secrets changes after initial creation of a Prometheus object are not
+    ## reflected in the running Pods. To change the secrets mounted into the Prometheus Pods, the object must be deleted and recreated
+    ## with the new list of secrets.
+    ##
+    secrets:
+      - etcd-client-cert
+
+
+## Component scraping etcd
+##
+kubeEtcd:
+  enabled: true
+
+  ## If your etcd is not deployed as a pod, specify IPs it can be found on
+  ##
+  endpoints: []
+  # - 10.141.4.22
+  # - 10.141.4.23
+  # - 10.141.4.24
+
+  ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used
+  ##
+  service:
+    enabled: true
+    port: 2381
+    targetPort: 2379
+    ipDualStack:
+      enabled: false
+      ipFamilies: ["IPv6", "IPv4"]
+      ipFamilyPolicy: "PreferDualStack"
+    # selector:
+    #   component: etcd
+
+  ## Configure secure access to the etcd cluster by loading a secret into prometheus and
+  ## specifying security configuration below. For example, with a secret named etcd-client-cert
+  ##
+  serviceMonitor:
+    scheme: https
+    insecureSkipVerify: false
+    serverName: localhost
+    caFile: /etc/prometheus/secrets/etcd-client-cert/ca.crt
+    certFile: /etc/prometheus/secrets/etcd-client-cert/client.crt
+    keyFile: /etc/prometheus/secrets/etcd-client-cert/client.key

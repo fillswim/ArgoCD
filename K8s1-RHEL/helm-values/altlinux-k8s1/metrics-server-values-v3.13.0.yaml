@@ -1,15 +1,17 @@
 
 replicas: 2
 
-args:
-  - --kubelet-insecure-tls
-  - --kubelet-preferred-address-types=InternalIP,Hostname
+# args:
+#   - --kubelet-insecure-tls
+#   - --kubelet-preferred-address-types=InternalIP,Hostname
 
 rbac:
   create: true
 
 serviceAccount:
   create: true
+  name: metrics-server
+  existingSecret: metrics-server-token
 
 resources:
   requests:
@@ -18,3 +20,24 @@ resources:
   limits:
     cpu: 200m
     memory: 400Mi
+
+# apiService:
+#   create: true
+#   insecureSkipTLSVerify: false
+
+# tls:
+#   # Set the TLS method to use. Supported values:
+#   # - `metrics-server` : Metrics-server will generate a self-signed certificate
+#   # - `helm`           : Helm will generate a self-signed certificate
+#   # - `cert-manager`   : Use cert-manager.io to create and maintain the certificate
+#   # - `existingSecret` : Reuse an existing secret. No new secret will be created
+#   # type: "metrics-server"
+#   type: "existingSecret"
+#   # Kubernetes cluster domain. Used to configure Subject Alt Names for the certificate
+#   clusterDomain: altlinux-k8s1
+
+#   existingSecret:
+#     # Name of the existing Secret to use for TLS
+#     name: ""
+#     # Use helm lookup function to provision `apiService.caBundle`
+#     lookup: true
