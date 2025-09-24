@@ -18,7 +18,7 @@ spec:
     namespace: kube-system                                          # В какой namespace будет производиться деплой
 
   sources:
-    - repoURL: "https://kubernetes-sigs.github.io/metrics-server"   # Репозиторий с Helm чартом
+    - repoURL: "https://kubernetes-sigs.github.io/metrics-server/"   # Репозиторий с Helm чартом
       chart: metrics-server                                         # Наименование Helm чарта
       targetRevision: 0.8.0                                         # Версия Helm чарта
       helm:
