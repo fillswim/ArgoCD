@@ -1,0 +1,20 @@
+---
+
+apiVersion: cert-manager.io/v1
+
+# kubectl apply  -f k8s-manifests/grafana/grafana-certificate.yaml
+# kubectl delete -f k8s-manifests/grafana/grafana-certificate.yaml
+
+kind: Certificate
+metadata:
+  name: grafana-cert
+  namespace: grafana
+spec:
+  secretName: grafana-tls
+  dnsNames:
+    - grafana-alma-k8s2.fillswim.local
+  issuerRef:
+    name: ca-cluster-issuer
+    kind: ClusterIssuer
+  privateKey:
+    rotationPolicy: Always
