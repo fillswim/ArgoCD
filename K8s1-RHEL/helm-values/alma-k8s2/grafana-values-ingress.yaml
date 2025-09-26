@@ -61,8 +61,8 @@ resources: {}
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  enabled: false
   type: pvc
-  enabled: true
 
   # storageClassName: default
   accessModes:

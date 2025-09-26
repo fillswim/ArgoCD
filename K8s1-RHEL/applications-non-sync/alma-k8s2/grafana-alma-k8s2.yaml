@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply  -f K8s1-RHEL/applications/alma-k8s2/grafana-alma-k8s2.yaml
-# kubectl delete -f K8s1-RHEL/applications/alma-k8s2/grafana-alma-k8s2.yaml
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/alma-k8s2/grafana-alma-k8s2.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/alma-k8s2/grafana-alma-k8s2.yaml
 
 metadata:
   name: grafana-alma-k8s2                                                     # Название создаваемого Argo CD application
