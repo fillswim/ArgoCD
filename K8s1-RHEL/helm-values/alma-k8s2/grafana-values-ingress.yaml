@@ -44,10 +44,10 @@ ingress:
   #         name: use-annotation
 
 
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+   - secretName: grafana-tls
+     hosts:
+       - grafana-alma-k8s2.fillswim.local
 
 resources: {}
 #  limits:
