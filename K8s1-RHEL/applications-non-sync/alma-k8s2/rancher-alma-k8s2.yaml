@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/alma-k8s2/rancher-alma-k8s2.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/alma-k8s2/rancher-alma-k8s2.yaml
+
+metadata:
+  name: rancher-alma-k8s2                                                     # Название создаваемого Argo CD application
+  namespace: argo-cd                                                          # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  destination:
+    name: kubernetes-admin-alma-k8s2@alma-k8s2                                # Деплой в этот же кластер
+    namespace: cattle-system                                                        # В какой namespace будет производиться деплой
+
+  sources:
+
+    - repoURL: "https://releases.rancher.com/server-charts/stable"            # Репозиторий с Helm чартом
+      chart: rancher                                                          # Наименование Helm чарта
+      targetRevision: 2.12.2                                                  # Версия Helm чарта
+      helm:
+        releaseName: rancher                                                  # Название релиза
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/alma-k8s2/rancher-stable-values.yaml
+
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"                       # Репозиторий с values
+      targetRevision: main
+      ref: values
+
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'                       # Репозиторий
+      path: "K8s1-RHEL/additions/additions-alma-k8s2/rancher"                 # Относительный путь отслеживаемой папки
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      # - ServerSideApply=true
