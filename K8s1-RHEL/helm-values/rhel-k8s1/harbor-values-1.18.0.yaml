@@ -32,15 +32,20 @@ persistence:
   persistentVolumeClaim:
     registry:
       size: 50Gi
+      accessMode: ReadWriteMany
     jobservice:
       jobLog:
         size: 10Gi
+        accessMode: ReadWriteMany
     database:
       size: 10Gi
+      accessMode: ReadWriteMany
     redis:
       size: 2Gi
+      accessMode: ReadWriteMany
     trivy:
       size: 5Gi
+      accessMode: ReadWriteMany
 
 existingSecretAdminPassword: ""
 existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
