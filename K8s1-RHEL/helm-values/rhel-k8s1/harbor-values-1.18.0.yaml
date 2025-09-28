@@ -46,6 +46,26 @@ existingSecretAdminPassword: ""
 existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
 harborAdminPassword: "Harbor12345"
 
+nginx:
+  replicas: 3
+
+portal:
+  replicas: 3
+
+registry:
+  replicas: 3
+
+core:
+  replicas: 3
+
+jobservice:
+  replicas: 3
+
+exporter:
+  replicas: 3
+
 trivy:
-  enabled: true
+  replicas: 3
+
+chartmuseum:
   replicas: 3
