@@ -3,6 +3,7 @@ kind: Application
 
 # kubectl apply  -f K8s1-RHEL/applications-non-sync/alma-k8s2/rancher-alma-k8s2.yaml
 # kubectl delete -f K8s1-RHEL/applications-non-sync/alma-k8s2/rancher-alma-k8s2.yaml
+# argocd app delete rancher-alma-k8s2 --cascade
 
 metadata:
   name: rancher-alma-k8s2                                                     # Название создаваемого Argo CD application
