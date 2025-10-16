@@ -1,0 +1,59 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/alma-k8s2/longhorn.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/alma-k8s2/longhorn.yaml
+
+metadata:
+  name: longhorn                                                            # Название создаваемого Argo CD application
+  namespace: argo-cd                                                        # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  destination:
+    name: kubernetes-admin-alma-k8s2@alma-k8s2                              # Деплой в этот же кластер
+    namespace: longhorn-system                                              # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "https://charts.longhorn.io/"                                # Репозиторий с Helm чартом
+      chart: longhorn                                                       # Наименование Helm чарта
+      targetRevision: v1.10.0                                               # Версия Helm чарта
+      helm:
+        releaseName: longhorn                                               # Название релиза
+
+        # Values относительно репозитория
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/alma-k8s2/longhorn-values-1.10.0.yaml
+
+        # Переопределенный параметр в values
+        parameters:
+        - name: "preUpgradeChecker.jobEnabled"
+          value: "false"
+
+    # Репозиторий с values
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"
+      targetRevision: main
+      ref: values
+
+     # Дополнительная папка для отслеживания
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'
+      path: "K8s1-RHEL/additions/additions-alma-k8s2/longhorn"
+      targetRevision: HEAD
+
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # - RespectIgnoreDifferences=true
+      # - ServerSideApply=true
