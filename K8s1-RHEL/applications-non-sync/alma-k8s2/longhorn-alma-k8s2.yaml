@@ -1,11 +1,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply  -f K8s1-RHEL/applications-non-sync/alma-k8s2/longhorn.yaml
-# kubectl delete -f K8s1-RHEL/applications-non-sync/alma-k8s2/longhorn.yaml
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/alma-k8s2/longhorn-alma-k8s2.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/alma-k8s2/longhorn-alma-k8s2.yaml
 
 metadata:
-  name: longhorn                                                            # Название создаваемого Argo CD application
+  name: longhorn-alma-k8s2                                                  # Название создаваемого Argo CD application
   namespace: argo-cd                                                        # namespace, в котором будет создаваться Argo CD application
   finalizers:
     - resources-finalizer.argocd.argoproj.io

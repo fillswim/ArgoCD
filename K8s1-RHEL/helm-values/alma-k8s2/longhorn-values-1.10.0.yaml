@@ -30,7 +30,7 @@ defaultSettings:
   # -- Setting that automatically rebalances replicas when an available node is discovered.
   replicaAutoBalance: best-effort
   # -- Percentage of storage that can be allocated relative to hard drive capacity. The default value is "100".
-  storageOverProvisioningPercentage: 300
+  storageOverProvisioningPercentage: "300"
   # -- Upgrade Checker that periodically checks for new Longhorn versions. When a new version is available, a notification appears on the Longhorn UI. This setting is enabled by default
   upgradeChecker: ~
   # -- Default number of replicas for volumes created using the Longhorn UI. For Kubernetes configuration, modify the `numberOfReplicas` field in the StorageClass. The default value is "{"v1":"3","v2":"3"}".
