@@ -78,7 +78,7 @@ ingress:
   # ingressClassName can replace the kubernetes.io/ingress.class annotation used in earlier Kubernetes releases.
   ingressClassName: nginx
   # -- Hostname of the Layer 7 load balancer.
-  host: sslip.io
+  host: longhorn-alma-k8s2.fillswim.local
   # -- Setting that allows you to enable TLS on ingress records.
   tls: true
   # -- Setting that allows you to enable secure connections to the Longhorn UI service via port 443.
