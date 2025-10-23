@@ -26,6 +26,11 @@ prometheus:
 
 
   prometheusSpec:
+    ## 2025-10-23: Добавлено для добавления внешних меток к метрикам
+    ## External labels to add to any time series or alerts when communicating with external systems
+    ##
+    externalLabels:
+      cluster: alma-k8s2
 
     ## EnableAdminAPI enables Prometheus the administrative HTTP API which includes functionality such as deleting time series.
     ## This is disabled by default.
