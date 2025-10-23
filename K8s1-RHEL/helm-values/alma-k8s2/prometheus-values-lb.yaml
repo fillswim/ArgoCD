@@ -109,3 +109,8 @@ kubeEtcd:
     caFile: /etc/prometheus/secrets/etcd-client-cert/ca.crt
     certFile: /etc/prometheus/secrets/etcd-client-cert/client.crt
     keyFile: /etc/prometheus/secrets/etcd-client-cert/client.key
+
+# 2025-10-23: Добавлено для развертывания Alertmanager
+alertmanager:
+  alertmanagerSpec:
+    replicas: 3
