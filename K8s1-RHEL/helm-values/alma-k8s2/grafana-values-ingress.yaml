@@ -41,15 +41,12 @@ resources: {}
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  enabled: false
+  enabled: true
   type: pvc
-
-  # storageClassName: default
+  storageClassName: longhorn
   accessModes:
-    # - ReadWriteOnce
     - ReadWriteMany
   size: 10Gi
-  # annotations: {}
   finalizers:
     - kubernetes.io/pvc-protection
 
