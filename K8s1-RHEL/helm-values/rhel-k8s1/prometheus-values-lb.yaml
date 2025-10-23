@@ -1,62 +1,94 @@
-grafana:
-  enabled: false
+# =================================================================================================
+#                                               Global
+# =================================================================================================
 
 ## Deploy a Prometheus instance
-##
 prometheus:
+
   enabled: true
 
-  service:
+  # service:
+  #   port: 9090
+  #   targetPort: 9090
+  #   loadBalancerIP: 192.168.2.226
+  #   type: LoadBalancer
 
-    ## Port for Prometheus Service to listen on
-    ##
-    port: 9090
-
-    ## To be used with a proxy extraContainer port
-    targetPort: 9090
-
-    ## Loadbalancer IP
-    ## Only use if service.type is "LoadBalancer"
-    loadBalancerIP: 192.168.2.226
-
-    ## Service type
-    ##
-    type: LoadBalancer
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: ca-cluster-issuer
+    hosts:
+      - prometheus-rhel-k8s1.fillswim.local
+    tls:
+      - secretName: prometheus-tls
+        hosts:
+          - prometheus-rhel-k8s1.fillswim.local
 
   prometheusSpec:
 
-    ## EnableAdminAPI enables Prometheus the administrative HTTP API which includes functionality such as deleting time series.
-    ## This is disabled by default.
-    ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
-    ##
-    enableAdminAPI: true
-
+    ## 2025-10-23: Добавлено для добавления внешних меток к метрикам
+    ## External labels to add to any time series or alerts when communicating with external systems
     externalLabels:
       cluster: rhel-k8s1
+
+    ## EnableAdminAPI enables Prometheus the administrative HTTP API which includes functionality such as deleting time series.
+    enableAdminAPI: true
 
     ## Secrets is a list of Secrets in the same namespace as the Prometheus object, which shall be mounted into the Prometheus Pods.
     ## The Secrets are mounted into /etc/prometheus/secrets/. Secrets changes after initial creation of a Prometheus object are not
     ## reflected in the running Pods. To change the secrets mounted into the Prometheus Pods, the object must be deleted and recreated
     ## with the new list of secrets.
-    ##
     secrets:
       - etcd-client-cert
 
+    # 2025-10-23: Добавлено для сохранения данных в PersistentVolumeClaim
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 20Gi
+
+    ## 2025-10-23: Задает на какой период времени хранить данные в метрик
+    ## How long to retain metrics
+    retention: 15d
+    ## Maximum size of metrics
+    ## Unit format should be in the form of "50GiB"
+    retentionSize: "10GiB"
+    ## Interval between consecutive scrapes.
+    ## Defaults to 30s.
+    scrapeInterval: "30s"
+    ## Interval between consecutive evaluations.
+    evaluationInterval: "30s"
+
+    ## Resource limits & requests
+    resources:
+      requests:
+        memory: 2Gi
+        cpu: 500m
+      limits:
+        memory: 4Gi
+        cpu: 1000m
+
+# =================================================================================================
+#                                               kubeEtcd
+# =================================================================================================
 
 ## Component scraping etcd
-##
 kubeEtcd:
   enabled: true
 
   ## If your etcd is not deployed as a pod, specify IPs it can be found on
-  ##
   endpoints: []
   # - 10.141.4.22
   # - 10.141.4.23
   # - 10.141.4.24
 
   ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used
-  ##
   service:
     enabled: true
     port: 2381
@@ -65,12 +97,9 @@ kubeEtcd:
       enabled: false
       ipFamilies: ["IPv6", "IPv4"]
       ipFamilyPolicy: "PreferDualStack"
-    # selector:
-    #   component: etcd
 
   ## Configure secure access to the etcd cluster by loading a secret into prometheus and
   ## specifying security configuration below. For example, with a secret named etcd-client-cert
-  ##
   serviceMonitor:
     scheme: https
     insecureSkipVerify: false
@@ -78,3 +107,38 @@ kubeEtcd:
     caFile: /etc/prometheus/secrets/etcd-client-cert/ca.crt
     certFile: /etc/prometheus/secrets/etcd-client-cert/client.crt
     keyFile: /etc/prometheus/secrets/etcd-client-cert/client.key
+
+# =================================================================================================
+#                                            Alertmanager
+# =================================================================================================
+
+# 2025-10-23: Добавлено для развертывания Alertmanager
+alertmanager:
+  alertmanagerSpec:
+    replicas: 3
+    retention: 120h # 5 days
+
+    ## Storage is the definition of how storage will be used by the ThanosRuler instances.
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+
+    ## Resource limits & requests
+    resources:
+      requests:
+        memory: 400Mi
+        cpu: 100m
+      limits:
+        memory: 800Mi
+        cpu: 200m
+
+# =================================================================================================
+#                                              Grafana
+# =================================================================================================
+grafana:
+  enabled: false
