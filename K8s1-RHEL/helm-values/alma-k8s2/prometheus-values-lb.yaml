@@ -54,6 +54,23 @@ prometheus:
             requests:
               storage: 20Gi
 
+    ## 2025-10-23: Задает на какой период времени хранить данные в метрик
+    ## How long to retain metrics
+    ##
+    retention: 15d
+    ## Maximum size of metrics
+    ## Unit format should be in the form of "50GiB"
+    retentionSize: "10GiB"
+    ## Interval between consecutive scrapes.
+    ## Defaults to 30s.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/release-0.44/pkg/prometheus/promcfg.go#L180-L183
+    ##
+    scrapeInterval: "30s"
+    ## Interval between consecutive evaluations.
+    ##
+    evaluationInterval: "30s"
+
+
 
 ## Component scraping etcd
 ##
