@@ -7,23 +7,17 @@ prometheus:
   enabled: true
 
   ingress:
-
     enabled: true
-
     ingressClassName: "nginx"
-
     annotations:
       kubernetes.io/ingress.class: nginx
       cert-manager.io/cluster-issuer: ca-cluster-issuer
-    
     hosts:
       - prometheus-alma-k8s2.fillswim.local
-
     tls:
       - secretName: prometheus-tls
         hosts:
           - prometheus-alma-k8s2.fillswim.local
-
 
   prometheusSpec:
     ## 2025-10-23: Добавлено для добавления внешних меток к метрикам
@@ -114,3 +108,13 @@ kubeEtcd:
 alertmanager:
   alertmanagerSpec:
     replicas: 3
+    retention: 120h # 5 days
+
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
