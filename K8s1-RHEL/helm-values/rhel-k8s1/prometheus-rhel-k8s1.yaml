@@ -117,6 +117,14 @@ prometheus:
         # basic_auth:
         #   username: "federation"
         #   password: "SuperSecret123"
+        relabel_configs:
+          - target_label: cluster
+            replacement: 'alma-k8s2'
+          - source_labels: [exported_instance]
+            target_label: instance
+          - source_labels: [exported_job]
+            target_label: job
+
 
 # =================================================================================================
 #                                               kubeEtcd
