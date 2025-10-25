@@ -74,6 +74,24 @@ prometheus:
         memory: 4Gi
         cpu: 1000m
 
+    additionalScrapeConfigs:
+      - job_name: 'federate-alma-k8s2'
+        scrape_interval: 30s
+        honor_labels: true
+        metrics_path: '/federate'
+        scheme: https
+        params:
+          'match[]':
+            - '{__name__=~"up|kube_.*|node_.*"}'
+        static_configs:
+          - targets:
+              - 'prometheus-alma-k8s2.fillswim.local'
+        tls_config:
+          insecure_skip_verify: true  # или false, если есть доверенный CA
+        # basic_auth:
+        #   username: "federation"
+        #   password: "SuperSecret123"
+
 # =================================================================================================
 #                                               kubeEtcd
 # =================================================================================================
