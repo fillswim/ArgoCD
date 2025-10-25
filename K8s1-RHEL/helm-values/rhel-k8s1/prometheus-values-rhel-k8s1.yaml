@@ -33,6 +33,10 @@ prometheus:
     externalLabels:
       cluster: rhel-k8s1
 
+    metricRelabelings:
+      - targetLabel: cluster
+        replacement: rhel-k8s1
+
     ## EnableAdminAPI enables Prometheus the administrative HTTP API which includes functionality such as deleting time series.
     enableAdminAPI: true
 
