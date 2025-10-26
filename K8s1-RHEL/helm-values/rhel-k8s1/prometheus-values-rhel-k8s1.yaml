@@ -91,7 +91,7 @@ prometheus:
 
       - job_name: 'federate-alma-k8s2'
         scrape_interval: 30s
-        honor_labels: false
+        honor_labels: true
         metrics_path: '/federate'
         scheme: https
         params:
