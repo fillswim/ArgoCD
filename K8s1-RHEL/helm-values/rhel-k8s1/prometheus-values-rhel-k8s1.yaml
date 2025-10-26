@@ -91,7 +91,7 @@ prometheus:
 
       - job_name: 'federate-rhel-k8s1'
         scrape_interval: 30s
-        honor_labels: true
+        honor_labels: false
         metrics_path: '/federate'
         # scheme: http
         params:
