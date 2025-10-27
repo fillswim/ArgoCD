@@ -31,7 +31,7 @@ persistence:
   storageClass: "longhorn"
   volumeName: ""
   accessMode: ReadWriteOnce
-  size: 20Gi
+  size: 40Gi
 
 ingress:
   enabled: true
