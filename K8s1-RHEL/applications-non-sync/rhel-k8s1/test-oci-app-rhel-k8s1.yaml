@@ -5,7 +5,7 @@ kind: Application
 # kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/test-oci-app-rhel-k8s1.yaml
 
 metadata:
-  name: prometheus-rhel-k8s1 # Название создаваемого Argo CD application
+  name: test-oci-app-rhel-k8s1 # Название создаваемого Argo CD application
   namespace: argo-cd # namespace, в котором будет создаваться Argo CD application
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -14,8 +14,8 @@ spec:
   project: default
 
   destination:
-    name: in-cluster # Деплой в этот же кластер
-    namespace: prometheus # В какой namespace будет производиться деплой
+    name: in-cluster    # Деплой в этот же кластер
+    namespace: test-oci # В какой namespace будет производиться деплой
 
   # sources:
   #   # - repoURL: "https://prometheus-community.github.io/helm-charts" # Репозиторий с Helm чартом
