@@ -5,8 +5,8 @@ kind: Application
 # kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/prometheus-app-rhel-k8s1.yaml
 
 metadata:
-  name: prometheus-rhel-k8s1 # Название создаваемого Argo CD application
-  namespace: argo-cd # namespace, в котором будет создаваться Argo CD application
+  name: prometheus-rhel-k8s1                                                       # Название создаваемого Argo CD application
+  namespace: argo-cd                                                               # namespace, в котором будет создаваться Argo CD application
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 
@@ -14,41 +14,29 @@ spec:
   project: default
 
   destination:
-    name: in-cluster # Деплой в этот же кластер
-    namespace: prometheus # В какой namespace будет производиться деплой
+    name: in-cluster                                                               # Деплой в этот же кластер
+    namespace: prometheus                                                          # В какой namespace будет производиться деплой
 
   sources:
     # - repoURL: oci://ghcr.io/prometheus-community/charts                           # Репозиторий с Helm чартом
     # - repoURL: oci://harbor.fillswim.local/charts                                  # Репозиторий с Helm чартом
     # - repoURL: prometheus-community-oci                                            # Репозиторий с Helm чартом
-    - repoURL: "https://prometheus-community.github.io/helm-charts"                # Репозиторий с Helm чартом
-      chart: kube-prometheus-stack # Наименование Helm чарта
-      targetRevision: 79.0.0 # Версия Helm чарта
+    # - repoURL: "https://prometheus-community.github.io/helm-charts"                # Репозиторий с Helm чартом
+    - repoURL: "oci://harbor.fillswim.local/charts/kube-prometheus-stack"          # Репозиторий с Helm чартом
+      chart: kube-prometheus-stack                                                 # Наименование Helm чарта
+      targetRevision: 79.0.0                                                       # Версия Helm чарта
       helm:
-        releaseName: prometheus # Название релиза
+        releaseName: prometheus                                                    # Название релиза
         valueFiles:
           - $values/K8s1-RHEL/helm-values/rhel-k8s1/prometheus-values-rhel-k8s1.yaml
 
-    - repoURL: "https://github.com/fillswim/ArgoCD.git" # Репозиторий с values
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"                             # Репозиторий с values
       targetRevision: main
       ref: values
 
-    - repoURL: 'https://github.com/fillswim/ArgoCD.git'   # Репозиторий
-      path: "K8s1-RHEL/additions/additions-rhel-k8s1/prometheus"              # Относительный путь отслеживаемой папки
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'                             # Репозиторий
+      path: "K8s1-RHEL/additions/additions-rhel-k8s1/prometheus"                    # Относительный путь отслеживаемой папки
       targetRevision: HEAD
-
-  source:
-    path: .
-    repoURL: oci://registry-1.docker.io/bitnamicharts/nginx 
-    targetRevision: 15.9.0
-    helm:
-      valuesObject:
-        some-value: foo
-
-  # sources:
-  #   - repoURL: https://github.com/fillswim/ArgoCD.git
-  #     targetRevision: main
-  #     ref: values
 
   syncPolicy:
     automated:
