@@ -51,10 +51,10 @@ ingress:
   path: /
   hosts:
     - api.minio-k8s1-rhel.fillswim.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+   - secretName: minio-tls
+     hosts:
+       - api.minio-k8s1-rhel.fillswim.local
 
 consoleIngress:
   enabled: true
