@@ -1,0 +1,59 @@
+global:
+  defaultStorageClass: "longhorn"
+
+clusterDomain: cluster.local
+
+architecture: replication
+
+image:
+  registry: registry-1.docker.io
+  repository: bitnami/redis
+  tag: latest
+
+auth:
+  enabled: true
+  sentinel: true
+  existingSecret: "redis-auth-secret"
+  existingSecretPasswordKey: "redis-password"
+
+master:
+  count: 1
+  priorityClassName: "system-cluster-critical"
+  podAntiAffinityPreset: hard
+
+  persistence:
+    enabled: true
+    storageClass: "longhorn"
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+
+replica:
+  replicaCount: 3
+  priorityClassName: "system-cluster-critical"
+  podAntiAffinityPreset: hard
+
+  persistence:
+    enabled: true
+    storageClass: "longhorn"
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+
+sentinel:
+  enabled: true
+  image:
+    registry: registry-1.docker.io
+    repository: bitnami/redis-sentinel
+    tag: latest
+  persistence:
+    enabled: false
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+  image:
+    registry: registry-1.docker.io
+    repository: bitnami/redis-exporter
+    tag: latest
