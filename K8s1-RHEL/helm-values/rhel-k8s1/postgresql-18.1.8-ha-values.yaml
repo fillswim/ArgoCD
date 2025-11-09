@@ -50,7 +50,7 @@ metrics:
   enabled: true
   serviceMonitor:
     enabled: true
-  # image:
-  #   registry: registry-1.docker.io
-  #   repository: bitnami/postgresql-exporter
-  #   tag: latest
+  image:
+    registry: registry-1.docker.io
+    repository: bitnami/postgres-exporter
+    tag: latest
