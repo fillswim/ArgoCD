@@ -28,7 +28,7 @@ database:
   external:
     host: postgresql-primary.postgresql-ha.svc.cluster.local
     port: "5432"
-    username: "postgres"
+    username: "user"
     coreDatabase: "harbor-ha"
     existingSecret: "postgresql-auth-secret-for-harbor"
 

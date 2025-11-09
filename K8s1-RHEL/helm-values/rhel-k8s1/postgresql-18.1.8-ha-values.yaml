@@ -12,6 +12,8 @@ architecture: replication
 
 auth:
   enablePostgresUser: true
+  username: "user"
+  database: "harbor-ha"
   existingSecret: "postgresql-auth-secret"
   secretKeys:
     adminPasswordKey: admin-password
