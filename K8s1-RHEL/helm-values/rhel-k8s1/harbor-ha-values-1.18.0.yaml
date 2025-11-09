@@ -1,0 +1,91 @@
+expose:
+  type: ingress
+  tls:
+    enabled: true
+    certSource: secret
+    secret:
+      # The name of secret which contains keys named:
+      # "tls.crt" - the certificate
+      # "tls.key" - the private key
+      secretName: "harbor-tls"
+  ingress:
+    hosts:
+      core: harbor-ha.fillswim.local
+    className: "nginx"
+    annotations:
+      # # note different ingress controllers may require a different ssl-redirect annotation
+      # # for Envoy, use ingress.kubernetes.io/force-ssl-redirect: "true" and remove the nginx lines below
+      # ingress.kubernetes.io/ssl-redirect: "true"
+      # ingress.kubernetes.io/proxy-body-size: "0"
+      # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      # nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: ca-cluster-issuer
+
+
+database:
+  type: external
+  external:
+    host: postgresql-primary.postgresql-ha.svc.cluster.local
+    port: "5432"
+    coreDatabase: "harbor-ha"
+    existingSecret: "postgresql-auth-secret-for-harbor"
+
+redis:
+  type: external
+  external:
+    addr: "redis.redis-ha.svc.cluster.local:6379"
+    existingSecret: "redis-auth-secret-for-harbor"
+
+persistence:
+  enabled: true
+  # Setting it to "keep" to avoid removing PVCs during a helm delete
+  # operation. Leaving it empty will delete PVCs after the chart deleted
+  # (this does not apply for PVCs that are created for internal database
+  # and redis components, i.e. they are never deleted automatically)
+  resourcePolicy: "keep"
+  persistentVolumeClaim:
+    registry:
+      size: 50Gi
+      accessMode: ReadWriteMany
+    jobservice:
+      jobLog:
+        size: 10Gi
+        accessMode: ReadWriteMany
+    # database:
+    #   size: 10Gi
+    #   accessMode: ReadWriteMany
+    # redis:
+    #   size: 2Gi
+    #   accessMode: ReadWriteMany
+    trivy:
+      size: 5Gi
+      accessMode: ReadWriteMany
+
+existingSecretAdminPassword: "harbor-auth-secret"
+existingSecretAdminPasswordKey: admin-password
+# harborAdminPassword: "Harbor12345"
+
+nginx:
+  replicas: 3
+
+portal:
+  replicas: 3
+
+registry:
+  replicas: 3
+
+core:
+  replicas: 3
+
+jobservice:
+  replicas: 3
+
+exporter:
+  replicas: 3
+
+trivy:
+  replicas: 3
+
+chartmuseum:
+  replicas: 3
