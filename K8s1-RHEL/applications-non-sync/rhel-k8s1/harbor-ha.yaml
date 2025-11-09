@@ -1,11 +1,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f  K8s1-RHEL/applications-non-sync/rhel-k8s1/harbor-ha.yaml
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/rhel-k8s1/harbor-ha.yaml
 # kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/harbor-ha.yaml
 
 metadata:
-  name: harbor-ha                                                                      # Название создаваемого Argo CD application
+  name: harbor-ha-rhel-k8s1                                                            # Название создаваемого Argo CD application
   namespace: argo-cd                                                                   # namespace, в котором будет создаваться Argo CD application
   finalizers:
     - resources-finalizer.argocd.argoproj.io/background
