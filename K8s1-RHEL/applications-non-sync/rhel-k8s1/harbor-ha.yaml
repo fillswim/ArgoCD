@@ -20,7 +20,7 @@ spec:
   sources:
     - repoURL: "https://helm.goharbor.io"                                               # Репозиторий с Helm чартом
       chart: harbor                                                                     # Наименование Helm чарта
-      targetRevision: 1.18.0                                                            # Версия Helm чарта
+      targetRevision: 1.17.0                                                            # Версия Helm чарта
       helm:
         releaseName: harbor-ha                                                          # Название релиза
 
