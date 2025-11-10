@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f K8s1-RHEL/applications-non-sync/loki.yaml
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/loki.yaml
 # kubectl delete -f K8s1-RHEL/applications-non-sync/loki.yaml
 
 metadata:
@@ -20,7 +20,7 @@ spec:
   sources:
     - repoURL: "https://grafana.github.io/helm-charts/"   # Репозиторий с Helm чартом
       chart: loki                                         # Наименование Helm чарта
-      targetRevision: 6.22.0                                                         # Версия Helm чарта
+      targetRevision: 6.46.0                              # Версия Helm чарта
       helm:
         releaseName: loki                                 # Название релиза
 
