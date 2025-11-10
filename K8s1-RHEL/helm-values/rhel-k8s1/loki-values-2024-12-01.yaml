@@ -7,11 +7,12 @@ loki:
   storage:
     # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
     # Please provide these values if you are using object storage.
-    bucketNames:
-      chunks: loki-chunks
-      ruler: loki-ruler
-      admin: loki-admin
+    # bucketNames:
+    #   chunks: loki-chunks
+    #   ruler: loki-ruler
+    #   admin: loki-admin
     type: s3
+    bucket_name: loki-chunks
     s3:
 
       # # MinIO S3 (На обычных серверах)
