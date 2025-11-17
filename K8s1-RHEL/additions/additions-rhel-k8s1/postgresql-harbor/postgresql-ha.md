@@ -1,1 +1,1 @@
-# Addons PostgreSQL HA
+# Addons PostgreSQL Harbor
