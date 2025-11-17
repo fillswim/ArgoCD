@@ -1,11 +1,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply  -f K8s1-RHEL/applications-non-sync/rhel-k8s1/redis-ha.yaml
-# kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/redis-ha.yaml
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/rhel-k8s1/redis-harbor.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/redis-harbor.yaml
 
 metadata:
-  name: redis-ha-rhel-k8s1                                                          # Название создаваемого Argo CD application
+  name: redis-harbor-rhel-k8s1                                                      # Название создаваемого Argo CD application
   namespace: argo-cd                                                                # namespace, в котором будет создаваться Argo CD application
   finalizers:
     - resources-finalizer.argocd.argoproj.io/background
@@ -15,7 +15,7 @@ spec:
 
   destination:
     name: in-cluster                                                                # Деплой в этот же кластер
-    namespace: redis-ha                                                             # В какой namespace будет производиться деплой
+    namespace: redis-harbor                                                         # В какой namespace будет производиться деплой
 
   sources:
     - repoURL: "http://nexus.fillswim.local:8081/repository/helm-hosted/"           # Репозиторий с Helm чартом
@@ -26,7 +26,7 @@ spec:
 
         # Values относительно репозитория
         valueFiles:
-          - $values/K8s1-RHEL/helm-values/rhel-k8s1/redis-ha-values-2025-11-08.yaml
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/redis-harbor-values-2025-11-08.yaml
 
     # Репозиторий с values
     - repoURL: "https://github.com/fillswim/ArgoCD.git"
@@ -35,7 +35,7 @@ spec:
 
     # Дополнительная папка для отслеживания
     - repoURL: 'https://github.com/fillswim/ArgoCD.git'
-      path: "K8s1-RHEL/additions/additions-rhel-k8s1/redis-ha"
+      path: "K8s1-RHEL/additions/additions-rhel-k8s1/redis-harbor"
       targetRevision: HEAD
 
   syncPolicy:
