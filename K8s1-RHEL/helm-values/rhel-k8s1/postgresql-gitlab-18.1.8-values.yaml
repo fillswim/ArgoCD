@@ -1,0 +1,58 @@
+global:
+  defaultStorageClass: "longhorn"
+
+clusterDomain: cluster.local
+
+image:
+  registry: registry-1.docker.io
+  repository: bitnami/postgresql
+  tag: latest
+
+architecture: replication
+
+auth:
+  enablePostgresUser: true
+  username: "user"
+  database: "harbor-ha"
+  existingSecret: "postgresql-auth-secret"
+  secretKeys:
+    adminPasswordKey: admin-password
+    userPasswordKey: user-password
+    replicationPasswordKey: replication-password
+
+replication:
+  synchronousCommit: "on"
+  numSynchronousReplicas: 1
+  applicationName: pg-ha-cluster
+
+primary:
+  priorityClassName: "system-cluster-critical"
+  podAntiAffinityPreset: hard
+
+  persistence:
+    enabled: true
+    storageClass: "longhorn"
+    accessModes:
+      - ReadWriteOnce
+    size: 20Gi
+
+readReplicas:
+  replicaCount: 2
+  priorityClassName: "system-cluster-critical"
+  podAntiAffinityPreset: hard
+
+  persistence:
+    enabled: true
+    storageClass: "longhorn"
+    accessModes:
+      - ReadWriteOnce
+    size: 20Gi
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+  image:
+    registry: registry-1.docker.io
+    repository: bitnami/postgres-exporter
+    tag: latest
