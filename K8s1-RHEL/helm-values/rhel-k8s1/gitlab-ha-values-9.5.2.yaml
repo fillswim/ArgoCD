@@ -92,11 +92,11 @@ gitlab:
     replicas: 3
 
   gitlab-shell:
-    replicas: 2
+    replicas: 3
 
   gitaly:
     # Если без Praefect → 3 отдельные gitaly-реплики
     replicas: 3
 
-  task-runner:
-    replicas: 2
+  toolbox:
+    replicas: 3
