@@ -89,9 +89,9 @@ spec:
   # ---------------------------------------------------------
   backup:
     barmanObjectStore:
-      destinationPath: "s3://cnpg-gitlab/"
-      endpoint: http://minio.minio.svc.cluster.local:9000
-      bucketName: cnpg-gitlab
+      # destinationPath: "s3://cnpg-gitlab/"
+      endpointURL: cnpg-gitlab.us-east-1.minio.minio.svc.cluster.local:9000
+      # bucketName: cnpg-gitlab
       s3Credentials:
         accessKeyId:
           name: minio-for-cnpg-secret

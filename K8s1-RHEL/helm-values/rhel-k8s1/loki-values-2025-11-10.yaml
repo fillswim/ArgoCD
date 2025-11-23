@@ -19,8 +19,8 @@ loki:
       # endpoint: http://api.minio.fillswim.local
 
       # # MinIO S3 Cluster K8s (Через Ingress)
-      # s3: http://api.minio-example.fillswim.local
-      # endpoint: http://api.minio-example.fillswim.local
+      # s3: http://api.minio-k8s1-rhel.fillswim.local
+      # endpoint: http://api.minio-k8s1-rhel.fillswim.local
 
       # # MinIO S3 Cluster K8s (Внутри кластера, через Service Cluster IP)
       s3: http://minio.minio.svc.cluster.local:9000
