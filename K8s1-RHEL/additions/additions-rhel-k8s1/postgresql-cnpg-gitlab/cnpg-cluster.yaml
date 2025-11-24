@@ -67,13 +67,15 @@ spec:
       autovacuum_analyze_scale_factor: "0.01"
       autovacuum_vacuum_cost_delay: "-1"
 
-  # --- База и пользователь GitLab ---
+  superuserSecret:
+    name: superuser-secret
+
   bootstrap:
     initdb:
       database: gitlab-db
       owner: gitlab
       secret:
-        name: gitlab-db-secret
+        name: user-secret
         # key: password
 
   # # --- HA синхронная репликация ---
