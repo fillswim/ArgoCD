@@ -13,7 +13,7 @@ global:
 
   hosts:
     https: true
-    domain: gitlab.fillswim.local
+    domain: fillswim.local
 
   ingress:
     enabled: true
