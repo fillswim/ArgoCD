@@ -2,7 +2,7 @@
 
 global:
   edition: ce
-  gitlabVersion: "18.5.2"
+  # gitlabVersion: "18.5.2"
 
   hosts:
     domain: gitlab.fillswim.local
