@@ -72,7 +72,7 @@ spec:
 
   bootstrap:
     initdb:
-      database: gitlab-db
+      database: gitlabhq_production
       owner: gitlab
       secret:
         name: user-secret
