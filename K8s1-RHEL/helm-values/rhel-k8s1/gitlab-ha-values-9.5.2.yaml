@@ -49,7 +49,8 @@ global:
     host: gitlab-postgresql-rw.cnpg-system.svc.cluster.local
     port: 5432
     database: gitlabhq_production
-    username: gitlab
+    # username: gitlab
+    username: postgres
     password:
       useSecret: true
       secret: postgresql-auth-secret-for-gitlab
@@ -57,7 +58,8 @@ global:
     main:
       host: gitlab-postgresql-rw.cnpg-system.svc.cluster.local
       port: 5432
-      username: gitlab
+      # username: gitlab
+      username: postgres
       database: gitlabhq_production
       # applicationName:
       # preparedStatements: false
