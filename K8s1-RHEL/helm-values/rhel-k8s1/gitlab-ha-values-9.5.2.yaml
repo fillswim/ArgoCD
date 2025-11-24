@@ -14,6 +14,24 @@ global:
   hosts:
     https: true
     domain: fillswim.local
+    gitlab:
+      name: gitlab.fillswim.local
+      https: true
+    registry:
+      name: registry.fillswim.local
+      https: true
+    ssh: gitlab.fillswim.local
+    # minio:
+    #   name: minio.fillswim.local
+    #   https: true
+    # smartcard:
+    #   name: smartcard.fillswim.local
+    # kas:
+    #   name: kas.fillswim.local
+    # pages:
+    #   name: pages.fillswim.local
+    #   https: true
+
 
   ingress:
     enabled: true
@@ -96,6 +114,8 @@ redis:
 gitlab:
   webservice:
     replicas: 3
+    webservice:
+      enabled: false
 
   sidekiq:
     replicas: 3
