@@ -54,6 +54,14 @@ global:
       useSecret: true
       secret: postgresql-auth-secret-for-gitlab
       key: password
+    main:
+      host: gitlab-postgresql-rw.cnpg-system.svc.cluster.local
+      port: 5432
+      username: gitlab
+      database: gitlabhq_production
+      # applicationName:
+      # preparedStatements: false
+      # databaseTasks: true
 
   redis:
     auth:
