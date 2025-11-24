@@ -4,9 +4,17 @@ global:
   edition: ce
   gitlabVersion: "18.5.2"
 
+  monitoring:
+    enabled: true
+
+  initialRootPassword:
+    secret: gitlab-initial-root-password
+    key: password
+
   hosts:
-    domain: gitlab.fillswim.local
     https: true
+    domain: fillswim.local
+    gitlab: gitlab
 
   ingress:
     enabled: true
