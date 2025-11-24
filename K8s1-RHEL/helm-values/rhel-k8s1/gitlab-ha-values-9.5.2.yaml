@@ -35,7 +35,7 @@ global:
 
   ingress:
     enabled: true
-    configureCertmanager: true
+    configureCertmanager: false
     annotations:
       cert-manager.io/cluster-issuer: ca-cluster-issuer
       kubernetes.io/ingress.class: nginx
@@ -43,7 +43,7 @@ global:
       enabled: true
       hosts:
         - gitlab.fillswim.local
-      secretName: gitlab-tls
+      # secretName: gitlab-tls
 
   psql:
     host: gitlab-postgresql-rw.cnpg-system.svc.cluster.local
