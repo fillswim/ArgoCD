@@ -8,7 +8,7 @@ metadata:
   name: mimir                                                                          # Название создаваемого Argo CD application
   namespace: argo-cd                                                                   # namespace, в котором будет создаваться Argo CD application
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io/background
 
 spec:
   project: default
