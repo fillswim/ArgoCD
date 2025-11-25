@@ -37,6 +37,8 @@ prometheus:
 
     remoteWrite:
       - url: https://mimir.fillswim.local/api/v1/push
+        headers:
+          X-Scope-OrgID: "fillswim"
         tlsConfig:
           insecureSkipVerify: true
 
