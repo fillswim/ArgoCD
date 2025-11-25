@@ -35,6 +35,8 @@ prometheus:
 
     remoteWrite:
       - url: https://mimir.fillswim.local/api/v1/push
+        tlsConfig:
+          insecureSkipVerify: true
 
         # Настройки надёжной доставки
         sendExemplars: true
