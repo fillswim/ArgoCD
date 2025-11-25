@@ -12,21 +12,24 @@ global:
   #   key: secretKey
   # access_key_id: ""
   # secret_access_key: ""
+  extraEnvFrom:
+    - secretRef:
+        name: minio-for-mimir-secret
 
   dnsService: kube-dns
   dnsNamespace: kube-system
   clusterDomain: cluster.local.
-  extraEnv:
-    - name: MINIO_USER
-      valueFrom:
-        secretKeyRef:
-          name: minio-for-mimir-secret
-          key: accessKey
-    - name: MINIO_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: minio-for-mimir-secret
-          key: secretKey
+  # extraEnv:
+  #   - name: MINIO_USER
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: minio-for-mimir-secret
+  #         key: accessKey
+  #   - name: MINIO_PASSWORD
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: minio-for-mimir-secret
+  #         key: secretKey
 
 mimir:
   structuredConfig:
@@ -34,28 +37,29 @@ mimir:
       storage:
         backend: s3
         s3:
-          bucket_name: "mimir"
-          endpoint: "http://minio.minio.svc.cluster.local:9000"
-          # endpoint: minio.minio.svc.cluster.local:9000
+          bucket_name: mimir
+          endpoint: minio.minio.svc.cluster.local:9000
+          # endpoint: "http://minio.minio.svc.cluster.local:9000"
           # region: "us-east-1"
-          access_key_id: "${MINIO_USER}"
-          secret_access_key: "${MINIO_PASSWORD}"
-          # access_key_id: ${MINIO_USER}
-          # secret_access_key: ${MINIO_PASSWORD}
+          # access_key_id: "${MINIO_USER}"
+          # secret_access_key: "${MINIO_PASSWORD}"
+          access_key_id: ${MINIO_ACCESS_KEY}
+          secret_access_key: ${MINIO_SECRET_KEY}
+          insecure: false
           http:
             insecure_skip_verify: true
 
-    blocks_storage:
-      s3:
-        bucket_name: mimir-blocks
+    # blocks_storage:
+    #   s3:
+    #     bucket_name: mimir-blocks
 
-    alertmanager_storage:
-      s3:
-        bucket_name: mimir-alertmanager
+    # alertmanager_storage:
+    #   s3:
+    #     bucket_name: mimir-alertmanager
 
-    ruler_storage:
-      s3:
-        bucket_name: mimir-ruler
+    # ruler_storage:
+    #   s3:
+    #     bucket_name: mimir-ruler
 
 ingester:
   enabled: true
