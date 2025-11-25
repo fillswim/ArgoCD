@@ -15,6 +15,10 @@ global:
 mimir:
   structuredConfig:
 
+    limits:
+      max_series_per_user: 2000000    # 2 миллиона series
+      max_series_per_metric: 0        # 0 = без лимита
+
     ingest_storage:
       enabled: false
     ingester:
