@@ -41,6 +41,19 @@ ingester:
     accessModes:
       - ReadWriteOnce
     size: 20Gi
+  extraArgs:
+    - -config.expand-env=true
+  extraEnv:
+    - name: MINIO_USER
+      valueFrom:
+        secretKeyRef:
+          name: minio-for-mimir-secret
+          key: accessKey
+    - name: MINIO_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: minio-for-mimir-secret
+          key: secretKey
 
 store_gateway:
   enabled: true
