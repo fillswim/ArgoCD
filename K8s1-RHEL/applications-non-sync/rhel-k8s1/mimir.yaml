@@ -15,7 +15,7 @@ spec:
 
   destination:
     name: in-cluster                                                                    # Деплой в этот же кластер
-    namespace: harbor                                                                   # В какой namespace будет производиться деплой
+    namespace: mimir                                                                   # В какой namespace будет производиться деплой
 
   sources:
     - repoURL: "https://grafana.github.io/helm-charts"                                  # Репозиторий с Helm чартом
