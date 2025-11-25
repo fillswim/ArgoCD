@@ -50,14 +50,17 @@ mimir:
             insecure_skip_verify: true
 
     blocks_storage:
+      backend: s3
       s3:
         bucket_name: mimir-blocks
 
     alertmanager_storage:
+      backend: s3
       s3:
         bucket_name: mimir-alertmanager
 
     ruler_storage:
+      backend: s3
       s3:
         bucket_name: mimir-ruler
 
