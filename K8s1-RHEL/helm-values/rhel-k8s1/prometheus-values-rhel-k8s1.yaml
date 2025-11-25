@@ -34,7 +34,7 @@ prometheus:
       cluster: rhel-k8s1
 
     remoteWrite:
-      - url: https://mimir.fillswim.local/api/v1/push
+      - url: https://mimir.fillswim1.local/api/v1/push
 
         # Настройки надёжной доставки
         sendExemplars: true
