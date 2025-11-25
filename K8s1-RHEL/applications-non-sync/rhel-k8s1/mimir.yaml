@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply -f  K8s1-RHEL/applications-non-sync/rhel-k8s1/mimir.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/mimir.yaml
+
+metadata:
+  name: mimir                                                                          # Название создаваемого Argo CD application
+  namespace: argo-cd                                                                   # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  destination:
+    name: in-cluster                                                                    # Деплой в этот же кластер
+    namespace: harbor                                                                   # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "https://grafana.github.io/helm-charts"                                  # Репозиторий с Helm чартом
+      chart: mimir-distributed                                                          # Наименование Helm чарта
+      targetRevision: 6.0.3                                                             # Версия Helm чарта
+      helm:
+        releaseName: mimir                                                              # Название релиза
+
+        # Values относительно репозитория
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/mimir-6.0.3-values.yaml
+
+    # Репозиторий с values
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"
+      targetRevision: main
+      ref: values
+
+    # Дополнительная папка для отслеживания
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'
+      path: "K8s1-RHEL/additions/additions-rhel-k8s1/mimir"
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # - RespectIgnoreDifferences=true
+      # - ServerSideApply=true
