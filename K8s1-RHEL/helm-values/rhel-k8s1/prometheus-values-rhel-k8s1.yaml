@@ -76,10 +76,13 @@ prometheus:
         # Настройки надёжной доставки
         sendExemplars: true
         queueConfig:
-          capacity: 20000
-          maxSamplesPerSend: 5000
-          maxShards: 20
-          minShards: 1
+          capacity: 50000
+          maxShards: 50
+          minShards: 5
+          maxSamplesPerSend: 2000  # меньше батчи → меньше 429
+          batchSendDeadline: 10s
+          minBackoff: 500ms
+          maxBackoff: 30s
 
     # Чтобы Prometheus локально не хранил много (он становится "агентом")
     retention: 2h
