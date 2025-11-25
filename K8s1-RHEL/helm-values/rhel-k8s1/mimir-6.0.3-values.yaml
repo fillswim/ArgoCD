@@ -25,7 +25,7 @@ mimir:
         backend: s3
         s3:
           bucket_name: "mimir"
-          endpoint: "http://minio.minio.svc.cluster.local:9000"
+          endpoint: "https://minio.minio.svc.cluster.local:9000"
           access_key_id: "${MINIO_USER}"
           secret_access_key: "${MINIO_PASSWORD}"
           http:
