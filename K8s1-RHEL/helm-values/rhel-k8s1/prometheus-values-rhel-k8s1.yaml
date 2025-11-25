@@ -45,6 +45,13 @@ prometheus:
         tlsConfig:
           insecureSkipVerify: true
 
+        writeRelabelConfigs:
+          # Keep only critical metrics
+          - sourceLabels: [__name__]
+            regex: ^(up|kube_pod_|kube_node_|prometheus_remote_storage_.+)$
+            action: keep
+          - action: drop    # дропаем всё остальное
+
         # writeRelabelConfigs:
         #   # 1. Убрать почти все kubelet/cAdvisor контейнерные метрики (очень жирные)
         #   - sourceLabels: [__name__]
