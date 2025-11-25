@@ -3,6 +3,16 @@ image:
   tag: 3.0.0
 
 global:
+
+  minioUser:
+    secretName: minio-for-mimir-secret
+    key: accessKey
+  minioPassword:
+    secretName: minio-for-mimir-secret
+    key: secretKey
+  access_key_id: ""
+  secret_access_key: ""
+
   dnsService: kube-dns
   dnsNamespace: kube-system
   clusterDomain: cluster.local.
@@ -27,8 +37,10 @@ mimir:
           bucket_name: "mimir"
           endpoint: "http://minio.minio.svc.cluster.local:9000"
           # region: "us-east-1"
-          access_key_id: "${MINIO_USER}"
-          secret_access_key: "${MINIO_PASSWORD}"
+          # access_key_id: "${MINIO_USER}"
+          # secret_access_key: "${MINIO_PASSWORD}"
+          access_key_id: ${MINIO_USER}
+          secret_access_key: ${MINIO_PASSWORD}
           http:
             insecure_skip_verify: true
 
