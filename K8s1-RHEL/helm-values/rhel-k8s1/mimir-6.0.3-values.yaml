@@ -37,7 +37,7 @@ mimir:
       storage:
         backend: s3
         s3:
-          bucket_name: mimir
+          # bucket_name: mimir
           endpoint: minio.minio.svc.cluster.local:9000
           # endpoint: "http://minio.minio.svc.cluster.local:9000"
           # region: "us-east-1"
@@ -49,17 +49,17 @@ mimir:
           http:
             insecure_skip_verify: true
 
-    # blocks_storage:
-    #   s3:
-    #     bucket_name: mimir-blocks
+    blocks_storage:
+      s3:
+        bucket_name: mimir-blocks
 
-    # alertmanager_storage:
-    #   s3:
-    #     bucket_name: mimir-alertmanager
+    alertmanager_storage:
+      s3:
+        bucket_name: mimir-alertmanager
 
-    # ruler_storage:
-    #   s3:
-    #     bucket_name: mimir-ruler
+    ruler_storage:
+      s3:
+        bucket_name: mimir-ruler
 
 ingester:
   enabled: true
