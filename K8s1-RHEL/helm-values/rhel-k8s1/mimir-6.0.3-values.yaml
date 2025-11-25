@@ -4,14 +4,14 @@ image:
 
 global:
 
-  minioUser:
-    secretName: minio-for-mimir-secret
-    key: accessKey
-  minioPassword:
-    secretName: minio-for-mimir-secret
-    key: secretKey
-  access_key_id: ""
-  secret_access_key: ""
+  # minioUser:
+  #   secretName: minio-for-mimir-secret
+  #   key: accessKey
+  # minioPassword:
+  #   secretName: minio-for-mimir-secret
+  #   key: secretKey
+  # access_key_id: ""
+  # secret_access_key: ""
 
   dnsService: kube-dns
   dnsNamespace: kube-system
@@ -35,14 +35,27 @@ mimir:
         backend: s3
         s3:
           bucket_name: "mimir"
-          endpoint: "http://minio.minio.svc.cluster.local:9000"
+          # endpoint: "http://minio.minio.svc.cluster.local:9000"
+          endpoint: minio.minio.svc.cluster.local:9000
           # region: "us-east-1"
-          # access_key_id: "${MINIO_USER}"
-          # secret_access_key: "${MINIO_PASSWORD}"
-          access_key_id: ${MINIO_USER}
-          secret_access_key: ${MINIO_PASSWORD}
+          access_key_id: "${MINIO_USER}"
+          secret_access_key: "${MINIO_PASSWORD}"
+          # access_key_id: ${MINIO_USER}
+          # secret_access_key: ${MINIO_PASSWORD}
           http:
             insecure_skip_verify: true
+
+    blocks_storage:
+      s3:
+        bucket_name: mimir
+
+    alertmanager_storage:
+      s3:
+        bucket_name: mimir-alertmanager
+
+    ruler_storage:
+      s3:
+        bucket_name: mimir-ruler
 
 ingester:
   enabled: true
