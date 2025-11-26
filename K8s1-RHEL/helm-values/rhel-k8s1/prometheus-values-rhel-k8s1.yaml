@@ -52,33 +52,33 @@ prometheus:
         #     action: keep
         #   - action: drop    # дропаем всё остальное
 
-        # writeRelabelConfigs:
-        #   # 1. Убрать почти все kubelet/cAdvisor контейнерные метрики (очень жирные)
-        #   - sourceLabels: [__name__]
-        #     regex: ^(container_cpu_usage_seconds_total|container_memory_working_set_bytes|container_network_.+|container_fs_.+)
-        #     action: drop
+        writeRelabelConfigs:
+          # 1. Убрать почти все kubelet/cAdvisor контейнерные метрики (очень жирные)
+          - sourceLabels: [__name__]
+            regex: ^(container_cpu_usage_seconds_total|container_memory_working_set_bytes|container_network_.+|container_fs_.+)
+            action: drop
 
-        #   # 2. Убрать kube-state-metrics шум (оставляем только самое важное)
-        #   - sourceLabels: [__name__]
-        #     regex: ^(kube_pod_container_resource_requests|kube_pod_container_resource_limits|kube_pod_status_phase|kube_pod_container_status_ready|.+) 
-        #     action: drop
-        #   - sourceLabels: [__name__]
-        #     regex: ^(kube_pod_status_phase|kube_pod_container_status_ready|kube_deployment_status_replicas_available|kube_statefulset_status_replicas_ready)
-        #     action: keep
+          # 2. Убрать kube-state-metrics шум (оставляем только самое важное)
+          - sourceLabels: [__name__]
+            regex: ^(kube_pod_container_resource_requests|kube_pod_container_resource_limits|kube_pod_status_phase|kube_pod_container_status_ready|.+) 
+            action: drop
+          - sourceLabels: [__name__]
+            regex: ^(kube_pod_status_phase|kube_pod_container_status_ready|kube_deployment_status_replicas_available|kube_statefulset_status_replicas_ready)
+            action: keep
 
-        #   # 3. Убрать все scrape-метрики самого Prometheus (up, scrape_duration, etc.)
-        #   - sourceLabels: [job]
-        #     regex: (prometheus|kube-state-metrics|node-exporter)
-        #     action: drop
+          # 3. Убрать все scrape-метрики самого Prometheus (up, scrape_duration, etc.)
+          - sourceLabels: [job]
+            regex: (prometheus|kube-state-metrics|node-exporter)
+            action: drop
 
-        #   # # 4. Полностью отключить отправку exemplars (экономия до 20 %)
-        #   # - action: drop
-        #   #   regex: .+
-        #   #   targetLabel: __name__
-        #   #   sourceLabels: [__name__]
-        #   #   action: drop
-        #   #   # или проще — добавить в remote_write:
-        #   #   # sendExemplars: false
+          # # 4. Полностью отключить отправку exemplars (экономия до 20 %)
+          # - action: drop
+          #   regex: .+
+          #   targetLabel: __name__
+          #   sourceLabels: [__name__]
+          #   action: drop
+          #   # или проще — добавить в remote_write:
+          #   # sendExemplars: false
 
         # Настройки надёжной доставки
         sendExemplars: true
