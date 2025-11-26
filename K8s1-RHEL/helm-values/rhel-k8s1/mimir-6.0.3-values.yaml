@@ -19,7 +19,7 @@ mimir:
       # max_series_per_user: 2000000    # 2 миллиона series
       # max_series_per_metric: 0        # 0 = без лимита
       ingestion_rate: 0                # 0 = unlimited, иначе override ограничивает
-      ingestion_burst_size: 0
+      ingestion_burst_size: 500000
 
     # distributor:
     #   ingestion_rate_limit: 200000      # 200k samples/sec — нормально для 3 кластеров
