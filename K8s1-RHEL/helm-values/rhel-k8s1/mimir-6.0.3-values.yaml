@@ -12,23 +12,38 @@ global:
   dnsNamespace: kube-system
   clusterDomain: cluster.local.
 
+ingress:
+  enabled: true
+  ingressClassName: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: ca-cluster-issuer
+  hosts:
+    - mimir.fillswim.local
+  tls:
+    - secretName: mimir-distribted-tls
+      hosts:
+        - mimir.fillswim.local
+
+# runtimeConfig:
+  # ingester_limits: # limits that each ingester replica enforces
+  #   max_ingestion_rate: 20000
+  #   max_series: 1500000
+  #   max_tenants: 1000
+  #   max_inflight_push_requests: 30000
+  # distributor_limits: # limits that each distributor replica enforces
+  #   max_ingestion_rate: 20000
+  #   max_inflight_push_requests: 30000
+  #   max_inflight_push_requests_bytes: 50000000
+  # overrides:
+  #   tenant-1: # limits for tenant-1 that the whole cluster enforces
+  #     ingestion_tenant_shard_size: 9
+  #     max_global_series_per_user: 1500000
+  #     max_fetched_series_per_query: 100000
+
 mimir:
+
   structuredConfig:
-
-    limits:
-      # max_series_per_user: 2000000    # 2 миллиона series
-      # max_series_per_metric: 0        # 0 = без лимита
-      ingestion_rate: 200000                # 0 = unlimited, иначе override ограничивает
-      ingestion_burst_size: 500000
-
-    # distributor:
-    #   ingestion_rate_limit: 200000      # 200k samples/sec — нормально для 3 кластеров
-    #   ingestion_burst_size: 400000
-
-    ingest_storage:
-      enabled: false
-    ingester:
-      push_grpc_method_enabled: true
 
     common:
       storage:
@@ -40,6 +55,16 @@ mimir:
           insecure: true
           http:
             insecure_skip_verify: true
+
+    limits:
+      ingestion_rate: 200000
+      ingestion_burst_size: 500000
+      max_global_series_per_user: 1500000
+
+    ingest_storage:
+      enabled: false
+    ingester:
+      push_grpc_method_enabled: true
 
     blocks_storage:
       backend: s3
@@ -107,16 +132,3 @@ minio:
 
 kafka:
   enabled: false
-
-ingress:
-  enabled: true
-  ingressClassName: "nginx"
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: ca-cluster-issuer
-  hosts:
-    - mimir.fillswim.local
-  tls:
-    - secretName: mimir-distribted-tls
-      hosts:
-        - mimir.fillswim.local
