@@ -54,8 +54,12 @@ prometheus:
           #   regex: "node_network_receive_bytes_total|node_network_transmit_bytes_total"
           #   action: keep
 
+          # - sourceLabels: [__name__]
+          #   regex: "node_uname_info|\node_cpu_seconds_total|node_memory_MemAvailable_bytes"
+          #   action: keep
+
           - sourceLabels: [__name__]
-            regex: |-
+            regex: >-
               node_cpu_seconds_total|
               node_memory_MemAvailable_bytes|
               node_memory_MemTotal_bytes|
