@@ -36,10 +36,22 @@ prometheus:
         tlsConfig:
           insecureSkipVerify: true
 
+        # writeRelabelConfigs:
+        #   - sourceLabels: [__name__]
+        #     regex: "node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes|node_filesystem_avail_bytes|node_filesystem_size_bytes|node_uname_info"
+        #     action: keep
+
         writeRelabelConfigs:
           - sourceLabels: [__name__]
-            regex: "node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes|node_filesystem_avail_bytes|node_filesystem_size_bytes|node_uname_info"
+            regex: >-
+              node_cpu_seconds_total|
+              node_memory_MemAvailable_bytes|
+              node_memory_MemTotal_bytes|
+              node_filesystem_avail_bytes|
+              node_filesystem_size_bytes|
+              node_uname_info
             action: keep
+
 
         # Настройки надёжной доставки
         sendExemplars: true
