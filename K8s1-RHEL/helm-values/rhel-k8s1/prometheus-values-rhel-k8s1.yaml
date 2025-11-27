@@ -43,22 +43,22 @@ prometheus:
         tlsConfig:
           insecureSkipVerify: true
 
-        writeRelabelConfigs:
-          - sourceLabels: [__name__]
-            regex: "^node_cpu_seconds_total$"
-            action: keep
-
-          - sourceLabels: [__name__]
-            regex: "^prometheus_remote_storage_.*|^prometheus_tsdb_.*|^prometheus_engine_.*|^up$|^scrape_.*"
-            action: keep
-
-          - action: drop
-
-
         # writeRelabelConfigs:
         #   - sourceLabels: [__name__]
-        #     regex: "node_cpu_seconds_total"
+        #     regex: "^node_cpu_seconds_total$"
         #     action: keep
+
+        #   - sourceLabels: [__name__]
+        #     regex: "^prometheus_remote_storage_.*|^prometheus_tsdb_.*|^prometheus_engine_.*|^up$|^scrape_.*"
+        #     action: keep
+
+        #   - action: drop
+
+
+        writeRelabelConfigs:
+          - sourceLabels: [__name__]
+            regex: "node_cpu_seconds_total|node_uname_info"
+            action: keep
 
         # writeRelabelConfigs:
         # - sourceLabels:
