@@ -49,6 +49,8 @@ prometheus:
               node_memory_MemTotal_bytes|
               node_filesystem_avail_bytes|
               node_filesystem_size_bytes|
+              node_network_receive_bytes_total|
+              node_network_transmit_bytes_total|
               node_uname_info
             action: keep
 
