@@ -59,10 +59,10 @@ prometheus:
             regex: "node_uname_info|node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes"
             action: keep
 
-          # Filesystem
-          - sourceLabels: [__name__]
-            regex: "node_filesystem_avail_bytes|node_filesystem_size_bytes"
-            action: keep
+          # # Filesystem
+          # - sourceLabels: [__name__]
+          #   regex: "node_filesystem_avail_bytes|node_filesystem_size_bytes"
+          #   action: keep
 
           # - sourceLabels: [__name__]
           #   regex: |
