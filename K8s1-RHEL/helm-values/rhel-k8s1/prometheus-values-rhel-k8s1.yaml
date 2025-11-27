@@ -59,15 +59,15 @@ prometheus:
           #   action: keep
 
           - sourceLabels: [__name__]
-            regex: >-
-              node_cpu_seconds_total|
+            regex: |
+              (node_cpu_seconds_total|
               node_memory_MemAvailable_bytes|
               node_memory_MemTotal_bytes|
               node_filesystem_avail_bytes|
               node_filesystem_size_bytes|
               node_network_receive_bytes_total|
               node_network_transmit_bytes_total|
-              node_uname_info
+              node_uname_info)
             action: keep
 
 
