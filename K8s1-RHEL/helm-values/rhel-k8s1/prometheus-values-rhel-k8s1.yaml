@@ -54,15 +54,36 @@ prometheus:
           #   regex: "node_network_receive_bytes_total|node_network_transmit_bytes_total"
           #   action: keep
 
-          # CPU, Memory
-          - sourceLabels: [__name__]
-            regex: "node_uname_info|node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes"
-            action: keep
+          # # CPU, Memory
+          # - sourceLabels: [__name__]
+          #   regex: "node_uname_info|node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes"
+          #   action: keep
 
           # # Filesystem
           # - sourceLabels: [__name__]
           #   regex: "node_filesystem_avail_bytes|node_filesystem_size_bytes"
           #   action: keep
+
+          # Правило 1: пометить метрику 1
+          - sourceLabels: ["__name__"]
+            regex: "node_uname_info|node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Правило 2: пометить метрику 2
+          - sourceLabels: ["__name__"]
+            regex: "node_filesystem_avail_bytes|node_filesystem_size_bytes"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Последнее правило: сохранить только те, которые помечены как "true"
+          - sourceLabels: ["remote_write_allow"]
+            regex: "true"
+            action: "keep"
+
+
 
           # - sourceLabels: [__name__]
           #   regex: |
