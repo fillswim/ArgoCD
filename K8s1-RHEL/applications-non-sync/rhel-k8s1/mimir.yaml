@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f  K8s1-RHEL/applications-non-sync/rhel-k8s1/mimir.yaml
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/rhel-k8s1/mimir.yaml
 # kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/mimir.yaml
 
 metadata:
