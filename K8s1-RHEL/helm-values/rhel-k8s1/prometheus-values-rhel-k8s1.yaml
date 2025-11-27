@@ -33,8 +33,6 @@ prometheus:
     allowOverpassTLS: true
     allowOverpassRemoteWriteHeaders: true
 
-    ## 2025-10-23: Добавлено для добавления внешних меток к метрикам
-    ## External labels to add to any time series or alerts when communicating with external systems
     externalLabels:
       cluster: rhel-k8s1
 
@@ -44,6 +42,11 @@ prometheus:
           X-Scope-OrgID: "fillswim"
         tlsConfig:
           insecureSkipVerify: true
+
+        writeRelabelConfigs:
+          - sourceLabels: [__name__]
+            regex: "node_cpu_seconds_total"
+            action: keep
 
         # writeRelabelConfigs:
         #   # Keep only critical metrics
