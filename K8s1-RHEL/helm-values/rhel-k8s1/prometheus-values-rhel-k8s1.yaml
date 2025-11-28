@@ -45,6 +45,13 @@ prometheus:
             replacement: "true"
             action: "replace"
 
+          # K8s Nodes Info
+          - sourceLabels: ["__name__"]
+            regex: "kube_node_info"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
           # Filesystem
           - sourceLabels: ["__name__"]
             regex: "node_filesystem_avail_bytes|node_filesystem_size_bytes"
