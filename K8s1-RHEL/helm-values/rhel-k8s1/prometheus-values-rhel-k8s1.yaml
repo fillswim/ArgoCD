@@ -94,6 +94,20 @@ prometheus:
             replacement: "true"
             action: "replace"
 
+          # Pods Usage CPU, Memory
+          - sourceLabels: ["__name__"]
+            regex: "container_cpu_usage_seconds_total|container_memory_working_set_bytes"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Pods Limits, Requests
+          - sourceLabels: ["__name__"]
+            regex: "kube_pod_container_resource_requests|kube_pod_container_resource_limits"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
           # Последнее правило: сохранить только те, которые помечены как "true"
           - sourceLabels: ["remote_write_allow"]
             regex: "true"
