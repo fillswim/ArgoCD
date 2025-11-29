@@ -94,6 +94,13 @@ prometheus:
             replacement: "true"
             action: "replace"
 
+          # Pods Info
+          - sourceLabels: ["__name__"]
+            regex: "kube_pod_info|kube_pod_container_info"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
           # Pods Usage CPU, Memory
           - sourceLabels: ["__name__"]
             regex: "container_cpu_usage_seconds_total|container_memory_working_set_bytes"
