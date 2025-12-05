@@ -96,7 +96,7 @@ prometheus:
 
           # Pods Info
           - sourceLabels: ["__name__"]
-            regex: "kube_pod_info|kube_pod_container_info"
+            regex: "kube_pod_info|kube_pod_container_info|kube_pod_status_phase"
             targetLabel: "remote_write_allow"
             replacement: "true"
             action: "replace"
