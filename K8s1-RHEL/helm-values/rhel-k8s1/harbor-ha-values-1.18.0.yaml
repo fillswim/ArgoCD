@@ -25,7 +25,9 @@ database:
 redis:
   type: external
   external:
-    addr: "redis.redis-harbor.svc.cluster.local:6379"
+    # addr: "redis.redis-harbor.svc.cluster.local:6379"
+    addr: "redis.redis-harbor.svc.cluster.local:26379"
+    sentinelMasterSet: "mymaster"
     password: "P4ssw0rd"
     # existingSecret: "redis-auth-secret-for-harbor"
 
