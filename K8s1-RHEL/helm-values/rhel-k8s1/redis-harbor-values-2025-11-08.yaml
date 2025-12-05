@@ -12,7 +12,7 @@ image:
 
 auth:
   enabled: true
-  sentinel: true
+  sentinel: false
   existingSecret: "redis-auth-secret"
   existingSecretPasswordKey: "redis-password"
 
