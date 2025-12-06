@@ -47,7 +47,7 @@ prometheus:
 
           # K8s Nodes Info
           - sourceLabels: ["__name__"]
-            regex: "kube_node_info"
+            regex: "kube_node_info|kube_node_status_condition"
             targetLabel: "remote_write_allow"
             replacement: "true"
             action: "replace"
