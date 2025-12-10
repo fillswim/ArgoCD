@@ -144,10 +144,6 @@ prometheus:
           minBackoff: 500ms
           maxBackoff: 30s
 
-    # Чтобы Prometheus локально не хранил много (он становится "агентом" (для Prometheus c Grafana Mimir))
-    retention: 2h
-    retentionSize: "2GB"
-
     ## EnableAdminAPI enables Prometheus the administrative HTTP API which includes functionality such as deleting time series.
     enableAdminAPI: true
     secrets:
@@ -163,9 +159,13 @@ prometheus:
             requests:
               storage: 20Gi
 
-    ## 2025-10-23: Задает на какой период времени хранить данные в метрик (для Prometheus без Grafana Mimir)
-    # retention: 15d
-    # retentionSize: "10GiB"
+    # # Чтобы Prometheus локально не хранил много (он становится "агентом" (для Prometheus c Grafana Mimir))
+    # retention: 2h
+    # retentionSize: "2GB"
+
+    # 2025-10-23: Задает на какой период времени хранить данные в метрик (для Prometheus без Grafana Mimir)
+    retention: 15d
+    retentionSize: "10GiB"
 
     ## Interval between consecutive scrapes.
     scrapeInterval: "30s"
