@@ -38,6 +38,10 @@ prometheus:
 
         writeRelabelConfigs:
 
+          # ==============================================================================================================
+          #                                                    Instances
+          # ==============================================================================================================
+
           # CPU, Memory
           - sourceLabels: ["__name__"]
             regex: "node_uname_info|node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes"
@@ -66,33 +70,9 @@ prometheus:
             replacement: "true"
             action: "replace"
 
-          # Pods
-          - sourceLabels: ["__name__"]
-            regex: "container_cpu_usage_seconds_total|container_memory_working_set_bytes"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
-
-          # Longhorn Nodes
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_node_storage_capacity_bytes|longhorn_node_storage_usage_bytes|longhorn_node_status"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
-
-          # Longhorn Disks
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_disk_usage_bytes|longhorn_disk_capacity_bytes|longhorn_disk_status"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
-
-          # Longhorn PVC
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_volume_actual_size_bytes|longhorn_volume_capacity_bytes"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+          # ==============================================================================================================
+          #                                                    Pods
+          # ==============================================================================================================
 
           # Pods Info
           - sourceLabels: ["__name__"]
@@ -101,7 +81,7 @@ prometheus:
             replacement: "true"
             action: "replace"
 
-          # Pods Usage CPU, Memory
+          # Pods (Usage CPU, Memory)
           - sourceLabels: ["__name__"]
             regex: "container_cpu_usage_seconds_total|container_memory_working_set_bytes"
             targetLabel: "remote_write_allow"
@@ -115,22 +95,97 @@ prometheus:
             replacement: "true"
             action: "replace"
 
+          # ==============================================================================================================
+          #                                               Longhorn Nodes
+          # ==============================================================================================================
+
+          # Longhorn Nodes (Storage)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_node_storage_capacity_bytes|longhorn_node_storage_usage_bytes|longhorn_node_status"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Longhorn Nodes (CPU)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_node_cpu_usage_millicpu|longhorn_node_cpu_capacity_millicpu"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Longhorn Nodes (Memory)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_node_memory_usage_bytes|longhorn_node_memory_capacity_bytes"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Longhorn Instance Manager (CPU)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_instance_manager_cpu_usage_millicpu|longhorn_instance_manager_cpu_requests_millicpu"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Longhorn Instance Manager (Memory)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_instance_manager_memory_usage_bytes|longhorn_instance_manager_memory_requests_bytes"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Longhorn Manager (CPU, Memory)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_manager_cpu_usage_millicpu|longhorn_manager_memory_usage_bytes"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Longhorn Nodes (Disks)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_disk_usage_bytes|longhorn_disk_capacity_bytes|longhorn_disk_status"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # ==============================================================================================================
+          #                                                 Longhorn PVC
+          # ==============================================================================================================
+
+          # Longhorn PVC (Info)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_volume_state"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Longhorn PVC (Size)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_volume_actual_size_bytes|longhorn_volume_capacity_bytes"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Longhorn PVC (Read IOPS, Latency, Throughput)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_volume_read_iops|longhorn_volume_read_latency|longhorn_volume_read_throughput"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # Longhorn PVC (Write IOPS, Latency, Throughput)
+          - sourceLabels: ["__name__"]
+            regex: "longhorn_volume_write_iops|longhorn_volume_write_latency|longhorn_volume_write_throughput"
+            targetLabel: "remote_write_allow"
+            replacement: "true"
+            action: "replace"
+
+          # ==============================================================================================================
+          
           # Последнее правило: сохранить только те, которые помечены как "true"
           - sourceLabels: ["remote_write_allow"]
             regex: "true"
             action: "keep"
-
-          # - sourceLabels: [__name__]
-          #   regex: |
-          #     (node_cpu_seconds_total|
-          #     node_memory_MemAvailable_bytes|
-          #     node_memory_MemTotal_bytes|
-          #     node_filesystem_avail_bytes|
-          #     node_filesystem_size_bytes|
-          #     node_network_receive_bytes_total|
-          #     node_network_transmit_bytes_total|
-          #     node_uname_info)
-          #   action: keep
 
 
         # Настройки надёжной доставки
