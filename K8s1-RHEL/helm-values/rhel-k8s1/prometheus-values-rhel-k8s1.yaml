@@ -154,7 +154,7 @@ prometheus:
 
           # Longhorn PVC (Info)
           - sourceLabels: ["__name__"]
-            regex: "longhorn_volume_state"
+            regex: "longhorn_volume_state|longhorn_volume_robustness"
             targetLabel: "remote_write_allow"
             replacement: "true"
             action: "replace"
@@ -181,7 +181,7 @@ prometheus:
             action: "replace"
 
           # ==============================================================================================================
-          
+
           # Последнее правило: сохранить только те, которые помечены как "true"
           - sourceLabels: ["remote_write_allow"]
             regex: "true"
