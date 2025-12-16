@@ -27,6 +27,8 @@ prometheus:
     allowOverpassRemoteWriteHeaders: true
 
     externalLabels:
+      env: main
+      system: K8s
       cluster: rhel-k8s1
 
     remoteWrite:
