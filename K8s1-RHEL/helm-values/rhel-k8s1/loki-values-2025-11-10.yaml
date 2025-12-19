@@ -79,19 +79,19 @@ loki:
 # Ingester
 ingester:
   replicas: 3 # To ensure data durability with replication
-  extraArgs:
-    - -config.expand-env=true
-  extraEnv:
-    - name: MINIO_USER
-      valueFrom:
-        secretKeyRef:
-          name: minio-for-loki-secret
-          key: rootUser
-    - name: MINIO_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: minio-for-loki-secret
-          key: rootPassword
+  # extraArgs:
+  #   - -config.expand-env=true
+  # extraEnv:
+  #   - name: MINIO_USER
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: minio-for-loki-secret
+  #         key: rootUser
+  #   - name: MINIO_PASSWORD
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: minio-for-loki-secret
+  #         key: rootPassword
 
 querier:
   replicas: 3 # Improve query performance via parallelism
@@ -108,19 +108,19 @@ distributor:
 # Compactor
 compactor:
   replicas: 1
-  extraArgs:
-    - -config.expand-env=true
-  extraEnv:
-    - name: MINIO_USER
-      valueFrom:
-        secretKeyRef:
-          name: minio-for-loki-secret
-          key: rootUser
-    - name: MINIO_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: minio-for-loki-secret
-          key: rootPassword
+  # extraArgs:
+  #   - -config.expand-env=true
+  # extraEnv:
+  #   - name: MINIO_USER
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: minio-for-loki-secret
+  #         key: rootUser
+  #   - name: MINIO_PASSWORD
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: minio-for-loki-secret
+  #         key: rootPassword
 
   # extraEnvFrom:
   #   - secretRef:
@@ -146,7 +146,6 @@ write:
 
 singleBinary:
   replicas: 0
-
 
 # Enable minio for storage
 minio:
