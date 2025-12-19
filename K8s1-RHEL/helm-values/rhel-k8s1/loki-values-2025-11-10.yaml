@@ -1,5 +1,20 @@
 deploymentMode: Distributed
 
+global:
+  extraArgs:
+    - -config.expand-env=true
+  extraEnv:
+    - name: MINIO_USER
+      valueFrom:
+        secretKeyRef:
+          name: minio-for-loki-secret
+          key: rootUser
+    - name: MINIO_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: minio-for-loki-secret
+          key: rootPassword
+
 loki:
   # Should authentication be enabled
   auth_enabled: false
