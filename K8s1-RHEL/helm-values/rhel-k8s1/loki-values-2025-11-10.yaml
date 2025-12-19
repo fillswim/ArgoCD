@@ -98,6 +98,8 @@ gateway:
   replicas: 3
 resultsCache:
   replicas: 3
+chunksCache:
+  replicas: 3
 
 bloomPlanner:
   replicas: 0
