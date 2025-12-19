@@ -76,59 +76,28 @@ loki:
     retention_enabled: true
     delete_request_store: s3
 
-# Ingester
 ingester:
   replicas: 3 # To ensure data durability with replication
-  # extraArgs:
-  #   - -config.expand-env=true
-  # extraEnv:
-  #   - name: MINIO_USER
-  #     valueFrom:
-  #       secretKeyRef:
-  #         name: minio-for-loki-secret
-  #         key: rootUser
-  #   - name: MINIO_PASSWORD
-  #     valueFrom:
-  #       secretKeyRef:
-  #         name: minio-for-loki-secret
-  #         key: rootPassword
-
 querier:
   replicas: 3 # Improve query performance via parallelism
   maxUnavailable: 2
 queryFrontend:
-  replicas: 2
+  replicas: 3
   maxUnavailable: 1
 queryScheduler:
-  replicas: 2
+  replicas: 3
 distributor:
   replicas: 3
   maxUnavailable: 2
-
-# Compactor
 compactor:
-  replicas: 1
-  # extraArgs:
-  #   - -config.expand-env=true
-  # extraEnv:
-  #   - name: MINIO_USER
-  #     valueFrom:
-  #       secretKeyRef:
-  #         name: minio-for-loki-secret
-  #         key: rootUser
-  #   - name: MINIO_PASSWORD
-  #     valueFrom:
-  #       secretKeyRef:
-  #         name: minio-for-loki-secret
-  #         key: rootPassword
-
-  # extraEnvFrom:
-  #   - secretRef:
-  #       name: minio-for-loki-secret
-
+  replicas: 3
 indexGateway:
-  replicas: 2
+  replicas: 3
   maxUnavailable: 1
+gateway:
+  replicas: 3
+resultsCache:
+  replicas: 3
 
 bloomPlanner:
   replicas: 0
