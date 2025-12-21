@@ -44,12 +44,12 @@ prometheus:
           #                                                    Instances
           # ==============================================================================================================
 
-          # CPU, Memory
-          - sourceLabels: ["__name__"]
-            regex: "node_uname_info|node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+          # # CPU, Memory
+          # - sourceLabels: ["__name__"]
+          #   regex: "node_uname_info|node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes"
+          #   targetLabel: "remote_write_allow"
+          #   replacement: "true"
+          #   action: "replace"
 
           # K8s Nodes Info
           - sourceLabels: ["__name__"]
@@ -58,19 +58,19 @@ prometheus:
             replacement: "true"
             action: "replace"
 
-          # Filesystem
-          - sourceLabels: ["__name__"]
-            regex: "node_filesystem_avail_bytes|node_filesystem_size_bytes"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+          # # Filesystem
+          # - sourceLabels: ["__name__"]
+          #   regex: "node_filesystem_avail_bytes|node_filesystem_size_bytes"
+          #   targetLabel: "remote_write_allow"
+          #   replacement: "true"
+          #   action: "replace"
 
-          # Network
-          - sourceLabels: ["__name__"]
-            regex: "node_network_receive_bytes_total|node_network_transmit_bytes_total"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+          # # Network
+          # - sourceLabels: ["__name__"]
+          #   regex: "node_network_receive_bytes_total|node_network_transmit_bytes_total"
+          #   targetLabel: "remote_write_allow"
+          #   replacement: "true"
+          #   action: "replace"
 
           # ==============================================================================================================
           #                                                    Pods
@@ -267,6 +267,13 @@ kubeEtcd:
     caFile: /etc/prometheus/secrets/etcd-client-cert/ca.crt
     certFile: /etc/prometheus/secrets/etcd-client-cert/client.crt
     keyFile: /etc/prometheus/secrets/etcd-client-cert/client.key
+
+# =================================================================================================
+#                                            Node Exporter
+# =================================================================================================
+
+nodeExporter:
+  enabled: false
 
 # =================================================================================================
 #                                            Alertmanager
