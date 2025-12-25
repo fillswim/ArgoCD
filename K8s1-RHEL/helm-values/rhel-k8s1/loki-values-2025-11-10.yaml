@@ -17,7 +17,7 @@ global:
 
 loki:
   # Should authentication be enabled
-  auth_enabled: false
+  auth_enabled: true
   # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
   storage:
     # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
