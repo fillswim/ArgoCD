@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/rhel-k8s1/fluent-bit.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/fluent-bit.yaml
+
+metadata:
+  name: fluent-bit-rhel-k8s1                                                            # Название создаваемого Argo CD application
+  namespace: argo-cd                                                                    # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+
+spec:
+  project: default
+
+  destination:
+    name: in-cluster                                                                    # Деплой в этот же кластер
+    namespace: fluent-bit                                                               # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "https://fluent.github.io/helm-charts"                                   # Репозиторий с Helm чартом
+      chart: fluent-bit                                                                 # Наименование Helm чарта
+      targetRevision: 0.54.0                                                            # Версия Helm чарта
+      helm:
+        releaseName: fluent-bit                                                         # Название релиза
+
+        # Values относительно репозитория
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/fluent-bit-values-0.54.0.yaml
+
+    # Репозиторий с values
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"
+      targetRevision: main
+      ref: values
+
+    # Дополнительная папка для отслеживания
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'
+      path: "K8s1-RHEL/additions/additions-rhel-k8s1/fluent-bit"
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # - RespectIgnoreDifferences=true
+      # - ServerSideApply=true

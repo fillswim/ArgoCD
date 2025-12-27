@@ -1,0 +1,12 @@
+---
+config:
+  outputs: |
+    [OUTPUT]
+        Name loki
+        Match kube.*
+        Host loki.fillswim.local
+        port 443
+        tls off
+        tls.verify off
+        tenant_id fillswim
+        labels job=fluentbit,env=test,app=k8s,cluster=alma-k8s2,subsystem=cluster
