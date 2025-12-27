@@ -128,6 +128,13 @@ minio:
 ingress:
   enabled: true
   ingressClassName: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: ca-cluster-issuer
   # -- Hosts configuration for the ingress, passed through the `tpl` function to allow templating
   hosts:
     - loki.fillswim.local
+  tls:
+   - secretName: grafana-tls
+     hosts:
+       - loki.fillswim.local
