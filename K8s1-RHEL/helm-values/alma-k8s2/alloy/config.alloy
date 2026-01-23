@@ -14,9 +14,8 @@ prometheus.scrape "node" {
 prometheus.relabel "filter_metrics" {
 	rule {
 		source_labels = ["__name__"]
-		regex         = "node_cpu_seconds_total|" + 
-						"node_memory_MemAvailable_bytes"
-		action = "keep"
+		regex         = "node_cpu_seconds_total"
+		action        = "keep"
 	}
 	forward_to = [prometheus.remote_write.mimir.receiver]
 }
@@ -27,8 +26,10 @@ prometheus.relabel "filter_metrics" {
 
 prometheus.remote_write "mimir" {
 	external_labels = {
-		env = "test",
-		app = "alloy",
+		env       = "test",
+		app       = "k8s",
+		cluster   = "alma-k8s2",
+		subsystem = "cluster",
 	}
 
 	endpoint {
