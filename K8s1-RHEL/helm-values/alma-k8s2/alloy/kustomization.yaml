@@ -10,9 +10,8 @@ kind: Kustomization
 configMapGenerator:
   - name: alloy-config
     files:
-      - config.alloy=config.alloy
-    # options:
-    #   disableNameSuffixHash: true
+      # - config.alloy=config.alloy
+      - config.alloy
 
 generatorOptions:
   disableNameSuffixHash: true
