@@ -4,6 +4,9 @@ kind: Application
 # kubectl apply  -f K8s1-RHEL/applications-non-sync/alma-k8s2/prometheus-alma-k8s2.yaml
 # kubectl delete -f K8s1-RHEL/applications-non-sync/alma-k8s2/prometheus-alma-k8s2.yaml
 
+# kubectl -n alloy port-forward svc/alloy 12345:12345
+# http://127.0.0.1:12345/graph
+
 metadata:
   name: prometheus-alma-k8s2                                              # Название создаваемого Argo CD application
   namespace: argo-cd                                                      # namespace, в котором будет создаваться Argo CD application
