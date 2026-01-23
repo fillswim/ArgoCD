@@ -25,18 +25,21 @@ spec:
       helm:
         releaseName: alloy                                                    # Название релиза
         valueFiles:
-          # - $values/K8s1-RHEL/helm-values/alma-k8s2/alloy/alloy-values-1.5.2.yaml
-          - $values/alloy-values-1.5.2.yaml
+          - $values/K8s1-RHEL/helm-values/alma-k8s2/alloy/alloy-values-1.5.2.yaml
 
     - repoURL: "https://github.com/fillswim/ArgoCD.git"                       # Репозиторий с values
       targetRevision: main
       ref: values
-      path: "K8s1-RHEL/helm-values/alma-k8s2/alloy"
-      kustomize: {}
 
     - repoURL: 'https://github.com/fillswim/ArgoCD.git'                       # Репозиторий
       path: "K8s1-RHEL/additions/additions-alma-k8s2/alloy"                   # Относительный путь отслеживаемой папки
       targetRevision: HEAD
+
+    # 3) Kustomize source (ConfigMapGenerator)
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"
+      targetRevision: main
+      path: "K8s1-RHEL/helm-values/alma-k8s2/alloy"
+      kustomize: {}
 
   syncPolicy:
     automated:

@@ -5,11 +5,14 @@ kind: Kustomization
 # kubectl apply  -f K8s1-RHEL/additions/additions-alma-k8s2/alloy/configmapgenerator.yaml
 # kubectl delete -f K8s1-RHEL/additions/additions-alma-k8s2/alloy/configmapgenerator.yaml
 
-namespace: alloy
+# namespace: alloy
 
 configMapGenerator:
   - name: alloy-config
     files:
-      - config.alloy
-    options:
-      disableNameSuffixHash: true
+      - config.alloy=config.alloy
+    # options:
+    #   disableNameSuffixHash: true
+
+generatorOptions:
+  disableNameSuffixHash: true
