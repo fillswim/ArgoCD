@@ -29,7 +29,7 @@ storage:
     s3:
       bucket: tempo-traces
       region: us-east-1
-      endpoint: http://minio.minio.svc.cluster.local:9000
+      endpoint: minio.minio.svc.cluster.local:9000
       access_key: ${MINIO_USER}
       secret_key: ${MINIO_PASSWORD}
       insecure: true
