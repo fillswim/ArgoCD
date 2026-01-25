@@ -1,27 +1,8 @@
 global:
 
-  # extraEnvFrom:
-  #   - secretRef:
-  #       name: minio-for-tempo-secret
-
   dnsService: kube-dns
   dnsNamespace: kube-system
   clusterDomain: cluster.local.
-
-# global:
-#   extraArgs:
-#     - -config.expand-env=true
-#   extraEnv:
-#     - name: MINIO_USER
-#       valueFrom:
-#         secretKeyRef:
-#           name: minio-for-tempo-secret
-#           key: MINIO_ACCESS_KEY
-#     - name: MINIO_PASSWORD
-#       valueFrom:
-#         secretKeyRef:
-#           name: minio-for-tempo-secret
-#           key: MINIO_SECRET_KEY
 
 storage:
   trace:
@@ -32,11 +13,7 @@ storage:
       endpoint: minio.minio.svc.cluster.local:9000
       access_key: ${MINIO_USER}
       secret_key: ${MINIO_PASSWORD}
-      # access_key: ${MINIO_ACCESS_KEY}
-      # secret_key: ${MINIO_SECRET_KEY}
       insecure: true
-      # http:
-      #   insecure_skip_verify: true
 
 minio:
   enabled: false
