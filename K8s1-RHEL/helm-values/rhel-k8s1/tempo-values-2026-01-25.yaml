@@ -15,11 +15,11 @@ storage:
       bucket: tempo-traces
       region: us-east-1
       endpoint: minio.minio.svc.cluster.local:9000
-      access_key_id: ${MINIO_ACCESS_KEY}
-      secret_access_key: ${MINIO_SECRET_KEY}
+      access_key: ${MINIO_ACCESS_KEY}
+      secret_key: ${MINIO_SECRET_KEY}
       insecure: true
-      http:
-        insecure_skip_verify: true
+      # http:
+      #   insecure_skip_verify: true
 
 minio:
   enabled: false
