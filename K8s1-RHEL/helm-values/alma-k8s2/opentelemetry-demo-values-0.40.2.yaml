@@ -27,7 +27,7 @@ grafana:
   enabled: false
 
 prometheus:
-  enabled: false
+  enabled: true
 
 opensearch:
   enabled: false
