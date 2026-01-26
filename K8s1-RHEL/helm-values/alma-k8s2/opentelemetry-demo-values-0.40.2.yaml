@@ -33,22 +33,22 @@ opensearch:
   enabled: false
 
 
-components:
-  frontend:
-    enabled: true
-    env:
-      - name: OTEL_METRICS_EXPORTER
-        value: "none"
-      - name: OTEL_LOGS_EXPORTER
-        value: "none"
+# components:
+#   frontend:
+#     enabled: true
+#     env:
+#       - name: OTEL_METRICS_EXPORTER
+#         value: "none"
+#       - name: OTEL_LOGS_EXPORTER
+#         value: "none"
 
-  loadgenerator:
-    enabled: true
-    env:
-      - name: OTEL_METRICS_EXPORTER
-        value: "none"
-      - name: OTEL_LOGS_EXPORTER
-        value: "none"
+#   loadgenerator:
+#     enabled: true
+#     env:
+#       - name: OTEL_METRICS_EXPORTER
+#         value: "none"
+#       - name: OTEL_LOGS_EXPORTER
+#         value: "none"
 
 #   accounting:
 #     enabled: false
