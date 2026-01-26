@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/rhel-k8s1/opentelemetry-demo-rhel-k8s1.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/opentelemetry-demo-rhel-k8s1.yaml
+
+metadata:
+  name: opentelemetry-demo-rhel-k8s1                                          # Название создаваемого Argo CD application
+  namespace: argo-cd                                                          # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+
+spec:
+  project: default
+
+  destination:
+    name: in-cluster                                                          # Деплой в этот же кластер
+    namespace: opentelemetry-demo                                             # В какой namespace будет производиться деплой
+
+  sources:
+
+    - repoURL: "https://open-telemetry.github.io/opentelemetry-helm-charts"   # Репозиторий с Helm чартом
+      chart: opentelemetry-demo                                               # Наименование Helm чарта
+      targetRevision: 0.40.2                                                  # Версия Helm чарта
+      helm:
+        releaseName: opentelemetry-demo                                       # Название релиза
+        valueFiles:
+          - $values/K8s1-RHEL/helm-values/rhel-k8s1/opentelemetry-demo-values-0.40.2.yaml
+
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"                       # Репозиторий с values
+      targetRevision: main
+      ref: values
+
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'                       # Репозиторий
+      path: "K8s1-RHEL/additions/additions-rhel-k8s1/opentelemetry-demo"      # Относительный путь отслеживаемой папки
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      # - ServerSideApply=true

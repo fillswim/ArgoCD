@@ -1,0 +1,90 @@
+// alloy validate K8s1-RHEL/helm-values/alma-k8s2/alloy/config.alloy
+
+// ===================================================
+//                    Node Metrics
+// ===================================================
+
+prometheus.exporter.unix "node" { }
+
+prometheus.scrape "node" {
+	targets         = prometheus.exporter.unix.node.targets
+	scrape_interval = "15s"
+
+	forward_to = [prometheus.relabel.filter_metrics.receiver]
+}
+
+prometheus.relabel "filter_metrics" {
+	rule {
+		source_labels = ["__name__"]
+		regex         = "node_cpu_seconds_total"
+		action        = "keep"
+	}
+	forward_to = [prometheus.remote_write.mimir.receiver]
+}
+
+// ===================================================
+//                   Remote Write Mimir
+// ===================================================
+
+prometheus.remote_write "mimir" {
+	external_labels = {
+		env       = "main",
+		app       = "k8s",
+		cluster   = "rhel-k8s1",
+		subsystem = "cluster",
+	}
+
+	endpoint {
+		url     = "https://mimir.fillswim.local/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "fillswim",
+		}
+
+		tls_config {
+			insecure_skip_verify = true
+		}
+	}
+}
+
+// ============================================================================
+//                            OpenTelemetry Collector
+// ============================================================================
+
+otelcol.receiver.otlp "in" {
+	http {
+		endpoint = "0.0.0.0:4318"
+	}
+
+	output {
+		traces = [otelcol.processor.attributes.add_cluster.input]
+	}
+}
+
+otelcol.processor.attributes "add_cluster" {
+	action {
+		key    = "cluster"
+		action = "upsert"
+		value  = "rhel-k8s1"
+	}
+
+	output {
+		traces = [otelcol.processor.batch.default.input]
+	}
+}
+
+otelcol.processor.batch "default" {
+	output {
+		traces = [otelcol.exporter.otlphttp.tempo.input]
+	}
+}
+
+otelcol.exporter.otlphttp "tempo" {
+	client {
+		endpoint = "https://tempo.fillswim.local/v1/traces"
+
+		tls {
+			insecure             = true
+			insecure_skip_verify = true
+		}
+	}
+}
