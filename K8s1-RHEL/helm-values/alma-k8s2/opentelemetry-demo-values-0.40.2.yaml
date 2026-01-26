@@ -15,7 +15,7 @@ opentelemetry-collector:
       pipelines:
         traces:
           # было: [otlp/jaeger, debug, spanmetrics]
-          exporters: [otlphttp/alloy]
+          exporters: [otlphttp/alloy, debug, spanmetrics]
           # - otlphttp/alloy
 
 jaeger:
