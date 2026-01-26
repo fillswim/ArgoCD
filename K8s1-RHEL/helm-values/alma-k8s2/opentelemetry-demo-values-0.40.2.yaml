@@ -32,21 +32,21 @@ opensearch:
 
 
 components:
-  frontend:
-    enabled: true
+  # frontend:
+  #   enabled: true
 
-  loadgenerator:
-    enabled: true
-    replicaCount: 1
-    env:
-      - name: LOCUST_USERS
-        value: "1"
-      - name: LOCUST_SPAWN_RATE
-        value: "1"
-      - name: OTEL_METRICS_EXPORTER
-        value: "none"
-      - name: OTEL_LOGS_EXPORTER
-        value: "none"
+  # loadgenerator:
+  #   enabled: true
+  #   replicaCount: 1
+  #   env:
+  #     - name: LOCUST_USERS
+  #       value: "1"
+  #     - name: LOCUST_SPAWN_RATE
+  #       value: "1"
+  #     - name: OTEL_METRICS_EXPORTER
+  #       value: "none"
+  #     - name: OTEL_LOGS_EXPORTER
+  #       value: "none"
 
   accounting:
     enabled: false
