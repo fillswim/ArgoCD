@@ -15,8 +15,60 @@ opentelemetry-collector:
       pipelines:
         traces:
           # было: [otlp/jaeger, debug, spanmetrics]
-          exporters: [otlphttp/alloy, debug, spanmetrics]
+          exporters: [otlphttp/alloy]
           # - otlphttp/alloy
 
 jaeger:
   enabled: false
+
+grafana:
+  enabled: false
+
+prometheus:
+  enabled: false
+
+opensearch:
+  enabled: false
+
+
+components:
+  frontend:
+    enabled: true
+
+  loadgenerator:
+    enabled: true
+    replicaCount: 1
+    env:
+      - name: LOCUST_USERS
+        value: "1"
+      - name: LOCUST_SPAWN_RATE
+        value: "1"
+      - name: OTEL_METRICS_EXPORTER
+        value: "none"
+      - name: OTEL_LOGS_EXPORTER
+        value: "none"
+
+  accounting:
+    enabled: false
+  ad:
+    enabled: false
+  cart:
+    enabled: false
+  checkout:
+    enabled: false
+  currency:
+    enabled: false
+  email:
+    enabled: false
+  fraud:
+    enabled: false
+  payment:
+    enabled: false
+  productcatalog:
+    enabled: false
+  quote:
+    enabled: false
+  recommendation:
+    enabled: false
+  shipping:
+    enabled: false
