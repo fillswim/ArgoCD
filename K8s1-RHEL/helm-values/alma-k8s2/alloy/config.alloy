@@ -1,4 +1,3 @@
-
 // alloy validate K8s1-RHEL/helm-values/alma-k8s2/alloy/config.alloy
 
 // ===================================================
@@ -42,6 +41,49 @@ prometheus.remote_write "mimir" {
 		}
 
 		tls_config {
+			insecure_skip_verify = true
+		}
+	}
+}
+
+// ============================================================================
+//                            OpenTelemetry Collector
+// ============================================================================
+
+otelcol.receiver.otlp "in" {
+	http {
+		endpoint = "0.0.0.0:4318"
+	}
+
+	output {
+		traces = [otelcol.processor.attributes.add_cluster.input]
+	}
+}
+
+otelcol.processor.attributes "add_cluster" {
+	action {
+		key    = "cluster"
+		action = "upsert"
+		value  = "alma-k8s2"
+	}
+
+	output {
+		traces = [otelcol.processor.batch.default.input]
+	}
+}
+
+otelcol.processor.batch "default" {
+	output {
+		traces = [otelcol.exporter.otlphttp.tempo.input]
+	}
+}
+
+otelcol.exporter.otlphttp "tempo" {
+	client {
+		endpoint = "https://tempo.fillswim.local/v1/traces"
+
+		tls {
+			insecure             = true
 			insecure_skip_verify = true
 		}
 	}

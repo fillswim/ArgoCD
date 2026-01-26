@@ -4,7 +4,7 @@ opentelemetry-collector:
   config:
     exporters:
       otlphttp/alloy:
-        endpoint: http://alloy.alloy.svc.cluster.local:4318
+        endpoint: http://alloy.alloy.svc.cluster.local:4318/v1/traces
         tls:
           insecure: true
         # sending_queue:
