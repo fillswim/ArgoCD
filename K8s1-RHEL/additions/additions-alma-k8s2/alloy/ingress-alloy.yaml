@@ -1,0 +1,29 @@
+---
+apiVersion: networking.k8s.io/v1
+
+# kubectl apply  -f ArgoCD/Alloy-Ingress.yaml
+# kubectl delete -f ArgoCD/Alloy-Ingress.yaml
+
+kind: Ingress
+metadata:
+  name: alloy-ui
+  namespace: alloy
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: ca-cluster-issuer
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: alloy-ui-alma-k8s2.fillswim.local
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: alloy
+            port:
+              number: 12345
+  tls:
+  - hosts: [alloy-ui-alma-k8s2.fillswim.local]
+    secretName: alloy-ui-alma-k8s2-tls
