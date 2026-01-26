@@ -80,6 +80,7 @@ otelcol.processor.batch "default" {
 
 otelcol.exporter.otlphttp "tempo" {
 	client {
+		// endpoint = "https://tempo.fillswim.local/v1/traces"
 		endpoint = "https://tempo.fillswim.local/v1/traces"
 
 		tls {
