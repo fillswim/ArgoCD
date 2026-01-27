@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/rhel-k8s1/nicolaka-rhel-k8s1.yaml
+# kubectl delete -f K8s1-RHEL/applications-non-sync/rhel-k8s1/nicolaka-rhel-k8s1.yaml
+
+metadata:
+  name: nicolaka-rhel-k8s1                                                    # Название создаваемого Argo CD application
+  namespace: argo-cd                                                          # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+
+spec:
+  project: default
+
+  destination:
+    name: in-cluster                                                          # Деплой в этот же кластер
+    namespace: nicolaka                                                       # В какой namespace будет производиться деплой
+
+  sources:
+
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'                       # Репозиторий
+      path: "K8s1-RHEL/additions/additions-rhel-k8s1/nicolaka"                # Относительный путь отслеживаемой папки
+      targetRevision: HEAD
+
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      # - ServerSideApply=true
