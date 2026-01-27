@@ -84,7 +84,7 @@ otelcol.exporter.otlphttp "tempo" {
 		// endpoint = "https://tempo.fillswim.local"
 
 		tls {
-			insecure             = true
+			insecure             = false
 			insecure_skip_verify = true
 		}
 	}
