@@ -4,21 +4,14 @@ opentelemetry-collector:
   config:
     exporters:
       otlphttp/alloy:
-        # endpoint: http://alloy.alloy.svc.cluster.local:4318/v1/traces
         endpoint: http://alloy.alloy.svc.alma-k8s2:4318
         tls:
           insecure: true
-        # sending_queue:
-        #   enabled: true
-
 
     service:
       pipelines:
         traces:
-          # было: [otlp/jaeger, debug, spanmetrics]
           exporters: [otlphttp/alloy, debug, spanmetrics]
-          # exporters: [otlphttp/alloy, debug]
-          # - otlphttp/alloy
 
 jaeger:
   enabled: false
@@ -31,46 +24,3 @@ prometheus:
 
 opensearch:
   enabled: false
-
-
-# components:
-#   frontend:
-#     enabled: true
-#     env:
-#       - name: OTEL_METRICS_EXPORTER
-#         value: "none"
-#       - name: OTEL_LOGS_EXPORTER
-#         value: "none"
-
-#   loadgenerator:
-#     enabled: true
-#     env:
-#       - name: OTEL_METRICS_EXPORTER
-#         value: "none"
-#       - name: OTEL_LOGS_EXPORTER
-#         value: "none"
-
-#   accounting:
-#     enabled: false
-#   ad:
-#     enabled: false
-#   cart:
-#     enabled: false
-#   checkout:
-#     enabled: false
-#   currency:
-#     enabled: false
-#   email:
-#     enabled: false
-#   fraud:
-#     enabled: false
-#   payment:
-#     enabled: false
-#   productcatalog:
-#     enabled: false
-#   quote:
-#     enabled: false
-#   recommendation:
-#     enabled: false
-#   shipping:
-#     enabled: false
