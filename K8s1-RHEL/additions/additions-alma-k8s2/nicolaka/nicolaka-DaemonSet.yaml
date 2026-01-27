@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: netshoot-daemonset
+  labels:
+    app: netshoot
+spec:
+  selector:
+    matchLabels:
+      name: netshoot
+  template:
+    metadata:
+      labels:
+        name: netshoot
+    spec:
+      # Использование хостовой сети позволяет видеть интерфейсы узла
+      hostNetwork: true
+      containers:
+        - name: netshoot
+          image: nicolaka/netshoot
+          command: ["/bin/bash"]
+          args: ["-c", "while true; do sleep 60; done"]
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"] # Необязательно, но полезно для отладки сети
