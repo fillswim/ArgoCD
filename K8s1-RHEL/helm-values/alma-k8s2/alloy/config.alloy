@@ -1,50 +1,50 @@
-// alloy validate K8s1-RHEL/helm-values/alma-k8s2/alloy/config.alloy
+// // alloy validate K8s1-RHEL/helm-values/alma-k8s2/alloy/config.alloy
 
-// ===================================================
-//                    Node Metrics
-// ===================================================
+// // ===================================================
+// //                    Node Metrics
+// // ===================================================
 
-prometheus.exporter.unix "node" { }
+// prometheus.exporter.unix "node" { }
 
-prometheus.scrape "node" {
-	targets         = prometheus.exporter.unix.node.targets
-	scrape_interval = "15s"
+// prometheus.scrape "node" {
+// 	targets         = prometheus.exporter.unix.node.targets
+// 	scrape_interval = "15s"
 
-	forward_to = [prometheus.relabel.filter_metrics.receiver]
-}
+// 	forward_to = [prometheus.relabel.filter_metrics.receiver]
+// }
 
-prometheus.relabel "filter_metrics" {
-	rule {
-		source_labels = ["__name__"]
-		regex         = "node_cpu_seconds_total"
-		action        = "keep"
-	}
-	forward_to = [prometheus.remote_write.mimir.receiver]
-}
+// prometheus.relabel "filter_metrics" {
+// 	rule {
+// 		source_labels = ["__name__"]
+// 		regex         = "node_cpu_seconds_total"
+// 		action        = "keep"
+// 	}
+// 	forward_to = [prometheus.remote_write.mimir.receiver]
+// }
 
-// ===================================================
-//                   Remote Write Mimir
-// ===================================================
+// // ===================================================
+// //                   Remote Write Mimir
+// // ===================================================
 
-prometheus.remote_write "mimir" {
-	external_labels = {
-		env       = "test",
-		app       = "k8s",
-		cluster   = "alma-k8s2",
-		subsystem = "cluster",
-	}
+// prometheus.remote_write "mimir" {
+// 	external_labels = {
+// 		env       = "test",
+// 		app       = "k8s",
+// 		cluster   = "alma-k8s2",
+// 		subsystem = "cluster",
+// 	}
 
-	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "fillswim",
-		}
+// 	endpoint {
+// 		url     = "https://mimir.fillswim.local/api/v1/push"
+// 		headers = {
+// 			"X-Scope-OrgID" = "fillswim",
+// 		}
 
-		tls_config {
-			insecure_skip_verify = true
-		}
-	}
-}
+// 		tls_config {
+// 			insecure_skip_verify = true
+// 		}
+// 	}
+// }
 
 // ============================================================================
 //                            OpenTelemetry Collector
