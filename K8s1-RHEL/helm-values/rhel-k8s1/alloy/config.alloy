@@ -1,70 +1,78 @@
-// alloy validate K8s1-RHEL/helm-values/alma-k8s2/alloy/config.alloy
+// Alloy RHEL K8s1
+// alloy validate K8s1-RHEL/helm-values/rhel-k8s1/alloy/config.alloy
 
-// ===================================================
-//                    Node Metrics
-// ===================================================
+// // ===================================================
+// //                    Node Metrics
+// // ===================================================
 
-prometheus.exporter.unix "node" { }
+// prometheus.exporter.unix "node" { }
 
-prometheus.scrape "node" {
-	targets         = prometheus.exporter.unix.node.targets
-	scrape_interval = "15s"
+// prometheus.scrape "node" {
+// 	targets         = prometheus.exporter.unix.node.targets
+// 	scrape_interval = "15s"
 
-	forward_to = [prometheus.relabel.filter_metrics.receiver]
-}
+// 	forward_to = [prometheus.relabel.filter_metrics.receiver]
+// }
 
-prometheus.relabel "filter_metrics" {
-	rule {
-		source_labels = ["__name__"]
-		regex         = "node_cpu_seconds_total"
-		action        = "keep"
-	}
-	forward_to = [prometheus.remote_write.mimir.receiver]
-}
+// prometheus.relabel "filter_metrics" {
+// 	rule {
+// 		source_labels = ["__name__"]
+// 		regex         = "node_cpu_seconds_total"
+// 		action        = "keep"
+// 	}
+// 	forward_to = [prometheus.remote_write.mimir.receiver]
+// }
 
-// ===================================================
-//                   Remote Write Mimir
-// ===================================================
+// // ===================================================
+// //                   Remote Write Mimir
+// // ===================================================
 
-prometheus.remote_write "mimir" {
-	external_labels = {
-		env       = "main",
-		app       = "k8s",
-		cluster   = "rhel-k8s1",
-		subsystem = "cluster",
-	}
+// prometheus.remote_write "mimir" {
+// 	external_labels = {
+// 		env       = "main",
+// 		app       = "k8s",
+// 		cluster   = "rhel-k8s1",
+// 		subsystem = "cluster",
+// 	}
 
-	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "fillswim",
-		}
+// 	endpoint {
+// 		url     = "https://mimir.fillswim.local/api/v1/push"
+// 		headers = {
+// 			"X-Scope-OrgID" = "fillswim",
+// 		}
 
-		tls_config {
-			insecure_skip_verify = true
-		}
-	}
-}
+// 		tls_config {
+// 			insecure_skip_verify = true
+// 		}
+// 	}
+// }
 
 // ============================================================================
-//                            OpenTelemetry Collector
+//                        OpenTelemetry Collector (RHEL K8s1)
 // ============================================================================
 
 otelcol.receiver.otlp "in" {
+	grpc {
+		endpoint = "0.0.0.0:4317"
+	}
+
 	http {
 		endpoint = "0.0.0.0:4318"
 	}
 
 	output {
-		traces = [otelcol.processor.attributes.add_cluster.input]
+		traces = [otelcol.processor.transform.add_cluster.input]
 	}
 }
 
-otelcol.processor.attributes "add_cluster" {
-	action {
-		key    = "cluster"
-		action = "upsert"
-		value  = "rhel-k8s1"
+otelcol.processor.transform "add_cluster" {
+	error_mode = "ignore"
+
+	trace_statements {
+		context    = "resource"
+		statements = [
+			"set(attributes[\"cluster\"], \"rhel-k8s1\")",
+		]
 	}
 
 	output {
@@ -73,6 +81,9 @@ otelcol.processor.attributes "add_cluster" {
 }
 
 otelcol.processor.batch "default" {
+	timeout         = "5s"
+	send_batch_size = 1000
+
 	output {
 		traces = [otelcol.exporter.otlphttp.tempo.input]
 	}
@@ -80,11 +91,16 @@ otelcol.processor.batch "default" {
 
 otelcol.exporter.otlphttp "tempo" {
 	client {
-		endpoint = "https://tempo.fillswim.local/v1/traces"
+		endpoint = "https://tempo.fillswim.local"
 
 		tls {
-			insecure             = true
+			insecure             = false
 			insecure_skip_verify = true
 		}
 	}
+
+	retry_on_failure {
+		enabled = true
+	}
 }
+
