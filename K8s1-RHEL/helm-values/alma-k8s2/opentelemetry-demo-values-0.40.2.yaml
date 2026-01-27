@@ -24,13 +24,13 @@ jaeger:
   enabled: false
 
 grafana:
-  enabled: true
+  enabled: false
 
 prometheus:
-  enabled: true
+  enabled: false
 
 opensearch:
-  enabled: true
+  enabled: false
 
 
 # components:
