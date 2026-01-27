@@ -14,7 +14,7 @@ spec:
         name: netshoot
     spec:
       # Использование хостовой сети позволяет видеть интерфейсы узла
-      hostNetwork: true
+      # hostNetwork: true
       containers:
         - name: netshoot
           image: nicolaka/netshoot
