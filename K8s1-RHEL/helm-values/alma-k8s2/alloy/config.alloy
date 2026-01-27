@@ -56,15 +56,31 @@ otelcol.receiver.otlp "in" {
 	}
 
 	output {
-		traces = [otelcol.processor.attributes.add_cluster.input]
+		// traces = [otelcol.processor.attributes.add_cluster.input]
+		traces = [otelcol.processor.transform.add_cluster.input]
 	}
 }
 
-otelcol.processor.attributes "add_cluster" {
-	action {
-		key    = "cluster"
-		action = "upsert"
-		value  = "alma-k8s2"
+// otelcol.processor.attributes "add_cluster" {
+// 	action {
+// 		key    = "cluster"
+// 		action = "upsert"
+// 		value  = "alma-k8s2"
+// 	}
+
+// 	output {
+// 		traces = [otelcol.processor.batch.default.input]
+// 	}
+// }
+
+otelcol.processor.transform "add_cluster" {
+	error_mode = "ignore"
+
+	trace_statements {
+		context    = "resource"
+		statements = [
+			"set(attributes[\"cluster\"], \"alma-k8s2\")",
+		]
 	}
 
 	output {
