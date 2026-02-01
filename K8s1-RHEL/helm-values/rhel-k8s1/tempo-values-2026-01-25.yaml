@@ -4,6 +4,10 @@ global:
   dnsNamespace: kube-system
   clusterDomain: cluster.local.
 
+server:
+  grpc_server_max_recv_msg_size: 33554432 # 32MB
+  grpc_server_max_send_msg_size: 33554432 # 32MB
+
 storage:
   trace:
     backend: s3
@@ -82,6 +86,9 @@ distributor:
 
 compactor:
   replicas: 3
+  config:
+    compaction:
+      block_retention: 48h
   extraArgs:
     - -config.expand-env=true
   extraEnv:
@@ -98,6 +105,11 @@ compactor:
 
 querier:
   replicas: 3
+  config:
+    frontend_worker:
+      grpc_client_config:
+        max_recv_msg_size: 33554432 # 32MB
+        max_send_msg_size: 33554432 # 32MB
   extraArgs:
     - -config.expand-env=true
   extraEnv:
