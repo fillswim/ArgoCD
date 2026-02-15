@@ -35,8 +35,8 @@ prometheus:
         rhel-k8s1
       subsystem:
         cluster
-      prometheus: 
-        rhel-k8s1-cluster-prom-01
+      # prometheus: 
+      #   rhel-k8s1-cluster-prom-01
 
     remoteWrite:
       - url: https://mimir.fillswim.local/api/v1/push
