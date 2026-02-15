@@ -1,104 +1,91 @@
-// // alloy validate K8s1-RHEL/helm-values/alma-k8s2/alloy/config.alloy
+// alloy validate K8s1-RHEL/helm-values/alma-k8s2/alloy/config.alloy
 
-// // ===================================================
-// //                    Node Metrics
-// // ===================================================
+// // ============================================================================
+// //                            OpenTelemetry Collector
+// // ============================================================================
 
-// prometheus.exporter.unix "node" { }
-
-// prometheus.scrape "node" {
-// 	targets         = prometheus.exporter.unix.node.targets
-// 	scrape_interval = "15s"
-
-// 	forward_to = [prometheus.relabel.filter_metrics.receiver]
-// }
-
-// prometheus.relabel "filter_metrics" {
-// 	rule {
-// 		source_labels = ["__name__"]
-// 		regex         = "node_cpu_seconds_total"
-// 		action        = "keep"
-// 	}
-// 	forward_to = [prometheus.remote_write.mimir.receiver]
-// }
-
-// // ===================================================
-// //                   Remote Write Mimir
-// // ===================================================
-
-// prometheus.remote_write "mimir" {
-// 	external_labels = {
-// 		env       = "test",
-// 		app       = "k8s",
-// 		cluster   = "alma-k8s2",
-// 		subsystem = "cluster",
+// otelcol.receiver.otlp "in" {
+// 	grpc {
+// 		endpoint = "0.0.0.0:4317"
 // 	}
 
-// 	endpoint {
-// 		url     = "https://mimir.fillswim.local/api/v1/push"
-// 		headers = {
-// 			"X-Scope-OrgID" = "fillswim",
-// 		}
+// 	http {
+// 		endpoint = "0.0.0.0:4318"
+// 	}
 
-// 		tls_config {
+// 	output {
+// 		traces = [otelcol.processor.transform.add_cluster.input]
+// 	}
+// }
+
+// otelcol.processor.transform "add_cluster" {
+// 	error_mode = "ignore"
+
+// 	trace_statements {
+// 		context    = "resource"
+// 		statements = [
+// 			"set(attributes[\"cluster\"], \"alma-k8s2\")",
+// 		]
+// 	}
+
+// 	output {
+// 		traces = [otelcol.processor.batch.default.input]
+// 	}
+// }
+
+// otelcol.processor.batch "default" {
+// 	timeout         = "5s"
+// 	send_batch_size = 1000
+
+// 	output {
+// 		traces = [otelcol.exporter.otlphttp.tempo.input]
+// 	}
+// }
+
+// otelcol.exporter.otlphttp "tempo" {
+// 	client {
+// 		endpoint = "https://tempo.fillswim.local"
+
+// 		tls {
+// 			insecure             = false
 // 			insecure_skip_verify = true
 // 		}
 // 	}
+
+// 	retry_on_failure {
+// 		enabled = true
+// 	}
 // }
 
 // ============================================================================
-//                            OpenTelemetry Collector
+//                                  Metrics
 // ============================================================================
 
-otelcol.receiver.otlp "in" {
-	grpc {
-		endpoint = "0.0.0.0:4317"
-	}
-
-	http {
-		endpoint = "0.0.0.0:4318"
-	}
-
-	output {
-		traces = [otelcol.processor.transform.add_cluster.input]
-	}
+discovery.kubernetes "pods" {
+	role = "pod"
 }
 
-otelcol.processor.transform "add_cluster" {
-	error_mode = "ignore"
-
-	trace_statements {
-		context    = "resource"
-		statements = [
-			"set(attributes[\"cluster\"], \"alma-k8s2\")",
-		]
-	}
-
-	output {
-		traces = [otelcol.processor.batch.default.input]
-	}
+prometheus.scrape "k8s_metrics" {
+	targets    = discovery.kubernetes.pods.targets
+	forward_to = [prometheus.remote_write.mimir.receiver]
 }
 
-otelcol.processor.batch "default" {
-	timeout         = "5s"
-	send_batch_size = 1000
-
-	output {
-		traces = [otelcol.exporter.otlphttp.tempo.input]
+prometheus.remote_write "mimir" {
+	external_labels = {
+		env       = "test",
+		app       = "k8s",
+		cluster   = "alma-k8s2",
+		subsystem = "cluster",
 	}
-}
 
-otelcol.exporter.otlphttp "tempo" {
-	client {
-		endpoint = "https://tempo.fillswim.local"
+	endpoint {
+		url     = "https://mimir.fillswim.local/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "fillswim",
+		}
 
-		tls {
-			insecure             = false
+		tls_config {
 			insecure_skip_verify = true
 		}
-	}
-
-	retry_on_failure {
-		enabled = true
 	}
 }
