@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply -f K8s1-RHEL/applications-non-sync/longhorn.yaml
+# kubectl apply  -f K8s1-RHEL/applications-non-sync/longhorn.yaml
 # kubectl delete -f K8s1-RHEL/applications-non-sync/longhorn.yaml
 
 metadata:
@@ -20,7 +20,7 @@ spec:
   sources:
     - repoURL: "https://charts.longhorn.io/"                                # Репозиторий с Helm чартом
       chart: longhorn                                                       # Наименование Helm чарта
-      targetRevision: v1.10.2                                               # Версия Helm чарта
+      targetRevision: v1.11.0                                               # Версия Helm чарта
       helm:
         releaseName: longhorn                                               # Название релиза
 
