@@ -35,178 +35,178 @@ prometheus:
         alma-k8s2
       subsystem:
         cluster
-      prometheus: 
-        alma-k8s2-cluster-prom-01
+      # prometheus: 
+      #   alma-k8s2-cluster-prom-01
 
-    remoteWrite:
-      - url: https://mimir.fillswim.local/api/v1/push
-        headers:
-          X-Scope-OrgID: "fillswim"
-        tlsConfig:
-          insecureSkipVerify: true
+    # remoteWrite:
+    #   - url: https://mimir.fillswim.local/api/v1/push
+    #     headers:
+    #       X-Scope-OrgID: "fillswim"
+    #     tlsConfig:
+    #       insecureSkipVerify: true
 
-        writeRelabelConfigs:
+    #     writeRelabelConfigs:
 
-          # ==============================================================================================================
-          #                                                    Instances
-          # ==============================================================================================================
+    #       # ==============================================================================================================
+    #       #                                                    Instances
+    #       # ==============================================================================================================
 
-          # # CPU, Memory
-          # - sourceLabels: ["__name__"]
-          #   regex: "node_uname_info|node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes"
-          #   targetLabel: "remote_write_allow"
-          #   replacement: "true"
-          #   action: "replace"
+    #       # # CPU, Memory
+    #       # - sourceLabels: ["__name__"]
+    #       #   regex: "node_uname_info|node_cpu_seconds_total|node_memory_MemAvailable_bytes|node_memory_MemTotal_bytes"
+    #       #   targetLabel: "remote_write_allow"
+    #       #   replacement: "true"
+    #       #   action: "replace"
 
-          # K8s Nodes Info
-          - sourceLabels: ["__name__"]
-            regex: "kube_node_info|kube_node_status_condition|up"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # K8s Nodes Info
+    #       - sourceLabels: ["__name__"]
+    #         regex: "kube_node_info|kube_node_status_condition|up"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # # Filesystem
-          # - sourceLabels: ["__name__"]
-          #   regex: "node_filesystem_avail_bytes|node_filesystem_size_bytes"
-          #   targetLabel: "remote_write_allow"
-          #   replacement: "true"
-          #   action: "replace"
+    #       # # Filesystem
+    #       # - sourceLabels: ["__name__"]
+    #       #   regex: "node_filesystem_avail_bytes|node_filesystem_size_bytes"
+    #       #   targetLabel: "remote_write_allow"
+    #       #   replacement: "true"
+    #       #   action: "replace"
 
-          # # Network
-          # - sourceLabels: ["__name__"]
-          #   regex: "node_network_receive_bytes_total|node_network_transmit_bytes_total"
-          #   targetLabel: "remote_write_allow"
-          #   replacement: "true"
-          #   action: "replace"
+    #       # # Network
+    #       # - sourceLabels: ["__name__"]
+    #       #   regex: "node_network_receive_bytes_total|node_network_transmit_bytes_total"
+    #       #   targetLabel: "remote_write_allow"
+    #       #   replacement: "true"
+    #       #   action: "replace"
 
-          # ==============================================================================================================
-          #                                                    Pods
-          # ==============================================================================================================
+    #       # ==============================================================================================================
+    #       #                                                    Pods
+    #       # ==============================================================================================================
 
-          # Pods Info
-          - sourceLabels: ["__name__"]
-            regex: "kube_pod_info|kube_pod_container_info|kube_pod_status_phase|kube_pod_status_ready"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Pods Info
+    #       - sourceLabels: ["__name__"]
+    #         regex: "kube_pod_info|kube_pod_container_info|kube_pod_status_phase|kube_pod_status_ready"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Pods (Usage CPU, Memory)
-          - sourceLabels: ["__name__"]
-            regex: "container_cpu_usage_seconds_total|container_memory_working_set_bytes"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Pods (Usage CPU, Memory)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "container_cpu_usage_seconds_total|container_memory_working_set_bytes"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Pods Limits, Requests
-          - sourceLabels: ["__name__"]
-            regex: "kube_pod_container_resource_requests|kube_pod_container_resource_limits"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Pods Limits, Requests
+    #       - sourceLabels: ["__name__"]
+    #         regex: "kube_pod_container_resource_requests|kube_pod_container_resource_limits"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # ==============================================================================================================
-          #                                               Longhorn Nodes
-          # ==============================================================================================================
+    #       # ==============================================================================================================
+    #       #                                               Longhorn Nodes
+    #       # ==============================================================================================================
 
-          # Longhorn Nodes (Storage)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_node_storage_capacity_bytes|longhorn_node_storage_usage_bytes|longhorn_node_status"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn Nodes (Storage)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_node_storage_capacity_bytes|longhorn_node_storage_usage_bytes|longhorn_node_status"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Longhorn Nodes (CPU)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_node_cpu_usage_millicpu|longhorn_node_cpu_capacity_millicpu"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn Nodes (CPU)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_node_cpu_usage_millicpu|longhorn_node_cpu_capacity_millicpu"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Longhorn Nodes (Memory)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_node_memory_usage_bytes|longhorn_node_memory_capacity_bytes"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn Nodes (Memory)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_node_memory_usage_bytes|longhorn_node_memory_capacity_bytes"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Longhorn Instance Manager (CPU)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_instance_manager_cpu_usage_millicpu|longhorn_instance_manager_cpu_requests_millicpu"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn Instance Manager (CPU)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_instance_manager_cpu_usage_millicpu|longhorn_instance_manager_cpu_requests_millicpu"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Longhorn Instance Manager (Memory)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_instance_manager_memory_usage_bytes|longhorn_instance_manager_memory_requests_bytes"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn Instance Manager (Memory)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_instance_manager_memory_usage_bytes|longhorn_instance_manager_memory_requests_bytes"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Longhorn Manager (CPU, Memory)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_manager_cpu_usage_millicpu|longhorn_manager_memory_usage_bytes"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn Manager (CPU, Memory)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_manager_cpu_usage_millicpu|longhorn_manager_memory_usage_bytes"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Longhorn Nodes (Disks)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_disk_usage_bytes|longhorn_disk_capacity_bytes|longhorn_disk_status"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn Nodes (Disks)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_disk_usage_bytes|longhorn_disk_capacity_bytes|longhorn_disk_status"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # ==============================================================================================================
-          #                                                 Longhorn PVC
-          # ==============================================================================================================
+    #       # ==============================================================================================================
+    #       #                                                 Longhorn PVC
+    #       # ==============================================================================================================
 
-          # Longhorn PVC (Info)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_volume_state|longhorn_volume_robustness"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn PVC (Info)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_volume_state|longhorn_volume_robustness"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Longhorn PVC (Size)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_volume_actual_size_bytes|longhorn_volume_capacity_bytes"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn PVC (Size)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_volume_actual_size_bytes|longhorn_volume_capacity_bytes"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Longhorn PVC (Read IOPS, Latency, Throughput)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_volume_read_iops|longhorn_volume_read_latency|longhorn_volume_read_throughput"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn PVC (Read IOPS, Latency, Throughput)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_volume_read_iops|longhorn_volume_read_latency|longhorn_volume_read_throughput"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # Longhorn PVC (Write IOPS, Latency, Throughput)
-          - sourceLabels: ["__name__"]
-            regex: "longhorn_volume_write_iops|longhorn_volume_write_latency|longhorn_volume_write_throughput"
-            targetLabel: "remote_write_allow"
-            replacement: "true"
-            action: "replace"
+    #       # Longhorn PVC (Write IOPS, Latency, Throughput)
+    #       - sourceLabels: ["__name__"]
+    #         regex: "longhorn_volume_write_iops|longhorn_volume_write_latency|longhorn_volume_write_throughput"
+    #         targetLabel: "remote_write_allow"
+    #         replacement: "true"
+    #         action: "replace"
 
-          # ==============================================================================================================
+    #       # ==============================================================================================================
 
-          # Последнее правило: сохранить только те, которые помечены как "true"
-          - sourceLabels: ["remote_write_allow"]
-            regex: "true"
-            action: "keep"
+    #       # Последнее правило: сохранить только те, которые помечены как "true"
+    #       - sourceLabels: ["remote_write_allow"]
+    #         regex: "true"
+    #         action: "keep"
 
 
-        # Настройки надёжной доставки
-        sendExemplars: true
-        queueConfig:
-          capacity: 50000
-          maxShards: 50
-          minShards: 5
-          maxSamplesPerSend: 2000  # меньше батчи → меньше 429
-          batchSendDeadline: 10s
-          minBackoff: 500ms
-          maxBackoff: 30s
+    #     # Настройки надёжной доставки
+    #     sendExemplars: true
+    #     queueConfig:
+    #       capacity: 50000
+    #       maxShards: 50
+    #       minShards: 5
+    #       maxSamplesPerSend: 2000  # меньше батчи → меньше 429
+    #       batchSendDeadline: 10s
+    #       minBackoff: 500ms
+    #       maxBackoff: 30s
 
     ## EnableAdminAPI enables Prometheus the administrative HTTP API which includes functionality such as deleting time series.
     enableAdminAPI: true
