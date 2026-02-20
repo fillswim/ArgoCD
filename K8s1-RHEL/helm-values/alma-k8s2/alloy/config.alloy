@@ -61,20 +61,43 @@
 //                                  Metrics
 // ============================================================================
 
+// ==============================================
+
 livedebugging {
 	enabled = true
 }
+
+// ==============================================
+//                Pod Metrics
+// ==============================================
 
 discovery.kubernetes "pods" {
 	role = "pod"
 }
 
-prometheus.scrape "k8s_metrics" {
+prometheus.scrape "pods_metrics" {
 	targets = discovery.kubernetes.pods.targets
 	// forward_to = [prometheus.remote_write.mimir.receiver]
 	// forward_to = []
 	forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
 }
+
+// ==============================================
+//                  Node Metrics
+// ==============================================
+
+discovery.kubernetes "nodes" {
+	role = "node"
+}
+
+prometheus.scrape "nodes_metrics" {
+	targets = discovery.kubernetes.nodes.targets
+	// forward_to = [prometheus.remote_write.mimir.receiver]
+	forward_to = []
+	// forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
+}
+
+// ==============================================
 
 // Компонент для фильтрации метрик
 prometheus.relabel "pods_metrics_filter" {
