@@ -72,6 +72,19 @@ discovery.kubernetes "pods" {
 prometheus.scrape "k8s_metrics" {
 	targets = discovery.kubernetes.pods.targets
 	// forward_to = [prometheus.remote_write.mimir.receiver]
+	// forward_to = []
+	forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
+}
+
+// Компонент для фильтрации метрик
+prometheus.relabel "pods_metrics_filter" {
+	rule {
+		source_labels = ["__name__"]
+		regex         = "longhorn_disk_status"
+		action        = "keep"
+	}
+
+	//   forward_to = [prometheus.remote_write.mimir.receiver]
 	forward_to = []
 }
 
