@@ -67,25 +67,26 @@ discovery.kubernetes "pods" {
 
 prometheus.scrape "k8s_metrics" {
 	targets    = discovery.kubernetes.pods.targets
-	forward_to = [prometheus.remote_write.mimir.receiver]
+	// forward_to = [prometheus.remote_write.mimir.receiver]
+	forward_to = []
 }
 
-prometheus.remote_write "mimir" {
-	external_labels = {
-		env       = "test",
-		app       = "k8s",
-		cluster   = "alma-k8s2",
-		subsystem = "cluster",
-	}
+// prometheus.remote_write "mimir" {
+// 	external_labels = {
+// 		env       = "test",
+// 		app       = "k8s",
+// 		cluster   = "alma-k8s2",
+// 		subsystem = "cluster",
+// 	}
 
-	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "fillswim",
-		}
+// 	endpoint {
+// 		url     = "https://mimir.fillswim.local/api/v1/push"
+// 		headers = {
+// 			"X-Scope-OrgID" = "fillswim",
+// 		}
 
-		tls_config {
-			insecure_skip_verify = true
-		}
-	}
-}
+// 		tls_config {
+// 			insecure_skip_verify = true
+// 		}
+// 	}
+// }
