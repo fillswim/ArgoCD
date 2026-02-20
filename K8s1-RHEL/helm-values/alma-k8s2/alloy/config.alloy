@@ -61,12 +61,16 @@
 //                                  Metrics
 // ============================================================================
 
+livedebugging {
+	enabled = true
+}
+
 discovery.kubernetes "pods" {
 	role = "pod"
 }
 
 prometheus.scrape "k8s_metrics" {
-	targets    = discovery.kubernetes.pods.targets
+	targets = discovery.kubernetes.pods.targets
 	// forward_to = [prometheus.remote_write.mimir.receiver]
 	forward_to = []
 }

@@ -1,6 +1,8 @@
 ---
 
 alloy:
+  # stabilityLevel: "generally-available"
+  stabilityLevel: "experimental"
   configMap:
     create: false
     name: alloy-config
