@@ -102,6 +102,24 @@ prometheus.relabel "pods_metrics_filter" {
 		action        = "keep"
 	}
 
+	rule {
+		source_labels = ["__name__"]
+		regex         = "loki_.*"
+		action        = "keep"
+	}
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "nginx_ingress_.*"
+		action        = "keep"
+	}
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "up"
+		action        = "keep"
+	}
+
 	forward_to = [prometheus.remote_write.mimir_pod_metrics_filtered.receiver]
 }
 
