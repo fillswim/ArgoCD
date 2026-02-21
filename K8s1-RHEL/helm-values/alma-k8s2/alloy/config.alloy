@@ -92,7 +92,13 @@ prometheus.scrape "pods_metrics" {
 prometheus.relabel "pods_metrics_filter" {
 	rule {
 		source_labels = ["__name__"]
-		regex         = "longhorn_.*|apiserver_.*"
+		regex         = "longhorn_.*"
+		action        = "keep"
+	}
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "apiserver_.*"
 		action        = "keep"
 	}
 
