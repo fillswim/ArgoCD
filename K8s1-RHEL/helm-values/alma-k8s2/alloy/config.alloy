@@ -62,24 +62,11 @@
 // ============================================================================
 
 // ==============================================
+//                Debug Mode
+// ==============================================
 
 livedebugging {
 	enabled = true
-}
-
-// ==============================================
-//                Node Metrics
-// ==============================================
-
-discovery.kubernetes "node" {
-	role = "node"
-}
-
-prometheus.scrape "node_metrics" {
-	targets    = discovery.kubernetes.node.targets
-	forward_to = [prometheus.remote_write.mimir_node_metrics_full.receiver]
-	// forward_to = []
-	// forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
 }
 
 // ==============================================
@@ -92,62 +79,24 @@ discovery.kubernetes "pods" {
 
 prometheus.scrape "pods_metrics" {
 	targets    = discovery.kubernetes.pods.targets
-	forward_to = [prometheus.remote_write.mimir_pod_metrics_full.receiver]
-	// forward_to = []
-	// forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
+	forward_to = [
+		prometheus.remote_write.mimir_pod_metrics_full.receiver,
+		prometheus.relabel.pods_metrics_filter.receiver,
+	]
 }
 
-// // ==============================================
-// //                  Node Metrics
-// // ==============================================
-
-// discovery.kubernetes "nodes" {
-// 	role = "node"
-// }
-
-// prometheus.scrape "nodes_metrics" {
-// 	targets = discovery.kubernetes.nodes.targets
-// 	// forward_to = [prometheus.remote_write.mimir.receiver]
-// 	forward_to = []
-// 	// forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
-// }
-
+// ==============================================
+//             Filter Pod Metrics
 // ==============================================
 
-// // Компонент для фильтрации метрик
-// prometheus.relabel "pods_metrics_filter" {
-// 	rule {
-// 		source_labels = ["__name__"]
-// 		regex         = "longhorn_disk_status"
-// 		action        = "keep"
-// 	}
-
-// 	//   forward_to = [prometheus.remote_write.mimir.receiver]
-// 	forward_to = []
-// }
-
-// ==============================================
-//              Mimir Node Metrics Full
-// ==============================================
-
-prometheus.remote_write "mimir_node_metrics_full" {
-	external_labels = {
-		env       = "test",
-		app       = "k8s",
-		cluster   = "alma-k8s2",
-		subsystem = "cluster",
+prometheus.relabel "pods_metrics_filter" {
+	rule {
+		source_labels = ["__name__"]
+		regex         = "longhorn_*"
+		action        = "keep"
 	}
 
-	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "test-node-metrics-full",
-		}
-
-		tls_config {
-			insecure_skip_verify = true
-		}
-	}
+	forward_to = [prometheus.remote_write.mimir_pod_metrics_filtered.receiver]
 }
 
 // ==============================================
@@ -166,6 +115,30 @@ prometheus.remote_write "mimir_pod_metrics_full" {
 		url     = "https://mimir.fillswim.local/api/v1/push"
 		headers = {
 			"X-Scope-OrgID" = "test-pod-metrics-full",
+		}
+
+		tls_config {
+			insecure_skip_verify = true
+		}
+	}
+}
+
+// ==============================================
+//              Mimir Pod Metrics Filtered
+// ==============================================
+
+prometheus.remote_write "mimir_pod_metrics_filtered" {
+	external_labels = {
+		env       = "test",
+		app       = "k8s",
+		cluster   = "alma-k8s2",
+		subsystem = "cluster",
+	}
+
+	endpoint {
+		url     = "https://mimir.fillswim.local/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "test-pod-metrics-filtered",
 		}
 
 		tls_config {
