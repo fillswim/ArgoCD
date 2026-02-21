@@ -75,27 +75,30 @@ discovery.kubernetes "pods" {
 	role = "pod"
 }
 
+prometheus.exporter.self "debug" {}
+
 prometheus.scrape "pods_metrics" {
 	targets = discovery.kubernetes.pods.targets
 	// forward_to = [prometheus.remote_write.mimir.receiver]
 	// forward_to = []
-	forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
-}
-
-// ==============================================
-//                  Node Metrics
-// ==============================================
-
-discovery.kubernetes "nodes" {
-	role = "node"
-}
-
-prometheus.scrape "nodes_metrics" {
-	targets = discovery.kubernetes.nodes.targets
-	// forward_to = [prometheus.remote_write.mimir.receiver]
-	forward_to = []
 	// forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
+	forward_to = [prometheus.exporter.self.debug.receiver]
 }
+
+// // ==============================================
+// //                  Node Metrics
+// // ==============================================
+
+// discovery.kubernetes "nodes" {
+// 	role = "node"
+// }
+
+// prometheus.scrape "nodes_metrics" {
+// 	targets = discovery.kubernetes.nodes.targets
+// 	// forward_to = [prometheus.remote_write.mimir.receiver]
+// 	forward_to = []
+// 	// forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
+// }
 
 // ==============================================
 
