@@ -75,14 +75,11 @@ discovery.kubernetes "pods" {
 	role = "pod"
 }
 
-prometheus.exporter.self "debug" {}
-
 prometheus.scrape "pods_metrics" {
 	targets = discovery.kubernetes.pods.targets
-	// forward_to = [prometheus.remote_write.mimir.receiver]
+	forward_to = [prometheus.remote_write.mimir_pod_metrics_full.receiver]
 	// forward_to = []
 	// forward_to = [prometheus.relabel.pods_metrics_filter.receiver]
-	forward_to = [prometheus.exporter.self.debug.receiver]
 }
 
 // // ==============================================
@@ -102,34 +99,38 @@ prometheus.scrape "pods_metrics" {
 
 // ==============================================
 
-// Компонент для фильтрации метрик
-prometheus.relabel "pods_metrics_filter" {
-	rule {
-		source_labels = ["__name__"]
-		regex         = "longhorn_disk_status"
-		action        = "keep"
+// // Компонент для фильтрации метрик
+// prometheus.relabel "pods_metrics_filter" {
+// 	rule {
+// 		source_labels = ["__name__"]
+// 		regex         = "longhorn_disk_status"
+// 		action        = "keep"
+// 	}
+
+// 	//   forward_to = [prometheus.remote_write.mimir.receiver]
+// 	forward_to = []
+// }
+
+// ==============================================
+//              Mimir Pod Metrics Full
+// ==============================================
+
+prometheus.remote_write "mimir_pod_metrics_full" {
+	external_labels = {
+		env       = "test",
+		app       = "k8s",
+		cluster   = "alma-k8s2",
+		subsystem = "cluster",
 	}
 
-	//   forward_to = [prometheus.remote_write.mimir.receiver]
-	forward_to = []
+	endpoint {
+		url     = "https://mimir.fillswim.local/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "test-pod-metrics-full",
+		}
+
+		tls_config {
+			insecure_skip_verify = true
+		}
+	}
 }
-
-// prometheus.remote_write "mimir" {
-// 	external_labels = {
-// 		env       = "test",
-// 		app       = "k8s",
-// 		cluster   = "alma-k8s2",
-// 		subsystem = "cluster",
-// 	}
-
-// 	endpoint {
-// 		url     = "https://mimir.fillswim.local/api/v1/push"
-// 		headers = {
-// 			"X-Scope-OrgID" = "fillswim",
-// 		}
-
-// 		tls_config {
-// 			insecure_skip_verify = true
-// 		}
-// 	}
-// }
