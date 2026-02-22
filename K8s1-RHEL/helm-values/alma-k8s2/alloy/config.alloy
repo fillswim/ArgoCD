@@ -86,6 +86,26 @@ prometheus.scrape "pods_metrics" {
 }
 
 // ==============================================
+//                KSM Metrics
+// ==============================================
+
+discovery.kubernetes "kube_state_metrics" {
+	role = "endpoints"
+
+	selectors {
+		role  = "endpoints"
+		label = "app.kubernetes.io/name=kube-state-metrics"
+	}
+}
+
+prometheus.scrape "ksm_metrics" {
+	targets    = discovery.kubernetes.kube_state_metrics.targets
+	forward_to = [
+		prometheus.remote_write.mimir_ksm_metrics_full.receiver,
+	]
+}
+
+// ==============================================
 //             Filter Pod Metrics
 // ==============================================
 
@@ -163,6 +183,30 @@ prometheus.remote_write "mimir_pod_metrics_filtered" {
 		url     = "https://mimir.fillswim.local/api/v1/push"
 		headers = {
 			"X-Scope-OrgID" = "test-pod-metrics-filtered",
+		}
+
+		tls_config {
+			insecure_skip_verify = true
+		}
+	}
+}
+
+// ==============================================
+//              Mimir KSM Metrics Full
+// ==============================================
+
+prometheus.remote_write "mimir_ksm_metrics_full" {
+	external_labels = {
+		env       = "test",
+		app       = "k8s",
+		cluster   = "alma-k8s2",
+		subsystem = "cluster",
+	}
+
+	endpoint {
+		url     = "https://mimir.fillswim.local/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "test-ksm-metrics-full",
 		}
 
 		tls_config {
