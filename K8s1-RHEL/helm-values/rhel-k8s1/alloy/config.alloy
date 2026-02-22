@@ -1,106 +1,55 @@
-// Alloy RHEL K8s1
 // alloy validate K8s1-RHEL/helm-values/rhel-k8s1/alloy/config.alloy
 
-// // ===================================================
-// //                    Node Metrics
-// // ===================================================
-
-// prometheus.exporter.unix "node" { }
-
-// prometheus.scrape "node" {
-// 	targets         = prometheus.exporter.unix.node.targets
-// 	scrape_interval = "15s"
-
-// 	forward_to = [prometheus.relabel.filter_metrics.receiver]
-// }
-
-// prometheus.relabel "filter_metrics" {
-// 	rule {
-// 		source_labels = ["__name__"]
-// 		regex         = "node_cpu_seconds_total"
-// 		action        = "keep"
-// 	}
-// 	forward_to = [prometheus.remote_write.mimir.receiver]
-// }
-
-// // ===================================================
-// //                   Remote Write Mimir
-// // ===================================================
-
-// prometheus.remote_write "mimir" {
-// 	external_labels = {
-// 		env       = "main",
-// 		app       = "k8s",
-// 		cluster   = "rhel-k8s1",
-// 		subsystem = "cluster",
-// 	}
-
-// 	endpoint {
-// 		url     = "https://mimir.fillswim.local/api/v1/push"
-// 		headers = {
-// 			"X-Scope-OrgID" = "fillswim",
-// 		}
-
-// 		tls_config {
-// 			insecure_skip_verify = true
-// 		}
-// 	}
-// }
-
 // ============================================================================
-//                        OpenTelemetry Collector (RHEL K8s1)
+//                                  Metrics
 // ============================================================================
 
-otelcol.receiver.otlp "in" {
-	grpc {
-		endpoint = "0.0.0.0:4317"
-	}
+// ==============================================
+//                Debug Mode
+// ==============================================
 
-	http {
-		endpoint = "0.0.0.0:4318"
-	}
+livedebugging {
+	enabled = true
+}
 
-	output {
-		traces = [otelcol.processor.transform.add_cluster.input]
+// ==============================================
+//                 Loki Metrics
+// ==============================================
+
+discovery.kubernetes "loki" {
+	role = "pod"
+
+	selectors {
+		role  = "pod"
+		label = "app.kubernetes.io/name=loki"
 	}
 }
 
-otelcol.processor.transform "add_cluster" {
-	error_mode = "ignore"
-
-	trace_statements {
-		context    = "resource"
-		statements = [
-			"set(attributes[\"cluster\"], \"rhel-k8s1\")",
-		]
-	}
-
-	output {
-		traces = [otelcol.processor.batch.default.input]
-	}
+prometheus.scrape "loki" {
+	targets    = discovery.kubernetes.loki.targets
+	forward_to = [prometheus.remote_write.mimir_loki_metrics_full.receiver]
 }
 
-otelcol.processor.batch "default" {
-	timeout         = "5s"
-	send_batch_size = 1000
+// ==============================================
+//              Mimir loki Metrics Full
+// ==============================================
 
-	output {
-		traces = [otelcol.exporter.otlphttp.tempo.input]
+prometheus.remote_write "mimir_loki_metrics_full" {
+	external_labels = {
+		env       = "main",
+		app       = "k8s",
+		cluster   = "rhel-k8s1",
+		subsystem = "cluster",
 	}
-}
 
-otelcol.exporter.otlphttp "tempo" {
-	client {
-		endpoint = "https://tempo.fillswim.local"
+	endpoint {
+		url     = "https://mimir.fillswim.local/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "test-loki-metrics-full",
+		}
 
-		tls {
-			insecure             = false
+		tls_config {
 			insecure_skip_verify = true
 		}
 	}
-
-	retry_on_failure {
-		enabled = true
-	}
 }
-
