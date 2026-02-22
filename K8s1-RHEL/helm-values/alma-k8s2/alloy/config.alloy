@@ -106,6 +106,37 @@ prometheus.scrape "ksm_metrics" {
 }
 
 // ==============================================
+//                cAdvisor Metrics
+// ==============================================
+
+// 1. Обнаружение узлов кластера
+discovery.kubernetes "nodes" {
+	role = "node"
+}
+
+// 2. Перезапись пути на /metrics/cadvisor
+discovery.relabel "cadvisor" {
+	targets = discovery.kubernetes.nodes.targets
+
+	rule {
+		replacement  = "/metrics/cadvisor"
+		target_label = "__metrics_path__"
+	}
+}
+
+// 3. Сбор метрик
+prometheus.scrape "cadvisor" {
+	targets           = discovery.relabel.cadvisor.output
+	scheme            = "https"
+	bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+	tls_config {
+		insecure_skip_verify = true
+	}
+	forward_to = [prometheus.remote_write.mimir_cadvisor_metrics_full.receiver]
+}
+
+// ==============================================
 //             Filter Pod Metrics
 // ==============================================
 
@@ -115,30 +146,6 @@ prometheus.relabel "pods_metrics_filter" {
 		regex         = "longhorn_.*|apiserver_.*|loki_.*|nginx_ingress_.*|up"
 		action        = "keep"
 	}
-
-	// rule {
-	// 	source_labels = ["__name__"]
-	// 	regex         = "apiserver_.*"
-	// 	action        = "keep"
-	// }
-
-	// rule {
-	// 	source_labels = ["__name__"]
-	// 	regex         = "loki_.*"
-	// 	action        = "keep"
-	// }
-
-	// rule {
-	// 	source_labels = ["__name__"]
-	// 	regex         = "nginx_ingress_.*"
-	// 	action        = "keep"
-	// }
-
-	// rule {
-	// 	source_labels = ["__name__"]
-	// 	regex         = "up"
-	// 	action        = "keep"
-	// }
 
 	forward_to = [prometheus.remote_write.mimir_pod_metrics_filtered.receiver]
 }
@@ -207,6 +214,30 @@ prometheus.remote_write "mimir_ksm_metrics_full" {
 		url     = "https://mimir.fillswim.local/api/v1/push"
 		headers = {
 			"X-Scope-OrgID" = "test-ksm-metrics-full",
+		}
+
+		tls_config {
+			insecure_skip_verify = true
+		}
+	}
+}
+
+// ==============================================
+//              Mimir cAdvisor Metrics Full
+// ==============================================
+
+prometheus.remote_write "mimir_cadvisor_metrics_full" {
+	external_labels = {
+		env       = "test",
+		app       = "k8s",
+		cluster   = "alma-k8s2",
+		subsystem = "cluster",
+	}
+
+	endpoint {
+		url     = "https://mimir.fillswim.local/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "test-cadvisor-metrics-full",
 		}
 
 		tls_config {
