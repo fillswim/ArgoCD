@@ -39,7 +39,7 @@ prometheus.relabel "loki_metrics_filter" {
 		source_labels = ["__name__"]
 		regex         = "loki_distributor_bytes_received_total|" + 
 						"loki_ingester_memory_chunks|" + 
-						"loki_panic_totals"
+						"loki_build_info"
 		action = "keep"
 	}
 
