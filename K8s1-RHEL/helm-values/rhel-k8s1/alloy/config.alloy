@@ -1,7 +1,7 @@
 // alloy validate K8s1-RHEL/helm-values/rhel-k8s1/alloy/config.alloy
 
 // ============================================================================
-//                                  Metrics
+//                               Metrics RHEL-K8s1
 // ============================================================================
 
 // ==============================================
@@ -27,7 +27,21 @@ discovery.kubernetes "loki" {
 
 prometheus.scrape "loki" {
 	targets    = discovery.kubernetes.loki.targets
-	forward_to = [prometheus.remote_write.mimir_loki_metrics_full.receiver]
+	forward_to = [
+		prometheus.relabel.loki_metrics_filter.receiver,
+		prometheus.remote_write.mimir_loki_metrics_full.receiver,
+	]
+}
+
+// Loki Metrics Filter
+prometheus.relabel "loki_metrics_filter" {
+	rule {
+		source_labels = ["__name__"]
+		regex         = "loki_distributor_bytes_received_total"
+		action        = "keep"
+	}
+
+	forward_to = [prometheus.remote_write.mimir_main.receiver]
 }
 
 // ==============================================
@@ -46,6 +60,30 @@ prometheus.remote_write "mimir_loki_metrics_full" {
 		url     = "https://mimir.fillswim.local/api/v1/push"
 		headers = {
 			"X-Scope-OrgID" = "test-loki-metrics-full",
+		}
+
+		tls_config {
+			insecure_skip_verify = true
+		}
+	}
+}
+
+// ==============================================
+//                  Mimir Main
+// ==============================================
+
+prometheus.remote_write "mimir_main" {
+	external_labels = {
+		env       = "main",
+		app       = "k8s",
+		cluster   = "rhel-k8s1",
+		subsystem = "cluster",
+	}
+
+	endpoint {
+		url     = "https://mimir.fillswim.local/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "fillswim",
 		}
 
 		tls_config {
