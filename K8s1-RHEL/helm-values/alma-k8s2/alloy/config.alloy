@@ -86,7 +86,7 @@ prometheus.scrape "pods_metrics" {
 }
 
 // ==============================================
-//                KSM Metrics
+//                  KSM Metrics
 // ==============================================
 
 discovery.kubernetes "kube_state_metrics" {
@@ -134,6 +134,30 @@ prometheus.scrape "cadvisor" {
 		insecure_skip_verify = true
 	}
 	forward_to = [prometheus.remote_write.mimir_cadvisor_metrics_full.receiver]
+}
+
+// ===================================================
+//                    Alloy Metrics
+// ===================================================
+
+discovery.relabel "alloy_relabel" {
+	targets = [
+		{"__address__" = "alloy.alloy.svc.alma-k8s2:12345"},
+	]
+
+	// rule {
+	// 	target_label = "instance"
+	// 	replacement  = constants.hostname
+	// }
+}
+
+prometheus.scrape "alloy" {
+	targets = discovery.relabel.alloy_relabel.output
+
+	metrics_path    = "/metrics"
+	scrape_interval = "15s"
+
+	forward_to = [prometheus.remote_write.mimir_alloy_cluster_metrics_full.receiver]
 }
 
 // ==============================================
@@ -238,6 +262,30 @@ prometheus.remote_write "mimir_cadvisor_metrics_full" {
 		url     = "https://mimir.fillswim.local/api/v1/push"
 		headers = {
 			"X-Scope-OrgID" = "test-cadvisor-metrics-full",
+		}
+
+		tls_config {
+			insecure_skip_verify = true
+		}
+	}
+}
+
+// ==============================================
+//              Mimir Alloy Metrics Full
+// ==============================================
+
+prometheus.remote_write "mimir_alloy_cluster_metrics_full" {
+	external_labels = {
+		env       = "test",
+		app       = "k8s",
+		cluster   = "alma-k8s2",
+		subsystem = "cluster",
+	}
+
+	endpoint {
+		url     = "https://mimir.fillswim.local/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "test-alloy-cluster-metrics-full",
 		}
 
 		tls_config {
