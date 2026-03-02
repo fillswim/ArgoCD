@@ -65,6 +65,11 @@ mimir:
       s3:
         bucket_name: mimir-ruler
 
+    memberlist:
+      join_members:
+        - mimir-memberlist.mimir.svc.cluster.local:7946
+      cluster_label: "mimir-main"
+
 ingester:
   enabled: true
   replicas: 3
