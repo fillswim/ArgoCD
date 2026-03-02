@@ -61,6 +61,17 @@ loki:
           prefix: loki_index_
           period: 24h
 
+  structuredConfig:
+    common:
+      ring:
+        kvstore:
+          store: memberlist
+
+    memberlist:
+      # важно: join по DNS (headless), а не по pod IP
+      join_members:
+        - loki-memberlist
+
   ingester:
     # chunk_encoding: snappy
     chunk_encoding: zstd

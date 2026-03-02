@@ -67,17 +67,6 @@ loki:
     retention_enabled: true
     delete_request_store: s3
 
-  structuredConfig:
-    common:
-      ring:
-        kvstore:
-          store: memberlist
-
-    memberlist:
-      # важно: join по DNS (headless), а не по pod IP
-      join_members:
-        - loki-memberlist
-
 
 # Ingester
 ingester:
