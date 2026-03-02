@@ -74,11 +74,14 @@ loki:
 
     ingester:
       autoforget_unhealthy: true
+
       lifecycler:
         unregister_on_shutdown: true
+        heartbeat_period: 5s
+        heartbeat_timeout: 1m
         ring:
-          heartbeat_period: 5s
-          heartbeat_timeout: 1m
+          kvstore:
+            store: memberlist
 
   ingester:
     # chunk_encoding: snappy
