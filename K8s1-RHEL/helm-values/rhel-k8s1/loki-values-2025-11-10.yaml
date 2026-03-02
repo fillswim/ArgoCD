@@ -72,6 +72,14 @@ loki:
       join_members:
         - loki-memberlist
 
+    ingester:
+      autoforget_unhealthy: true
+      lifecycler:
+        unregister_on_shutdown: true
+        ring:
+          heartbeat_period: 5s
+          heartbeat_timeout: 1m
+
   ingester:
     # chunk_encoding: snappy
     chunk_encoding: zstd
