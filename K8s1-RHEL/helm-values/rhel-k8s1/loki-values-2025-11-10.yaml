@@ -70,7 +70,11 @@ loki:
     memberlist:
       # важно: join по DNS (headless), а не по pod IP
       join_members:
-        - loki-memberlist
+        # - loki-memberlist
+        - loki-memberlist.loki.svc.cluster.local
+
+      # уникальная метка кластера (любой уникальный текст)
+      cluster_label: "loki-main"
 
     ingester:
       autoforget_unhealthy: true
