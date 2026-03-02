@@ -67,7 +67,7 @@ mimir:
 
     memberlist:
       join_members:
-        - mimir-memberlist.mimir.svc.cluster.local:7946
+        - mimir-gossip-ring.mimir.svc.cluster.local:7946
       cluster_label: "mimir-main"
 
 ingester:
