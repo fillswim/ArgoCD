@@ -87,6 +87,10 @@ loki:
           kvstore:
             store: memberlist
 
+    limits_config:
+      max_line_size: 1048576        # 1 MiB
+      max_line_size_truncate: true  # обрезать вместо 4xx/5xx
+
   ingester:
     # chunk_encoding: snappy
     chunk_encoding: zstd
