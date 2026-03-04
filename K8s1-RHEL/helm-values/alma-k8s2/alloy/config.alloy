@@ -80,85 +80,85 @@ discovery.kubernetes "pods" {
 prometheus.scrape "pods_metrics" {
 	targets    = discovery.kubernetes.pods.targets
 	forward_to = [
-		prometheus.remote_write.mimir_pod_metrics_full.receiver,
+		// prometheus.remote_write.mimir_pod_metrics_full.receiver,
 		prometheus.relabel.pods_metrics_filter.receiver,
 	]
 }
 
-// ==============================================
-//                  KSM Metrics
-// ==============================================
+// // ==============================================
+// //                  KSM Metrics
+// // ==============================================
 
-discovery.kubernetes "kube_state_metrics" {
-	role = "endpoints"
+// discovery.kubernetes "kube_state_metrics" {
+// 	role = "endpoints"
 
-	selectors {
-		role  = "endpoints"
-		label = "app.kubernetes.io/name=kube-state-metrics"
-	}
-}
+// 	selectors {
+// 		role  = "endpoints"
+// 		label = "app.kubernetes.io/name=kube-state-metrics"
+// 	}
+// }
 
-prometheus.scrape "ksm_metrics" {
-	targets    = discovery.kubernetes.kube_state_metrics.targets
-	forward_to = [
-		prometheus.remote_write.mimir_ksm_metrics_full.receiver,
-	]
-}
+// prometheus.scrape "ksm_metrics" {
+// 	targets    = discovery.kubernetes.kube_state_metrics.targets
+// 	forward_to = [
+// 		prometheus.remote_write.mimir_ksm_metrics_full.receiver,
+// 	]
+// }
 
-// ==============================================
-//                cAdvisor Metrics
-// ==============================================
+// // ==============================================
+// //                cAdvisor Metrics
+// // ==============================================
 
-// 1. Обнаружение узлов кластера
-discovery.kubernetes "nodes" {
-	role = "node"
-}
+// // 1. Обнаружение узлов кластера
+// discovery.kubernetes "nodes" {
+// 	role = "node"
+// }
 
-// 2. Перезапись пути на /metrics/cadvisor
-discovery.relabel "cadvisor" {
-	targets = discovery.kubernetes.nodes.targets
+// // 2. Перезапись пути на /metrics/cadvisor
+// discovery.relabel "cadvisor" {
+// 	targets = discovery.kubernetes.nodes.targets
 
-	rule {
-		replacement  = "/metrics/cadvisor"
-		target_label = "__metrics_path__"
-	}
-}
+// 	rule {
+// 		replacement  = "/metrics/cadvisor"
+// 		target_label = "__metrics_path__"
+// 	}
+// }
 
-// 3. Сбор метрик
-prometheus.scrape "cadvisor" {
-	targets           = discovery.relabel.cadvisor.output
-	scheme            = "https"
-	bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+// // 3. Сбор метрик
+// prometheus.scrape "cadvisor" {
+// 	targets           = discovery.relabel.cadvisor.output
+// 	scheme            = "https"
+// 	bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
 
-	tls_config {
-		insecure_skip_verify = true
-	}
-	forward_to = [prometheus.remote_write.mimir_cadvisor_metrics_full.receiver]
-}
+// 	tls_config {
+// 		insecure_skip_verify = true
+// 	}
+// 	forward_to = [prometheus.remote_write.mimir_cadvisor_metrics_full.receiver]
+// }
 
-// ===================================================
-//                    Alloy Metrics
-// ===================================================
+// // ===================================================
+// //                    Alloy Metrics
+// // ===================================================
 
-discovery.relabel "alloy_relabel" {
-	targets = [
-		{"__address__" = "alloy.alloy.svc.alma-k8s2:12345"},
-	]
+// discovery.relabel "alloy_relabel" {
+// 	targets = [
+// 		{"__address__" = "alloy.alloy.svc.alma-k8s2:12345"},
+// 	]
 
-	// rule {
-	// 	target_label = "instance"
-	// 	replacement  = constants.hostname
-	// }
-}
+// 	// rule {
+// 	// 	target_label = "instance"
+// 	// 	replacement  = constants.hostname
+// 	// }
+// }
 
-prometheus.scrape "alloy" {
-	targets = discovery.relabel.alloy_relabel.output
+// prometheus.scrape "alloy" {
+// 	targets = discovery.relabel.alloy_relabel.output
 
-	metrics_path    = "/metrics"
-	scrape_interval = "15s"
+// 	metrics_path    = "/metrics"
+// 	scrape_interval = "15s"
 
-	forward_to = [prometheus.remote_write.mimir_alloy_cluster_metrics_full.receiver]
-}
+// 	forward_to = [prometheus.remote_write.mimir_alloy_cluster_metrics_full.receiver]
+// }
 
 // ==============================================
 //             Filter Pod Metrics
@@ -174,29 +174,29 @@ prometheus.relabel "pods_metrics_filter" {
 	forward_to = [prometheus.remote_write.mimir_pod_metrics_filtered.receiver]
 }
 
-// ==============================================
-//              Mimir Pod Metrics Full
-// ==============================================
+// // ==============================================
+// //              Mimir Pod Metrics Full
+// // ==============================================
 
-prometheus.remote_write "mimir_pod_metrics_full" {
-	external_labels = {
-		env       = "test",
-		app       = "k8s",
-		cluster   = "alma-k8s2",
-		subsystem = "cluster",
-	}
+// prometheus.remote_write "mimir_pod_metrics_full" {
+// 	external_labels = {
+// 		env       = "test",
+// 		app       = "k8s",
+// 		cluster   = "alma-k8s2",
+// 		subsystem = "cluster",
+// 	}
 
-	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "test-pod-metrics-full",
-		}
+// 	endpoint {
+// 		url     = "https://mimir.fillswim.local/api/v1/push"
+// 		headers = {
+// 			"X-Scope-OrgID" = "test-pod-metrics-full",
+// 		}
 
-		tls_config {
-			insecure_skip_verify = true
-		}
-	}
-}
+// 		tls_config {
+// 			insecure_skip_verify = true
+// 		}
+// 	}
+// }
 
 // ==============================================
 //              Mimir Pod Metrics Filtered
@@ -222,74 +222,74 @@ prometheus.remote_write "mimir_pod_metrics_filtered" {
 	}
 }
 
-// ==============================================
-//              Mimir KSM Metrics Full
-// ==============================================
+// // ==============================================
+// //              Mimir KSM Metrics Full
+// // ==============================================
 
-prometheus.remote_write "mimir_ksm_metrics_full" {
-	external_labels = {
-		env       = "test",
-		app       = "k8s",
-		cluster   = "alma-k8s2",
-		subsystem = "cluster",
-	}
+// prometheus.remote_write "mimir_ksm_metrics_full" {
+// 	external_labels = {
+// 		env       = "test",
+// 		app       = "k8s",
+// 		cluster   = "alma-k8s2",
+// 		subsystem = "cluster",
+// 	}
 
-	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "test-ksm-metrics-full",
-		}
+// 	endpoint {
+// 		url     = "https://mimir.fillswim.local/api/v1/push"
+// 		headers = {
+// 			"X-Scope-OrgID" = "test-ksm-metrics-full",
+// 		}
 
-		tls_config {
-			insecure_skip_verify = true
-		}
-	}
-}
+// 		tls_config {
+// 			insecure_skip_verify = true
+// 		}
+// 	}
+// }
 
-// ==============================================
-//              Mimir cAdvisor Metrics Full
-// ==============================================
+// // ==============================================
+// //              Mimir cAdvisor Metrics Full
+// // ==============================================
 
-prometheus.remote_write "mimir_cadvisor_metrics_full" {
-	external_labels = {
-		env       = "test",
-		app       = "k8s",
-		cluster   = "alma-k8s2",
-		subsystem = "cluster",
-	}
+// prometheus.remote_write "mimir_cadvisor_metrics_full" {
+// 	external_labels = {
+// 		env       = "test",
+// 		app       = "k8s",
+// 		cluster   = "alma-k8s2",
+// 		subsystem = "cluster",
+// 	}
 
-	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "test-cadvisor-metrics-full",
-		}
+// 	endpoint {
+// 		url     = "https://mimir.fillswim.local/api/v1/push"
+// 		headers = {
+// 			"X-Scope-OrgID" = "test-cadvisor-metrics-full",
+// 		}
 
-		tls_config {
-			insecure_skip_verify = true
-		}
-	}
-}
+// 		tls_config {
+// 			insecure_skip_verify = true
+// 		}
+// 	}
+// }
 
-// ==============================================
-//              Mimir Alloy Metrics Full
-// ==============================================
+// // ==============================================
+// //              Mimir Alloy Metrics Full
+// // ==============================================
 
-prometheus.remote_write "mimir_alloy_cluster_metrics_full" {
-	external_labels = {
-		env       = "test",
-		app       = "k8s",
-		cluster   = "alma-k8s2",
-		subsystem = "cluster",
-	}
+// prometheus.remote_write "mimir_alloy_cluster_metrics_full" {
+// 	external_labels = {
+// 		env       = "test",
+// 		app       = "k8s",
+// 		cluster   = "alma-k8s2",
+// 		subsystem = "cluster",
+// 	}
 
-	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "test-alloy-cluster-metrics-full",
-		}
+// 	endpoint {
+// 		url     = "https://mimir.fillswim.local/api/v1/push"
+// 		headers = {
+// 			"X-Scope-OrgID" = "test-alloy-cluster-metrics-full",
+// 		}
 
-		tls_config {
-			insecure_skip_verify = true
-		}
-	}
-}
+// 		tls_config {
+// 			insecure_skip_verify = true
+// 		}
+// 	}
+// }
