@@ -29,7 +29,7 @@ prometheus.scrape "loki" {
 	targets    = discovery.kubernetes.loki.targets
 	forward_to = [
 		prometheus.relabel.loki_metrics_filter.receiver,
-		prometheus.remote_write.mimir_loki_metrics_full.receiver,
+		// prometheus.remote_write.mimir_loki_metrics_full.receiver,
 	]
 }
 
@@ -46,29 +46,29 @@ prometheus.relabel "loki_metrics_filter" {
 	forward_to = [prometheus.remote_write.mimir_main.receiver]
 }
 
-// ==============================================
-//              Mimir loki Metrics Full
-// ==============================================
+// // ==============================================
+// //              Mimir loki Metrics Full
+// // ==============================================
 
-prometheus.remote_write "mimir_loki_metrics_full" {
-	external_labels = {
-		env       = "main",
-		app       = "k8s",
-		cluster   = "rhel-k8s1",
-		subsystem = "cluster",
-	}
+// prometheus.remote_write "mimir_loki_metrics_full" {
+// 	external_labels = {
+// 		env       = "main",
+// 		app       = "k8s",
+// 		cluster   = "rhel-k8s1",
+// 		subsystem = "cluster",
+// 	}
 
-	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "test-loki-metrics-full",
-		}
+// 	endpoint {
+// 		url     = "https://mimir.fillswim.local/api/v1/push"
+// 		headers = {
+// 			"X-Scope-OrgID" = "test-loki-metrics-full",
+// 		}
 
-		tls_config {
-			insecure_skip_verify = true
-		}
-	}
-}
+// 		tls_config {
+// 			insecure_skip_verify = true
+// 		}
+// 	}
+// }
 
 // ==============================================
 //                  Mimir Main
