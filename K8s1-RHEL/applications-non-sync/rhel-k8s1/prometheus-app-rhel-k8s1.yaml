@@ -19,8 +19,8 @@ spec:
 
   sources:
     # - repoURL: oci://ghcr.io/prometheus-community/charts                           # Репозиторий с Helm чартом
-    # - repoURL: "https://prometheus-community.github.io/helm-charts"                # Репозиторий с Helm чартом
-    - repoURL: "oci://harbor.fillswim.local/charts/kube-prometheus-stack"          # Репозиторий с Helm чартом
+    - repoURL: "https://prometheus-community.github.io/helm-charts"                # Репозиторий с Helm чартом
+    # - repoURL: "oci://harbor.fillswim.local/charts/kube-prometheus-stack"          # Репозиторий с Helm чартом
       chart: kube-prometheus-stack                                                 # Наименование Helm чарта
       targetRevision: 79.0.0                                                       # Версия Helm чарта
       helm:
