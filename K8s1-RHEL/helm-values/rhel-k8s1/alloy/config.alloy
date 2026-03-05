@@ -4,61 +4,49 @@
 //                               Metrics RHEL-K8s1
 // ============================================================================
 
-// ==============================================
-//                Debug Mode
-// ==============================================
+// // ==============================================
+// //                Debug Mode
+// // ==============================================
 
-livedebugging {
-	enabled = true
-}
+// livedebugging {
+// 	enabled = true
+// }
 
-// ==============================================
-//                 Loki Metrics
-// ==============================================
+// // ==============================================
+// //                 Loki Metrics
+// // ==============================================
 
-discovery.kubernetes "loki" {
-	role = "pod"
+// discovery.kubernetes "loki" {
+// 	role = "pod"
 
-	selectors {
-		role  = "pod"
-		label = "app.kubernetes.io/name=loki"
-	}
-}
+// 	selectors {
+// 		role  = "pod"
+// 		label = "app.kubernetes.io/name=loki"
+// 	}
+// }
 
-prometheus.scrape "loki" {
-	targets    = discovery.kubernetes.loki.targets
-	forward_to = [
-		prometheus.relabel.loki_metrics_filter.receiver,
-		// prometheus.remote_write.mimir_loki_metrics_full.receiver,
-	]
-}
+// prometheus.scrape "loki" {
+// 	targets    = discovery.kubernetes.loki.targets
+// 	forward_to = [
+// 		prometheus.relabel.loki_metrics_filter.receiver,
+// 		// prometheus.remote_write.mimir_loki_metrics_full.receiver,
+// 	]
+// }
 
 // // Loki Metrics Filter
 // prometheus.relabel "loki_metrics_filter" {
 // 	rule {
 // 		source_labels = ["__name__"]
-// 		regex         = "loki_distributor_bytes_received_total|" + 
-// 						"loki_ingester_memory_chunks|" + 
-// 						"loki_build_info"
+// 		regex         = join([
+// 			"loki_distributor_bytes_received_total",
+// 			"loki_ingester_memory_chunks",
+// 			"loki_build_info",
+// 		], "|")
 // 		action = "keep"
 // 	}
 
 // 	forward_to = [prometheus.remote_write.mimir_main.receiver]
 // }
-
-prometheus.relabel "loki_metrics_filter" {
-	rule {
-		source_labels = ["__name__"]
-		regex         = join([
-			"loki_distributor_bytes_received_total",
-			"loki_ingester_memory_chunks",
-			"loki_build_info",
-		], "|")
-		action = "keep"
-	}
-
-	forward_to = [prometheus.remote_write.mimir_main.receiver]
-}
 
 // // ==============================================
 // //              Mimir loki Metrics Full
@@ -85,6 +73,124 @@ prometheus.relabel "loki_metrics_filter" {
 // }
 
 // ==============================================
+//                  KSM Metrics
+// ==============================================
+
+discovery.kubernetes "kube_state_metrics" {
+	role = "endpoints"
+
+	selectors {
+		role  = "endpoints"
+		label = "app.kubernetes.io/name=kube-state-metrics"
+	}
+}
+
+prometheus.scrape "ksm_metrics" {
+	targets    = discovery.kubernetes.kube_state_metrics.targets
+	forward_to = [
+		prometheus.relabel.ksm_metrics_filter.receiver,
+	]
+}
+
+// KSM Metrics Filter
+prometheus.relabel "ksm_metrics_filter" {
+	rule {
+		source_labels = ["__name__"]
+		regex         = string.join([
+			"kube_node_info",
+			"kube_node_status_condition",
+			"up",
+			"kube_pod_info",
+			"kube_pod_container_info",
+			"kube_pod_status_phase",
+			"kube_pod_status_ready",
+			"kube_pod_container_resource_requests",
+			"kube_pod_container_resource_limits",
+		], "|")
+		action = "keep"
+	}
+
+	forward_to = [prometheus.remote_write.mimir_main.receiver]
+}
+
+// ==============================================
+//                cAdvisor Metrics
+// ==============================================
+
+// 1. Обнаружение узлов кластера
+discovery.kubernetes "nodes" {
+	role = "node"
+}
+
+// 2. Перезапись пути на /metrics/cadvisor
+discovery.relabel "cadvisor" {
+	targets = discovery.kubernetes.nodes.targets
+
+	rule {
+		replacement  = "/metrics/cadvisor"
+		target_label = "__metrics_path__"
+	}
+}
+
+// 3. Сбор метрик
+prometheus.scrape "cadvisor" {
+	targets           = discovery.relabel.cadvisor.output
+	scheme            = "https"
+	bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+	tls_config {
+		insecure_skip_verify = true
+	}
+	forward_to = [
+		prometheus.relabel.cadvisor_metrics_filter.receiver,
+	]
+}
+
+// 4. Cadvisor Metrics Filter
+prometheus.relabel "cadvisor_metrics_filter" {
+	rule {
+		source_labels = ["__name__"]
+		regex         = string.join([
+			"container_cpu_usage_seconds_total",
+			"container_memory_working_set_bytes",
+		], "|")
+		action = "keep"
+	}
+
+	forward_to = [prometheus.remote_write.mimir_main.receiver]
+}
+
+// ==============================================
+//                Pod Metrics
+// ==============================================
+
+discovery.kubernetes "pods" {
+	role = "pod"
+}
+
+prometheus.scrape "pods_metrics" {
+	targets    = discovery.kubernetes.pods.targets
+	forward_to = [
+		// prometheus.remote_write.mimir_pod_metrics_full.receiver,
+		prometheus.relabel.pods_metrics_filter.receiver,
+	]
+}
+
+// Pod Metrics Filter
+prometheus.relabel "pods_metrics_filter" {
+	rule {
+		source_labels = ["__name__"]
+		regex         = string.join([
+			"longhorn_.*",
+			"apiserver_.*",
+		], "|")
+		action = "keep"
+	}
+
+	forward_to = [prometheus.remote_write.mimir_main.receiver]
+}
+
+// ==============================================
 //                  Mimir Main
 // ==============================================
 
@@ -97,13 +203,14 @@ prometheus.remote_write "mimir_main" {
 	}
 
 	endpoint {
-		url     = "https://mimir.fillswim.local/api/v1/push"
+		// url     = "https://mimir.fillswim.local/api/v1/push"
+		url     = "http://mimir-gateway.mimir.svc.cluster.local/api/v1/push"
 		headers = {
 			"X-Scope-OrgID" = "fillswim",
 		}
 
-		tls_config {
-			insecure_skip_verify = true
-		}
+		// tls_config {
+		// 	insecure_skip_verify = true
+		// }
 	}
 }
