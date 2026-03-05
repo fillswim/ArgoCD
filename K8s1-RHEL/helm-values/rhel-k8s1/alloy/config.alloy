@@ -33,13 +33,27 @@ prometheus.scrape "loki" {
 	]
 }
 
-// Loki Metrics Filter
+// // Loki Metrics Filter
+// prometheus.relabel "loki_metrics_filter" {
+// 	rule {
+// 		source_labels = ["__name__"]
+// 		regex         = "loki_distributor_bytes_received_total|" + 
+// 						"loki_ingester_memory_chunks|" + 
+// 						"loki_build_info"
+// 		action = "keep"
+// 	}
+
+// 	forward_to = [prometheus.remote_write.mimir_main.receiver]
+// }
+
 prometheus.relabel "loki_metrics_filter" {
 	rule {
 		source_labels = ["__name__"]
-		regex         = "loki_distributor_bytes_received_total|" + 
-						"loki_ingester_memory_chunks|" + 
-						"loki_build_info"
+		regex         = join([
+			"loki_distributor_bytes_received_total",
+			"loki_ingester_memory_chunks",
+			"loki_build_info",
+		], "|")
 		action = "keep"
 	}
 
