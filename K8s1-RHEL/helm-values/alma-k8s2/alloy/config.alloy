@@ -62,11 +62,91 @@
 // ============================================================================
 
 // ==============================================
-//                Debug Mode
+//                  KSM Metrics
 // ==============================================
 
-livedebugging {
-	enabled = true
+discovery.kubernetes "kube_state_metrics" {
+	role = "endpoints"
+
+	selectors {
+		role  = "endpoints"
+		label = "app.kubernetes.io/name=kube-state-metrics"
+	}
+}
+
+prometheus.scrape "ksm_metrics" {
+	targets    = discovery.kubernetes.kube_state_metrics.targets
+	forward_to = [
+		prometheus.relabel.ksm_metrics_filter.receiver,
+	]
+}
+
+// KSM Metrics Filter
+prometheus.relabel "ksm_metrics_filter" {
+	rule {
+		source_labels = ["__name__"]
+		regex         = string.join([
+			"kube_node_info",
+			"kube_node_status_condition",
+			"up",
+			"kube_pod_info",
+			"kube_pod_container_info",
+			"kube_pod_status_phase",
+			"kube_pod_status_ready",
+			"kube_pod_container_resource_requests",
+			"kube_pod_container_resource_limits",
+		], "|")
+		action = "keep"
+	}
+
+	forward_to = [prometheus.remote_write.mimir_main.receiver]
+}
+
+// ==============================================
+//                cAdvisor Metrics
+// ==============================================
+
+// 1. Обнаружение узлов кластера
+discovery.kubernetes "nodes" {
+	role = "node"
+}
+
+// 2. Перезапись пути на /metrics/cadvisor
+discovery.relabel "cadvisor" {
+	targets = discovery.kubernetes.nodes.targets
+
+	rule {
+		replacement  = "/metrics/cadvisor"
+		target_label = "__metrics_path__"
+	}
+}
+
+// 3. Сбор метрик
+prometheus.scrape "cadvisor" {
+	targets           = discovery.relabel.cadvisor.output
+	scheme            = "https"
+	bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+	tls_config {
+		insecure_skip_verify = true
+	}
+	forward_to = [
+		prometheus.relabel.cadvisor_metrics_filter.receiver,
+	]
+}
+
+// 4. Cadvisor Metrics Filter
+prometheus.relabel "cadvisor_metrics_filter" {
+	rule {
+		source_labels = ["__name__"]
+		regex         = string.join([
+			"container_cpu_usage_seconds_total",
+			"container_memory_working_set_bytes",
+		], "|")
+		action = "keep"
+	}
+
+	forward_to = [prometheus.remote_write.mimir_main.receiver]
 }
 
 // ==============================================
@@ -80,129 +160,29 @@ discovery.kubernetes "pods" {
 prometheus.scrape "pods_metrics" {
 	targets    = discovery.kubernetes.pods.targets
 	forward_to = [
-		// prometheus.remote_write.mimir_pod_metrics_full.receiver,
 		prometheus.relabel.pods_metrics_filter.receiver,
 	]
 }
 
-// // ==============================================
-// //                  KSM Metrics
-// // ==============================================
-
-// discovery.kubernetes "kube_state_metrics" {
-// 	role = "endpoints"
-
-// 	selectors {
-// 		role  = "endpoints"
-// 		label = "app.kubernetes.io/name=kube-state-metrics"
-// 	}
-// }
-
-// prometheus.scrape "ksm_metrics" {
-// 	targets    = discovery.kubernetes.kube_state_metrics.targets
-// 	forward_to = [
-// 		prometheus.remote_write.mimir_ksm_metrics_full.receiver,
-// 	]
-// }
-
-// // ==============================================
-// //                cAdvisor Metrics
-// // ==============================================
-
-// // 1. Обнаружение узлов кластера
-// discovery.kubernetes "nodes" {
-// 	role = "node"
-// }
-
-// // 2. Перезапись пути на /metrics/cadvisor
-// discovery.relabel "cadvisor" {
-// 	targets = discovery.kubernetes.nodes.targets
-
-// 	rule {
-// 		replacement  = "/metrics/cadvisor"
-// 		target_label = "__metrics_path__"
-// 	}
-// }
-
-// // 3. Сбор метрик
-// prometheus.scrape "cadvisor" {
-// 	targets           = discovery.relabel.cadvisor.output
-// 	scheme            = "https"
-// 	bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
-
-// 	tls_config {
-// 		insecure_skip_verify = true
-// 	}
-// 	forward_to = [prometheus.remote_write.mimir_cadvisor_metrics_full.receiver]
-// }
-
-// // ===================================================
-// //                    Alloy Metrics
-// // ===================================================
-
-// discovery.relabel "alloy_relabel" {
-// 	targets = [
-// 		{"__address__" = "alloy.alloy.svc.alma-k8s2:12345"},
-// 	]
-
-// 	// rule {
-// 	// 	target_label = "instance"
-// 	// 	replacement  = constants.hostname
-// 	// }
-// }
-
-// prometheus.scrape "alloy" {
-// 	targets = discovery.relabel.alloy_relabel.output
-
-// 	metrics_path    = "/metrics"
-// 	scrape_interval = "15s"
-
-// 	forward_to = [prometheus.remote_write.mimir_alloy_cluster_metrics_full.receiver]
-// }
-
-// ==============================================
-//             Filter Pod Metrics
-// ==============================================
-
+// Pod Metrics Filter
 prometheus.relabel "pods_metrics_filter" {
 	rule {
 		source_labels = ["__name__"]
-		regex         = "longhorn_.*|apiserver_.*|loki_.*|nginx_ingress_.*|up"
-		action        = "keep"
+		regex         = string.join([
+			"longhorn_.*",
+			"apiserver_.*",
+		], "|")
+		action = "keep"
 	}
 
-	forward_to = [prometheus.remote_write.mimir_pod_metrics_filtered.receiver]
+	forward_to = [prometheus.remote_write.mimir_main.receiver]
 }
 
-// // ==============================================
-// //              Mimir Pod Metrics Full
-// // ==============================================
-
-// prometheus.remote_write "mimir_pod_metrics_full" {
-// 	external_labels = {
-// 		env       = "test",
-// 		app       = "k8s",
-// 		cluster   = "alma-k8s2",
-// 		subsystem = "cluster",
-// 	}
-
-// 	endpoint {
-// 		url     = "https://mimir.fillswim.local/api/v1/push"
-// 		headers = {
-// 			"X-Scope-OrgID" = "test-pod-metrics-full",
-// 		}
-
-// 		tls_config {
-// 			insecure_skip_verify = true
-// 		}
-// 	}
-// }
-
 // ==============================================
-//              Mimir Pod Metrics Filtered
+//                  Mimir Main
 // ==============================================
 
-prometheus.remote_write "mimir_pod_metrics_filtered" {
+prometheus.remote_write "mimir_main" {
 	external_labels = {
 		env       = "test",
 		app       = "k8s",
@@ -213,7 +193,7 @@ prometheus.remote_write "mimir_pod_metrics_filtered" {
 	endpoint {
 		url     = "https://mimir.fillswim.local/api/v1/push"
 		headers = {
-			"X-Scope-OrgID" = "test-pod-metrics-filtered",
+			"X-Scope-OrgID" = "fillswim",
 		}
 
 		tls_config {
@@ -221,75 +201,3 @@ prometheus.remote_write "mimir_pod_metrics_filtered" {
 		}
 	}
 }
-
-// // ==============================================
-// //              Mimir KSM Metrics Full
-// // ==============================================
-
-// prometheus.remote_write "mimir_ksm_metrics_full" {
-// 	external_labels = {
-// 		env       = "test",
-// 		app       = "k8s",
-// 		cluster   = "alma-k8s2",
-// 		subsystem = "cluster",
-// 	}
-
-// 	endpoint {
-// 		url     = "https://mimir.fillswim.local/api/v1/push"
-// 		headers = {
-// 			"X-Scope-OrgID" = "test-ksm-metrics-full",
-// 		}
-
-// 		tls_config {
-// 			insecure_skip_verify = true
-// 		}
-// 	}
-// }
-
-// // ==============================================
-// //              Mimir cAdvisor Metrics Full
-// // ==============================================
-
-// prometheus.remote_write "mimir_cadvisor_metrics_full" {
-// 	external_labels = {
-// 		env       = "test",
-// 		app       = "k8s",
-// 		cluster   = "alma-k8s2",
-// 		subsystem = "cluster",
-// 	}
-
-// 	endpoint {
-// 		url     = "https://mimir.fillswim.local/api/v1/push"
-// 		headers = {
-// 			"X-Scope-OrgID" = "test-cadvisor-metrics-full",
-// 		}
-
-// 		tls_config {
-// 			insecure_skip_verify = true
-// 		}
-// 	}
-// }
-
-// // ==============================================
-// //              Mimir Alloy Metrics Full
-// // ==============================================
-
-// prometheus.remote_write "mimir_alloy_cluster_metrics_full" {
-// 	external_labels = {
-// 		env       = "test",
-// 		app       = "k8s",
-// 		cluster   = "alma-k8s2",
-// 		subsystem = "cluster",
-// 	}
-
-// 	endpoint {
-// 		url     = "https://mimir.fillswim.local/api/v1/push"
-// 		headers = {
-// 			"X-Scope-OrgID" = "test-alloy-cluster-metrics-full",
-// 		}
-
-// 		tls_config {
-// 			insecure_skip_verify = true
-// 		}
-// 	}
-// }
