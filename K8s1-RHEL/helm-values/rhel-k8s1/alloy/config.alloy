@@ -171,6 +171,12 @@ prometheus.relabel "cadvisor_metrics_filter" {
 
 discovery.kubernetes "pods" {
 	role = "pod"
+	
+	// Ограничиваем поиск конкретными неймспейсами
+	namespaces {
+		names = ["prometheus"]
+	}
+
 }
 
 prometheus.scrape "pods_metrics" {
