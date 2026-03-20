@@ -56,5 +56,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true
+      - ServerSideApply=true # Для Longhorn 1.7.2
       # - RespectIgnoreDifferences=true
