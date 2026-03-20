@@ -9,7 +9,7 @@ metadata:
   namespace: argo-cd                                                        # namespace, в котором будет создаваться Argo CD application
   finalizers:
     # - resources-finalizer.argocd.argoproj.io
-    - argocd.argoproj.io/resources-finalizer
+    - resources-finalizer.argocd.argoproj.io/background
 
 spec:
   project: default
@@ -56,5 +56,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
       # - RespectIgnoreDifferences=true
-      # - ServerSideApply=true
