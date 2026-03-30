@@ -38,12 +38,12 @@ spec:
       path: "K8s1-RHEL/additions/additions-rhel-k8s1/mimir"
       targetRevision: HEAD
 
-  ignoreDifferences:
-    - group: apps
-      kind: StatefulSet
-      name: mimir-compactor
-      jqPathExpressions:
-        - '.spec.volumeClaimTemplates[] | select(.metadata.name=="storage") | .spec.resources.requests.storage'
+  # ignoreDifferences:
+  #   - group: apps
+  #     kind: StatefulSet
+  #     name: mimir-compactor
+  #     jqPathExpressions:
+  #       - '.spec.volumeClaimTemplates[] | select(.metadata.name=="storage") | .spec.resources.requests.storage'
 
   syncPolicy:
     automated:
@@ -51,5 +51,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - RespectIgnoreDifferences=true
+      # - RespectIgnoreDifferences=true
       # - ServerSideApply=true
