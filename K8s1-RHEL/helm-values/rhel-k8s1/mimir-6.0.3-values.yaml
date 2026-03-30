@@ -112,8 +112,8 @@ alertmanager:
 
 compactor:
   replicas: 3
-  persistentVolume:
-    size: 10Gi
+  # persistentVolume:
+  #   size: 10Gi
 
 gateway:
   replicas: 3
