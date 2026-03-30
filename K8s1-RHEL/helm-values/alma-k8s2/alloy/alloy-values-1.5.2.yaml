@@ -8,6 +8,14 @@ alloy:
     name: alloy-config
     key: config.alloy
 
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 100m
+    limits:
+      memory: 2Gi
+      cpu: 500m
+
   extraPorts:
     - name: "otlp-grpc"
       port: 4317
