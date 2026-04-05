@@ -13,17 +13,19 @@ global:
   clusterDomain: cluster.local.
 
 ingress:
-  enabled: true
-  ingressClassName: "nginx"
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: ca-cluster-issuer
-  hosts:
-    - mimir.fillswim.local
-  tls:
-    - secretName: mimir-distribted-tls
-      hosts:
-        - mimir.fillswim.local
+  enabled: false
+# ingress:
+#   enabled: true
+#   ingressClassName: "nginx"
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     cert-manager.io/cluster-issuer: ca-cluster-issuer
+#   hosts:
+#     - mimir.fillswim.local
+#   tls:
+#     - secretName: mimir-distribted-tls
+#       hosts:
+#         - mimir.fillswim.local
 
 mimir:
 
@@ -130,17 +132,20 @@ gateway:
       nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
     hosts:
-      # Первый хост (Dev)
+      # --- Основной домен ---
+      - host: mimir.fillswim.local
+        paths:
+          - path: /
+            pathType: Prefix
+      # --- Домены для Alertmanager ---
       - host: mimir-alertmanager-dev.fillswim.local
         paths:
           - path: /
             pathType: Prefix
-      # Второй хост (Stage)
       - host: mimir-alertmanager-stage.fillswim.local
         paths:
           - path: /
             pathType: Prefix
-      # Третий хост (Fillswim)
       - host: mimir-alertmanager-fillswim.fillswim.local
         paths:
           - path: /
@@ -148,6 +153,7 @@ gateway:
     tls:
       - secretName: mimir-alertmanager-tls
         hosts:
+          - mimir.fillswim.local
           - mimir-alertmanager-dev.fillswim.local
           - mimir-alertmanager-stage.fillswim.local
           - mimir-alertmanager-fillswim.fillswim.local
@@ -210,10 +216,11 @@ gateway:
           # ========================================================
           map $http_host $tenant_by_host {
             hostnames;
+            mimir.fillswim.local                   "{{ include "mimir.noAuthTenant" . }}";
             mimir-alertmanager-dev.fillswim.local       dev;
             mimir-alertmanager-stage.fillswim.local     stage;
             mimir-alertmanager-fillswim.fillswim.local  fillswim;
-            default                                 {{ include "mimir.noAuthTenant" . }};
+            default                                 "{{ include "mimir.noAuthTenant" . }}";
           }
 
           map $http_x_scope_orgid $ensured_x_scope_orgid {
