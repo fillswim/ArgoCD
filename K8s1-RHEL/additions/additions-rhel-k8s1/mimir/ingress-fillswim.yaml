@@ -1,0 +1,38 @@
+# ---
+# apiVersion: networking.k8s.io/v1
+
+# # kubectl apply  -f K8s1-RHEL/additions/additions-rhel-k8s1/mimir/ingress-fillswim.yaml
+# # kubectl delete -f K8s1-RHEL/additions/additions-rhel-k8s1/mimir/ingress-fillswim.yaml
+
+# kind: Ingress
+# metadata:
+#   name: mimir-fillswim
+#   namespace: mimir
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     cert-manager.io/cluster-issuer: ca-cluster-issuer
+#     nginx.ingress.kubernetes.io/configuration-snippet: |
+#       proxy_set_header X-Scope-OrgID fillswim;
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: mimir-fillswim.fillswim.local
+#     http:
+#       paths:
+#       - backend:
+#           service:
+#             name: mimir-alertmanager
+#             port:
+#               number: 8080
+#         path: /alertmanager
+#         pathType: Prefix
+#       # - pathType: Prefix
+#       #   path: "/"
+#       #   backend:
+#       #     service:
+#       #       name: alloy
+#       #       port:
+#       #         number: 12345
+#   tls:
+#   - hosts: [mimir-fillswim.fillswim.local]
+#     secretName: mimir-tenant-tls
