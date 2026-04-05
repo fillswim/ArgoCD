@@ -12,6 +12,7 @@ global:
   dnsNamespace: kube-system
   clusterDomain: cluster.local.
 
+# Перенесен в [gateway.ingress]
 ingress:
   enabled: false
 # ingress:
