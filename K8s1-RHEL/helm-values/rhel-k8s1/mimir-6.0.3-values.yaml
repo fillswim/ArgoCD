@@ -242,7 +242,7 @@ gateway:
             # ====================================================================
             # Указываем ваши домены здесь (необязательно, но полезно для порядка)
             # ====================================================================
-            server_name mimir-alertmanager-dev.fillswim.local mimir-alertmanager-stage.fillswim.local mimir-alertmanager-fillswim.fillswim.local;
+            server_name mimir.fillswim.local mimir-alertmanager-dev.fillswim.local mimir-alertmanager-stage.fillswim.local mimir-alertmanager-fillswim.fillswim.local;
             # ====================================================================
 
             {{- if .Values.gateway.nginx.config.enableIPv6 }}
