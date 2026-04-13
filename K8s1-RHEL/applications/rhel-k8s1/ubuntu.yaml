@@ -15,7 +15,7 @@ spec:
 
   destination:
     name: in-cluster                                     # Деплой в этот же кластер
-    namespace: default                                   # В какой namespace будет производиться деплой
+    namespace: ubuntu                                    # В какой namespace будет производиться деплой
 
   sources:
     # Папка для отслеживания
