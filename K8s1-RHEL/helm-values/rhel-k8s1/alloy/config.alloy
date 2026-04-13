@@ -219,3 +219,58 @@ prometheus.remote_write "mimir_main" {
 		// }
 	}
 }
+
+// ==============================================
+//                   K8s Logs
+// ==============================================
+
+// // Обнаруживаем поды в кластере (уже задекларирован)
+// discovery.kubernetes "pods" {
+// 	role = "pod"
+// }
+
+// Настраиваем метки (labels) для логов
+discovery.relabel "pod_logs" {
+	targets = discovery.kubernetes.pods.targets
+
+	rule {
+		source_labels = ["__meta_kubernetes_namespace"]
+		target_label  = "namespace"
+	}
+
+	rule {
+		source_labels = ["__meta_kubernetes_pod_name"]
+		target_label  = "pod"
+	}
+
+	rule {
+		source_labels = ["__meta_kubernetes_pod_container_name"]
+		target_label  = "container"
+	}
+}
+
+// Собираем логи и передаем их в компонент записи
+loki.source.kubernetes "pod_logs" {
+	targets    = discovery.relabel.pod_logs.output
+	forward_to = [loki.write.loki_endpoint.receiver]
+}
+
+loki.write "loki_endpoint" {
+	external_labels = {
+		env       = "main",
+		app       = "k8s",
+		cluster   = "rhel-k8s1",
+		subsystem = "cluster",
+	}
+
+	endpoint {
+		url     = "https://loki.fillswim.local/loki/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "fillswim",
+		}
+
+		tls_config {
+			insecure_skip_verify = true
+		}
+	}
+}
