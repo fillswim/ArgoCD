@@ -1,0 +1,30 @@
+global:
+  tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "value1"
+    effect: "NoSchedule"
+
+persistence:
+  defaultDataLocality: best-effort
+  reclaimPolicy: Retain
+
+preUpgradeChecker:
+  jobEnabled: false # Для Argo CD
+
+defaultSettings:
+  replicaAutoBalance: best-effort
+  concurrentReplicaRebuildPerNodeLimit: 2
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  host: longhorn.lab.local
+  tls: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: ca-cluster-issuer
+
+metrics:
+  serviceMonitor:
+    enabled: true

@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 
-# kubectl apply  -f Ubuntu-k8s1/applications-non-sync/ubuntu-k8s1/nicolaka-ubuntu-k8s1.yaml
-# kubectl delete -f Ubuntu-k8s1/applications-non-sync/ubuntu-k8s1/nicolaka-ubuntu-k8s1.yaml
+# kubectl apply  -f Ubuntu-K8s1/applications-non-sync/ubuntu-k8s1/nicolaka-ubuntu-k8s1.yaml
+# kubectl delete -f Ubuntu-K8s1/applications-non-sync/ubuntu-k8s1/nicolaka-ubuntu-k8s1.yaml
 
 metadata:
   name: nicolaka-ubuntu-k8s1                                                    # Название создаваемого Argo CD application
