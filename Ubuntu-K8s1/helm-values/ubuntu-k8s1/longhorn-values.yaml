@@ -27,4 +27,4 @@ ingress:
 
 metrics:
   serviceMonitor:
-    enabled: true
+    enabled: false # Если не установлен kube-prometheus-stack
