@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply  -f Ubuntu-K8s1/applications-non-sync/ubuntu-k8s1/grafana-ubuntu-k8s1.yaml
+# kubectl delete -f Ubuntu-K8s1/applications-non-sync/ubuntu-k8s1/grafana-ubuntu-k8s1.yaml
+
+metadata:
+  name: grafana-ubuntu-k8s1                                                  # Название создаваемого Argo CD application
+  namespace: argo-cd                                                         # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+
+spec:
+  project: default
+
+  destination:
+    name: kubernetes-admin-ubuntu-k8s1@ubuntu-k8s1                           # Деплой в этот же кластер
+    namespace: grafana                                                       # В какой namespace будет производиться деплой
+
+  sources:
+
+    # - repoURL: "https://grafana.github.io/helm-charts"                       # Репозиторий с Helm чартом
+    - repoURL: "https://nexus.fillswim.local:8443/repository/helm-hosted/"   # Репозиторий с Helm чартом
+      chart: grafana                                                         # Наименование Helm чарта
+      targetRevision: 9.3.0                                                  # Версия Helm чарта
+      helm:
+        releaseName: grafana                                                 # Название релиза
+        valueFiles:
+          - $values/Ubuntu-K8s1/helm-values/ubuntu-k8s1/grafana-values.yaml
+
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"                      # Репозиторий с values
+      targetRevision: main
+      ref: values
+
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'                      # Репозиторий
+      path: "Ubuntu-K8s1/additions/additions-ubuntu-k8s1/grafana"            # Относительный путь отслеживаемой папки
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      # - ServerSideApply=true
