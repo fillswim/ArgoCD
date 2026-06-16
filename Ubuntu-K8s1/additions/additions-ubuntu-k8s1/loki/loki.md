@@ -1,0 +1,1 @@
+# Addons Vault Secrets Operator
