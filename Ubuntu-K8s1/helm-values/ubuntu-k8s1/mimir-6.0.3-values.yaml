@@ -72,7 +72,8 @@ mimir:
 
     memberlist:
       join_members:
-        - mimir-gossip-ring.mimir.svc.cluster.local:7946
+        # - mimir-gossip-ring.mimir.svc.cluster.local:7946                  # Поправить домен!!!
+        - mimir-gossip-ring.mimir.svc.ubuntu-k8s1:7946                  # Поправить домен!!!
       cluster_label: "mimir-main"
 
 ingester:
