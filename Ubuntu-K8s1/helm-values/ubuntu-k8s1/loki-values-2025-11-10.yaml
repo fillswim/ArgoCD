@@ -1,6 +1,11 @@
 deploymentMode: Distributed
 
 global:
+
+  dnsService: kube-dns
+  dnsNamespace: kube-system
+  clusterDomain: ubuntu-k8s1.
+
   extraArgs:
     - -config.expand-env=true
   extraEnv:
