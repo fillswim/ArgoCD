@@ -10,7 +10,6 @@ global:
 
   dnsService: kube-dns
   dnsNamespace: kube-system
-  # clusterDomain: cluster.local.
   clusterDomain: ubuntu-k8s1.
 
 # Перенесен в [gateway.ingress]
