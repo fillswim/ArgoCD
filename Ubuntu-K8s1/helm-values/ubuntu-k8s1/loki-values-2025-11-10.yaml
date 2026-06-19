@@ -1,0 +1,177 @@
+deploymentMode: Distributed
+
+global:
+  extraArgs:
+    - -config.expand-env=true
+  extraEnv:
+    - name: MINIO_USER
+      valueFrom:
+        secretKeyRef:
+          name: minio-for-loki-secret
+          # key: rootUser
+          key: MINIO_ACCESS_KEY
+    - name: MINIO_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: minio-for-loki-secret
+          # key: rootPassword
+          key: MINIO_SECRET_KEY
+
+loki:
+  # Should authentication be enabled
+  auth_enabled: true
+  # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
+  storage:
+    # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
+    # Please provide these values if you are using object storage.
+    bucketNames:
+      chunks: loki-chunks
+      ruler: loki-ruler
+      admin: loki-admin
+    type: s3
+    s3:
+
+      # # MinIO S3 (На обычных серверах)
+      # s3: http://api.minio.fillswim.local
+      # endpoint: http://api.minio.fillswim.local
+
+      # # MinIO S3 Cluster K8s (Через Ingress)
+      # s3: http://api.minio-k8s1-rhel.fillswim.local
+      # endpoint: http://api.minio-k8s1-rhel.fillswim.local
+
+      # # MinIO S3 Cluster K8s (Внутри кластера, через Service Cluster IP)
+      s3: http://minio.minio.svc.ubuntu-k8s1:9000
+      endpoint: http://minio.minio.svc.ubuntu-k8s1:9000
+
+      accessKeyId: "${MINIO_USER}"
+      secretAccessKey: "${MINIO_PASSWORD}"
+      s3ForcePathStyle: true
+      insecure: true
+      http_config: {}
+      backoff_config: {}
+      disable_dualstack: false
+
+  useTestSchema: false
+
+  schemaConfig:
+    configs:
+      - from: "2024-04-01"
+        store: tsdb
+        object_store: s3
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+
+  structuredConfig:
+    common:
+      ring:
+        kvstore:
+          store: memberlist
+
+    memberlist:
+      # важно: join по DNS (headless), а не по pod IP
+      join_members:
+        # - loki-memberlist
+        - loki-memberlist.loki.svc.ubuntu-k8s1:7946                 # Поправить домен!!!
+
+      # уникальная метка кластера (любой уникальный текст)
+      cluster_label: "loki-main"
+
+    ingester:
+      autoforget_unhealthy: true
+
+      lifecycler:
+        unregister_on_shutdown: true
+        heartbeat_period: 5s
+        heartbeat_timeout: 1m
+        ring:
+          kvstore:
+            store: memberlist
+
+    limits_config:
+      max_line_size: 1048576        # 1 MiB
+      max_line_size_truncate: true  # обрезать вместо 4xx/5xx
+
+  ingester:
+    # chunk_encoding: snappy
+    chunk_encoding: zstd
+  querier:
+    # Default is 4, if you have enough memory and CPU you can increase, reduce if OOMing
+    max_concurrent: 4
+  pattern_ingester:
+    enabled: true
+  limits_config:
+    allow_structured_metadata: true
+    volume_enabled: true
+    retention_period: 168h                  # 672h = 28 дней, 168h = 7 дней, 24h = 1 день
+  compactor:
+    retention_enabled: true
+    delete_request_store: s3
+
+ingester:
+  replicas: 3 # To ensure data durability with replication
+querier:
+  replicas: 3 # Improve query performance via parallelism
+  maxUnavailable: 2
+queryFrontend:
+  replicas: 3
+  maxUnavailable: 1
+queryScheduler:
+  replicas: 3
+distributor:
+  replicas: 3
+  maxUnavailable: 2
+compactor:
+  replicas: 3
+indexGateway:
+  replicas: 3
+  maxUnavailable: 1
+gateway:
+  replicas: 3
+resultsCache:
+  replicas: 3
+chunksCache:
+  replicas: 3
+
+bloomPlanner:
+  replicas: 0
+bloomBuilder:
+  replicas: 0
+bloomGateway:
+  replicas: 0
+
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+
+singleBinary:
+  replicas: 0
+
+# Enable minio for storage
+minio:
+  enabled: false
+
+monitoring:
+  dashboards:
+    enabled: true
+
+# -- Ingress configuration Use either this ingress or the gateway, but not both at once.
+# If you enable this, make sure to disable the gateway.
+# You'll need to supply authn configuration for your ingress controller.
+ingress:
+  enabled: true
+  ingressClassName: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: ca-cluster-issuer
+  # -- Hosts configuration for the ingress, passed through the `tpl` function to allow templating
+  hosts:
+    - loki.lab.local
+  tls:
+   - secretName: grafana-tls
+     hosts:
+       - loki.lab.local

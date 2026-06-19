@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+# kubectl apply  -f Ubuntu-K8s1/applications-non-sync/ubuntu-k8s1/loki-ubuntu-k8s1.yaml
+# kubectl delete -f Ubuntu-K8s1/applications-non-sync/ubuntu-k8s1/loki-ubuntu-k8s1.yaml
+
+metadata:
+  name: loki-ubuntu-k8s1                                                     # Название создаваемого Argo CD application
+  namespace: argo-cd                                                         # namespace, в котором будет создаваться Argo CD application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+
+spec:
+  project: default
+
+  destination:
+    name: kubernetes-admin-ubuntu-k8s1@ubuntu-k8s1                           # Деплой в этот же кластер
+    namespace: loki                                                          # В какой namespace будет производиться деплой
+
+  sources:
+    - repoURL: "https://nexus.fillswim.local:8443/repository/helm-hosted/"   # Репозиторий с Helm чартом
+      chart: loki                                                            # Наименование Helm чарта
+      targetRevision: 6.46.0                                                 # Версия Helm чарта
+      helm:
+        releaseName: loki                                                    # Название релиза
+
+        # Values относительно репозитория
+        valueFiles:
+          - $values/Ubuntu-K8s1/helm-values/ubuntu-k8s1/loki-values-2025-11-10.yaml
+
+        # # Переопределенный параметр в values
+        # parameters:
+        # - name: "preUpgradeChecker.jobEnabled"
+        #   value: "false"
+
+    # Репозиторий с values
+    - repoURL: "https://github.com/fillswim/ArgoCD.git"
+      targetRevision: main
+      ref: values
+
+     # Дополнительная папка для отслеживания
+    - repoURL: 'https://github.com/fillswim/ArgoCD.git'
+      path: "Ubuntu-K8s1/additions/additions-ubuntu-k8s1/loki"
+      targetRevision: HEAD
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # - RespectIgnoreDifferences=true
+      # - ServerSideApply=true
