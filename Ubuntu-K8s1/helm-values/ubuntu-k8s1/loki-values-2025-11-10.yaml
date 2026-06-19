@@ -13,22 +13,16 @@ global:
       valueFrom:
         secretKeyRef:
           name: minio-for-loki-secret
-          # key: rootUser
           key: MINIO_ACCESS_KEY
     - name: MINIO_PASSWORD
       valueFrom:
         secretKeyRef:
           name: minio-for-loki-secret
-          # key: rootPassword
           key: MINIO_SECRET_KEY
 
 loki:
-  # Should authentication be enabled
   auth_enabled: true
-  # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
   storage:
-    # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
-    # Please provide these values if you are using object storage.
     bucketNames:
       chunks: loki-chunks
       ruler: loki-ruler
@@ -164,16 +158,12 @@ monitoring:
   dashboards:
     enabled: true
 
-# -- Ingress configuration Use either this ingress or the gateway, but not both at once.
-# If you enable this, make sure to disable the gateway.
-# You'll need to supply authn configuration for your ingress controller.
 ingress:
   enabled: true
   ingressClassName: "nginx"
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: ca-cluster-issuer
-  # -- Hosts configuration for the ingress, passed through the `tpl` function to allow templating
   hosts:
     - loki.lab.local
   tls:
