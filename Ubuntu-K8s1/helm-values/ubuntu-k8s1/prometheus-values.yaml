@@ -223,13 +223,13 @@ prometheus:
             requests:
               storage: 20Gi
 
-    # # Чтобы Prometheus локально не хранил много (он становится "агентом" (для Prometheus c Grafana Mimir))
-    # retention: 2h
-    # retentionSize: "2GB"
+    # Чтобы Prometheus локально не хранил много (он становится "агентом" (для Prometheus c Grafana Mimir))
+    retention: 2h
+    retentionSize: "10GB"
 
-    # 2025-10-23: Задает на какой период времени хранить данные в метрик (для Prometheus без Grafana Mimir)
-    retention: 2d
-    retentionSize: "10GiB"
+    # # 2025-10-23: Задает на какой период времени хранить данные в метрик (для Prometheus без Grafana Mimir)
+    # retention: 2d
+    # retentionSize: "10GiB"
 
     ## Interval between consecutive scrapes.
     scrapeInterval: "30s"
