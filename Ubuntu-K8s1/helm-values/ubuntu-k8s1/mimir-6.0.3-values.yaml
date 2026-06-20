@@ -115,6 +115,14 @@ ruler:
 alertmanager:
   replicas: 3
 
+  resources:
+    requests:
+      cpu: 200m
+      memory: 200Mi
+    limits:
+      cpu: 400m
+      memory: 400Mi
+
 compactor:
   replicas: 3
   # persistentVolume:
